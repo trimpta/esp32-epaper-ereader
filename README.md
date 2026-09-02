@@ -22,7 +22,7 @@ python -m http.server 8420
 # open http://localhost:8420
 ```
 
-**[Live demo →](#)** *(GitHub Pages link goes live once Pages finishes deploying from this repo)*
+**[Live demo →](https://trimpta.com/esp32-epaper-ereader/)** *(deploys automatically from `simulator/` via GitHub Actions)*
 
 | Reading | Library | Sleep wallpaper |
 |---|---|---|
