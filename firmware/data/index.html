@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>E-Reader</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 480px; margin: 1.5rem auto; padding: 0 1rem; }
+  #status { white-space: pre-line; font-family: monospace; background: #f2f2f2; padding: 0.75rem; border-radius: 4px; min-height: 2em; }
+  button { padding: 0.6rem 1.2rem; font-size: 1rem; margin-top: 0.5rem; }
+  ul { padding-left: 1.2rem; }
+</style>
+</head>
+<body>
+<h1>Upload a book</h1>
+<p><input type="file" id="fileInput" accept=".epub" /></p>
+<button id="uploadBtn" disabled>Convert &amp; upload</button>
+<div id="status">Pick an EPUB file.</div>
+
+<h2>Library</h2>
+<ul id="bookList"></ul>
+
+<!--
+  Deliberately tiny: this page ships in device flash (8MB total, shared with firmware +
+  book storage — see README.md), so the actual conversion logic (JSZip + converter.js,
+  which together are a few hundred KB) is loaded from external URLs instead of being
+  vendored here. Point these at wherever you're hosting the files in ../../converter/
+  (GitHub Pages, your own server, a CDN — anywhere reachable from whatever device you're
+  uploading from). They're loaded fresh over the network every time this page opens.
+-->
+<script>
+  const CONVERTER_BASE_URL = "https://example.com/e-reader-converter"; // TODO: point at your host
+</script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script id="converterScript"></script>
+<script>
+  document.getElementById('converterScript').src = CONVERTER_BASE_URL + '/converter.js';
+</script>
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const statusEl = document.getElementById('status');
+  const bookList = document.getElementById('bookList');
+
+  function log(msg) {
+    statusEl.textContent += (statusEl.textContent ? '\n' : '') + msg;
+  }
+
+  async function refreshLibrary() {
+    try {
+      const resp = await fetch('/books');
+      const books = await resp.json();
+      bookList.innerHTML = '';
+      for (const b of books) {
+        const li = document.createElement('li');
+        li.textContent = `${b.name} (${(b.size / 1024).toFixed(1)} KB) `;
+        const del = document.createElement('button');
+        del.textContent = 'delete';
+        del.onclick = async () => {
+          const form = new URLSearchParams({ name: b.name });
+          await fetch('/books/delete', { method: 'POST', body: form });
+          refreshLibrary();
+        };
+        li.appendChild(del);
+        bookList.appendChild(li);
+      }
+    } catch (e) {
+      log(`Could not load library: ${e.message}`);
+    }
+  }
+
+  fileInput.addEventListener('change', () => {
+    uploadBtn.disabled = !fileInput.files[0];
+  });
+
+  uploadBtn.addEventListener('click', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    uploadBtn.disabled = true;
+    statusEl.textContent = '';
+    try {
+      if (!window.EpubConverter) {
+        throw new Error(
+          `converter.js didn't load from ${CONVERTER_BASE_URL} — check the URL and that the ` +
+          `device has a route to it (it's a normal internet fetch from whatever browser is ` +
+          `open, not from the ESP32 itself).`
+        );
+      }
+      const arrayBuffer = await file.arrayBuffer();
+      const metrics = await fetch(CONVERTER_BASE_URL + '/font-metrics.json').then((r) => r.json());
+      const bytes = await window.EpubConverter.convertEpub(arrayBuffer, metrics, undefined, log);
+      log(`Converted: ${(bytes.length / 1024).toFixed(1)} KB. Uploading...`);
+
+      const name = file.name.replace(/\.epub$/i, '') + '.cebk';
+      const resp = await fetch(`/upload?name=${encodeURIComponent(name)}`, {
+        method: 'POST',
+        body: bytes,
+      });
+      if (!resp.ok) throw new Error(`Device responded ${resp.status}`);
+      log('Done.');
+      refreshLibrary();
+    } catch (err) {
+      log(`ERROR: ${err.message}`);
+      console.error(err);
+    } finally {
+      uploadBtn.disabled = false;
+    }
+  });
+
+  refreshLibrary();
+</script>
+</body>
+</html>

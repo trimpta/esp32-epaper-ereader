@@ -1,0 +1,14 @@
+# Custom partition table for the 8MB flash CrowPanel board — replaces the earlier
+# platformio.ini reference to "default_8MB.csv", which was written by assumption and
+# never actually verified against a real build. This file is the source of truth for
+# docs/FLASH_BUDGET.md's arithmetic instead.
+#
+# No OTA: there's no update-over-WiFi flow implemented, so this is a single-app layout
+# (no otadata, no dual app0/app1) — that space goes to LittleFS instead, where it
+# directly buys more book storage on a board with no SD slot.
+#
+# Name,     Type, SubType,  Offset,    Size,      Flags
+nvs,        data, nvs,      0x9000,    0x6000,
+phy_init,   data, phy,      0xf000,    0x1000,
+factory,    app,  factory,  0x10000,   0x200000,
+littlefs,   data, littlefs, 0x210000,  0x5F0000,

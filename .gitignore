@@ -1,0 +1,10 @@
+# Test books dropped in for local testing — not part of the project
+*.epub
+
+# PlatformIO
+firmware/.pio/
+firmware/.vscode/
+
+# OS cruft
+.DS_Store
+Thumbs.db

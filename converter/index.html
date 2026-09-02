@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>EPUB → .cebk converter (dev/test)</title>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+  #status { white-space: pre-line; font-family: monospace; background: #f2f2f2; padding: 0.75rem; border-radius: 4px; min-height: 3em; }
+  input, button { font-size: 1rem; margin: 0.5rem 0; }
+  button { padding: 0.5rem 1rem; }
+  #deviceUrl { width: 20em; }
+</style>
+</head>
+<body>
+<h1>EPUB → .cebk converter</h1>
+<p>Standalone dev/test page — this is <strong>not</strong> the page the device serves (see
+<code>firmware/data/index.html</code> for that; it loads this same conversion logic from an
+external URL instead of shipping it in device flash). Useful for testing the converter and
+inspecting output size without hardware.</p>
+
+<p><label>EPUB file: <input type="file" id="fileInput" accept=".epub" /></label></p>
+<button id="convertBtn" disabled>Convert</button>
+<button id="downloadBtn" disabled>Download .cebk</button>
+<p>
+  <label>Device URL (optional): <input type="text" id="deviceUrl" placeholder="http://192.168.1.42" /></label>
+  <button id="uploadBtn" disabled>Upload to device</button>
+</p>
+<div id="status">Pick an EPUB file to begin.</div>
+
+<!-- JSZip from CDN — swap for a self-hosted copy if you don't want the CDN dependency -->
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="./converter.js"></script>
+<script>
+  const fileInput = document.getElementById('fileInput');
+  const convertBtn = document.getElementById('convertBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const uploadBtn = document.getElementById('uploadBtn');
+  const deviceUrl = document.getElementById('deviceUrl');
+  const statusEl = document.getElementById('status');
+
+  let epubBuffer = null;
+  let cebkBytes = null;
+  let bookName = 'book';
+
+  function log(msg) {
+    statusEl.textContent += (statusEl.textContent ? '\n' : '') + msg;
+  }
+
+  fileInput.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    bookName = file.name.replace(/\.epub$/i, '');
+    epubBuffer = await file.arrayBuffer();
+    statusEl.textContent = `Loaded ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+    convertBtn.disabled = false;
+    downloadBtn.disabled = true;
+    uploadBtn.disabled = true;
+    cebkBytes = null;
+  });
+
+  convertBtn.addEventListener('click', async () => {
+    statusEl.textContent = '';
+    convertBtn.disabled = true;
+    try {
+      const metricsResp = await fetch('./font-metrics.example.json');
+      const fontMetrics = await metricsResp.json();
+      log('Using PLACEHOLDER font metrics — see tools/dump_font_metrics for the real thing.');
+
+      cebkBytes = await window.EpubConverter.convertEpub(epubBuffer, fontMetrics, undefined, log);
+      log(`Output size: ${(cebkBytes.length / 1024).toFixed(1)} KB`);
+      downloadBtn.disabled = false;
+      uploadBtn.disabled = !deviceUrl.value;
+    } catch (err) {
+      log(`ERROR: ${err.message}`);
+      console.error(err);
+    } finally {
+      convertBtn.disabled = false;
+    }
+  });
+
+  downloadBtn.addEventListener('click', () => {
+    const blob = new Blob([cebkBytes], { type: 'application/octet-stream' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${bookName}.cebk`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  deviceUrl.addEventListener('input', () => {
+    uploadBtn.disabled = !cebkBytes || !deviceUrl.value;
+  });
+
+  uploadBtn.addEventListener('click', async () => {
+    uploadBtn.disabled = true;
+    try {
+      const base = deviceUrl.value.replace(/\/$/, '');
+      const resp = await fetch(`${base}/upload?name=${encodeURIComponent(bookName)}.cebk`, {
+        method: 'POST',
+        body: cebkBytes,
+      });
+      if (!resp.ok) throw new Error(`Device responded ${resp.status}`);
+      log(`Uploaded to ${base} as ${bookName}.cebk`);
+    } catch (err) {
+      log(`Upload failed: ${err.message} (device on same network? CORS enabled on /upload?)`);
+    } finally {
+      uploadBtn.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>
