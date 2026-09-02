@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rotary Reader — Docs</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bench: #23261f;
+    --bench-2: #191b16;
+    --panel: #2c2f27;
+    --panel-border: #454a3a;
+    --panel-border-lo: #3a3d33;
+    --copper: #c8863f;
+    --copper-bright: #e7ab6c;
+    --text-hi: #ece7d8;
+    --text-lo: #98988a;
+    --text-faint: #6b6c60;
+    --good: #86ac72;
+    --bad: #c97b6a;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    background: var(--bench);
+    color: var(--text-hi);
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.6;
+  }
+
+  a { color: var(--copper-bright); }
+  a:hover { color: var(--copper); }
+
+  code {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.86em;
+    background: var(--bench-2);
+    border: 1px solid var(--panel-border-lo);
+    border-radius: 4px;
+    padding: 0.05rem 0.35rem;
+  }
+
+  header.top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding: 0.9rem 1.4rem;
+    border-bottom: 1px solid var(--panel-border-lo);
+    background: var(--bench-2);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  header.top a.back {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    text-decoration: none;
+    color: var(--text-lo);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 0.4rem 0.7rem;
+    white-space: nowrap;
+  }
+  header.top a.back:hover { color: var(--copper-bright); border-color: var(--copper); }
+
+  header.top .mark {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    color: var(--copper);
+    border: 1px solid var(--copper);
+    border-radius: 3px;
+    padding: 0.15rem 0.4rem;
+  }
+
+  header.top h1 {
+    font-size: 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  header.top .spacer { flex: 1; }
+
+  header.top .gh {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-faint);
+    text-decoration: none;
+  }
+  header.top .gh:hover { color: var(--copper-bright); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    max-width: 1180px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  nav.index {
+    position: sticky;
+    top: 62px;
+    padding: 1.6rem 1rem 2rem 1.4rem;
+    align-self: start;
+  }
+
+  nav.index .index-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    color: var(--text-faint);
+    text-transform: uppercase;
+    margin: 0 0 0.6rem;
+  }
+
+  nav.index ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  nav.index li { margin: 0.1rem 0; }
+  nav.index a {
+    display: block;
+    text-decoration: none;
+    color: var(--text-lo);
+    font-size: 0.85rem;
+    padding: 0.45rem 0.6rem;
+    border-radius: 6px;
+    border-left: 2px solid transparent;
+  }
+  nav.index a:hover { color: var(--text-hi); background: var(--panel); }
+  nav.index a.active {
+    color: var(--copper-bright);
+    background: var(--panel);
+    border-left-color: var(--copper);
+  }
+  nav.index .desc {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.66rem;
+    color: var(--text-faint);
+    margin-top: 0.1rem;
+  }
+
+  main.doc {
+    padding: 1.8rem 2rem 5rem;
+    min-width: 0;
+  }
+
+  main.doc article {
+    max-width: 760px;
+  }
+
+  article h1, article h2, article h3, article h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-hi);
+    scroll-margin-top: 75px;
+  }
+  article h1 { font-size: 1.5rem; border-bottom: 1px solid var(--panel-border-lo); padding-bottom: 0.5rem; }
+  article h2 { font-size: 1.15rem; margin-top: 2.2rem; color: var(--copper-bright); }
+  article h3 { font-size: 1rem; margin-top: 1.6rem; }
+  article h4 { font-size: 0.92rem; margin-top: 1.3rem; }
+
+  article p, article li { color: var(--text-hi); font-size: 0.93rem; }
+  article ul, article ol { padding-left: 1.4rem; }
+  article li { margin: 0.35rem 0; }
+  article li > code, article p > code { color: var(--copper-bright); }
+
+  article pre {
+    background: var(--bench-2);
+    border: 1px solid var(--panel-border-lo);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    overflow-x: auto;
+  }
+  article pre code {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.82rem;
+    color: var(--text-hi);
+    white-space: pre;
+  }
+
+  article .table-wrap { overflow-x: auto; margin: 1rem 0; }
+  article table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
+  article th, article td {
+    border: 1px solid var(--panel-border-lo);
+    padding: 0.45rem 0.7rem;
+    text-align: left;
+    vertical-align: top;
+  }
+  article th {
+    background: var(--panel);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-lo);
+    letter-spacing: 0.04em;
+  }
+  article td code, article th code { white-space: nowrap; }
+
+  .doc-status {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-faint);
+    padding: 2rem 0;
+  }
+  .doc-status.err { color: var(--bad); }
+
+  @media (max-width: 760px) {
+    .layout { grid-template-columns: 1fr; }
+    nav.index { position: static; padding: 1rem 1.2rem 0; }
+    main.doc { padding: 1.2rem 1.2rem 4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="back" href="index.html">&larr; Rotary Reader</a>
+  <span class="mark">DOCS</span>
+  <h1>Project documentation</h1>
+  <span class="spacer"></span>
+  <a class="gh" href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">github.com/trimpta/esp32-epaper-ereader</a>
+</header>
+
+<div class="layout">
+  <nav class="index" id="docIndex" aria-label="Documentation index"></nav>
+  <main class="doc"><article id="docArticle"><p class="doc-status">Loading…</p></article></main>
+</div>
+
+<script>
+'use strict';
+
+/* This page only exists for the browser simulator — a design/reference tool, not
+   something the ESP32 itself ever hosts. firmware/data/index.html (the real device's
+   own served upload page) is a separate, much smaller file with no docs anywhere near
+   it; keeping this split means the simulator's own reference material never has to be
+   thought about while working on that page. */
+const DOCS = [
+  { slug: 'architecture', file: 'ARCHITECTURE.md', label: 'Architecture', desc: 'Converter → device pipeline' },
+  { slug: 'format', file: 'FORMAT.md', label: '.cebk format', desc: 'Binary book format (v1)' },
+  { slug: 'flash-budget', file: 'FLASH_BUDGET.md', label: 'Flash & RAM budget', desc: 'What fits, what doesn’t need porting' },
+  { slug: 'simulator', file: 'SIMULATOR.md', label: 'Simulator UI/UX', desc: 'Input model, screens, persistence' },
+];
+const DEFAULT_SLUG = DOCS[0].slug;
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[`*_]/g, '')
+    .replace(/[^\w\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+// Inline spans only — code/bold/italic/links — applied to already-HTML-escaped text so
+// the regexes only ever see markdown punctuation, never raw user/doc content as markup.
+function renderInline(escaped) {
+  return escaped
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+    .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, text, href) => {
+      const external = /^https?:\/\//.test(href);
+      return `<a href="${escapeHtml(href)}"${external ? ' target="_blank" rel="noopener"' : ''}>${text}</a>`;
+    });
+}
+
+function splitTableRow(line) {
+  let s = line.trim();
+  if (s.startsWith('|')) s = s.slice(1);
+  if (s.endsWith('|')) s = s.slice(0, -1);
+  // Split on unescaped pipes only — a literal "|" inside a cell can be written as "\|".
+  return s.split(/(?<!\\)\|/).map((c) => c.trim().replace(/\\\|/g, '|'));
+}
+
+const BLOCK_START = /^(#{1,6}\s+|[-*]\s+|\d+\.\s+|```)/;
+
+// Small hand-rolled renderer covering exactly what these four docs actually use
+// (checked against them directly): headings, paragraphs with lazy line-wrap
+// continuation, single-level bulleted/numbered lists, fenced code blocks, and GFM
+// pipe tables. Not a general CommonMark implementation — doesn't need to be one.
+function renderMarkdown(md) {
+  const lines = md.replace(/\r\n/g, '\n').split('\n');
+  const out = [];
+  const usedIds = new Set();
+  let openList = null; // { tag: 'ul'|'ol', items: [] }
+
+  function uniqueId(base) {
+    let id = base || 'section';
+    let n = 2;
+    while (usedIds.has(id)) id = `${base}-${n++}`;
+    usedIds.add(id);
+    return id;
+  }
+  function flushList() {
+    if (!openList) return;
+    const items = openList.items.map((raw) => `<li>${renderInline(escapeHtml(raw))}</li>`).join('');
+    out.push(`<${openList.tag}>${items}</${openList.tag}>`);
+    openList = null;
+  }
+  function isBlockBoundary(line) {
+    return line.trim() === '' || BLOCK_START.test(line) || /^\s*\|.+\|\s*$/.test(line);
+  }
+
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+
+    if (/^```/.test(line)) {
+      flushList();
+      const code = [];
+      i++;
+      while (i < lines.length && !/^```\s*$/.test(lines[i])) { code.push(lines[i]); i++; }
+      i++; // skip closing fence
+      out.push(`<pre><code>${escapeHtml(code.join('\n'))}</code></pre>`);
+      continue;
+    }
+
+    if (/^\s*\|.+\|\s*$/.test(line) && lines[i + 1] && /^\s*\|?[\s:-]+\|[\s:|-]*\|?\s*$/.test(lines[i + 1])) {
+      flushList();
+      const header = splitTableRow(line);
+      i += 2;
+      const rows = [];
+      while (i < lines.length && /^\s*\|.+\|\s*$/.test(lines[i])) { rows.push(splitTableRow(lines[i])); i++; }
+      const thead = `<tr>${header.map((c) => `<th>${renderInline(escapeHtml(c))}</th>`).join('')}</tr>`;
+      const tbody = rows.map((r) => `<tr>${r.map((c) => `<td>${renderInline(escapeHtml(c))}</td>`).join('')}</tr>`).join('');
+      out.push(`<div class="table-wrap"><table><thead>${thead}</thead><tbody>${tbody}</tbody></table></div>`);
+      continue;
+    }
+
+    const heading = line.match(/^(#{1,6})\s+(.+)$/);
+    if (heading) {
+      flushList();
+      const level = heading[1].length;
+      const text = heading[2].trim();
+      const id = uniqueId(slugify(text));
+      out.push(`<h${level} id="${id}">${renderInline(escapeHtml(text))}</h${level}>`);
+      i++;
+      continue;
+    }
+
+    if (!line.trim()) { flushList(); i++; continue; }
+
+    const bullet = line.match(/^[-*]\s+(.+)$/);
+    const numbered = line.match(/^\d+\.\s+(.+)$/);
+    if (bullet || numbered) {
+      const tag = numbered ? 'ol' : 'ul';
+      if (!openList || openList.tag !== tag) { flushList(); openList = { tag, items: [] }; }
+      let text = (bullet || numbered)[1];
+      i++;
+      while (i < lines.length && lines[i].trim() && !isBlockBoundary(lines[i])) { text += ' ' + lines[i].trim(); i++; }
+      openList.items.push(text);
+      continue;
+    }
+
+    // Plain paragraph — lazily continues over following non-blank, non-block-start lines.
+    flushList();
+    let text = line.trim();
+    i++;
+    while (i < lines.length && lines[i].trim() && !isBlockBoundary(lines[i])) { text += ' ' + lines[i].trim(); i++; }
+    out.push(`<p>${renderInline(escapeHtml(text))}</p>`);
+  }
+  flushList();
+  return out.join('\n');
+}
+
+function renderIndex(activeSlug) {
+  const nav = document.getElementById('docIndex');
+  nav.innerHTML = `<p class="index-label">Contents</p><ul>${DOCS.map((d) => `
+    <li><a href="#${d.slug}" class="${d.slug === activeSlug ? 'active' : ''}">${escapeHtml(d.label)}<span class="desc">${escapeHtml(d.desc)}</span></a></li>
+  `).join('')}</ul>`;
+}
+
+const docCache = new Map();
+async function loadDoc(slug) {
+  const doc = DOCS.find((d) => d.slug === slug) || DOCS[0];
+  renderIndex(doc.slug);
+  const article = document.getElementById('docArticle');
+  article.innerHTML = '<p class="doc-status">Loading…</p>';
+  try {
+    let text = docCache.get(doc.file);
+    if (text === undefined) {
+      const res = await fetch('docs/' + doc.file, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      text = await res.text();
+      docCache.set(doc.file, text);
+    }
+    article.innerHTML = renderMarkdown(text);
+    window.scrollTo({ top: 0 });
+  } catch (err) {
+    const ghUrl = `https://github.com/trimpta/esp32-epaper-ereader/blob/master/docs/${doc.file}`;
+    article.innerHTML = `<p class="doc-status err">Couldn't load <code>docs/${escapeHtml(doc.file)}</code> here (${escapeHtml(err.message)}).
+      That means this page isn't being served with the <code>docs/</code> folder alongside it — true for a bare
+      <code>file://</code> open or a server started somewhere that doesn't include it.
+      <a href="${ghUrl}" target="_blank" rel="noopener">Read it on GitHub instead →</a></p>`;
+  }
+}
+
+function currentSlug() {
+  const hash = location.hash.replace(/^#/, '');
+  return DOCS.some((d) => d.slug === hash) ? hash : DEFAULT_SLUG;
+}
+
+window.addEventListener('hashchange', () => loadDoc(currentSlug()));
+loadDoc(currentSlug());
+</script>
+</body>
+</html>

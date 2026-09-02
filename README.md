@@ -116,6 +116,8 @@ the reasoning behind the design choices (transport, refresh strategy, storage co
 - `simulator/` — standalone browser preview of the on-device reading UI (no hardware needed): same
   tag-stripping/wrap/paginate logic as the converter, rotary→scroll and MENU/EXIT→LMB/RMB input
   mapping, live layout-parameter sliders, games, wallpapers, and a memory/calibration panel.
+  `simulator/docs.html` is a separate in-site page rendering the four docs below in full, with an
+  index to switch between them — simulator-only, not part of what the ESP32 itself ever serves.
 - `converter/` — browser-side EPUB → `.cebk` converter (JSZip + vanilla JS). Runs standalone or
   loaded from the page the device itself serves.
 - `docs/FORMAT.md` — the `.cebk` binary format spec (must stay in sync between converter and firmware).

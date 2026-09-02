@@ -316,15 +316,42 @@ The sidebar's "About this project" panel carries the same AI-assistance disclosu
 Sources & inspirations list as the root README, so anyone who lands on the deployed simulator
 without going through GitHub still sees both. Keep the two in sync when either changes.
 
-Below it, a separate "Project docs" panel pulls its content live from `docs/*.md` instead
-(`loadDocsAbout`/`extractDocIntro`) — a title and first-paragraph summary per doc, fetched at
-page load rather than retyped by hand, so it can't quietly drift from the actual files the way a
-hand-copied summary could. This only works when `docs/` is actually reachable next to
-`index.html`: [.github/workflows/pages.yml](../.github/workflows/pages.yml) publishes them as
-siblings for exactly this reason. It fails gracefully (per-file, via `fetch`'s rejection) to a
-plain "Read on GitHub" link wherever that layout doesn't hold — a bare
-`cd simulator && python -m http.server` per the README's local-serve instructions, and always in
-the published Claude Artifact, which is one self-contained file with nothing alongside it.
+Below it, a "Read the docs →" button opens `simulator/docs.html` — a separate page, not another
+panel on this one. See [Docs page](#docs-page) below for what that page does and why it's split
+out.
+
+## Docs page
+
+`simulator/docs.html` is a standalone page — reached from `index.html`'s "About this project"
+panel, never embedded inside it — that renders the full text of `docs/ARCHITECTURE.md`,
+`docs/FORMAT.md`, `docs/FLASH_BUDGET.md`, and this file, in-site, with a left-hand index to switch
+between them (`#architecture`, `#format`, `#flash-budget`, `#simulator` — hash-routed, so a link to
+a specific doc is shareable). It exists only because this simulator does, and is deliberately kept
+out of the main page:
+
+- **It's a design/dev-reference tool, not part of the on-device experience.** The reading UI
+  (`index.html`'s canvas + sidebar) is meant to preview what the actual reader will feel like;
+  a documentation browser doesn't belong inside that illusion, so it's not a panel bolted onto the
+  same page.
+- **The real device doesn't get any of this.** `firmware/data/index.html` — the small loader page
+  the ESP32's own `web_server.cpp` actually serves for uploading books — is a separate, much
+  simpler file with nothing docs-related anywhere near it. Keeping the docs browser as its own
+  file in `simulator/` (rather than a section of `index.html`) means there's no risk of "does this
+  belong on the device's page" ever being a question worth asking.
+
+Content is fetched at page load (`fetch('docs/' + file)`) and rendered by a small hand-rolled
+markdown-to-HTML converter (`renderMarkdown` in `docs.html`) — headings (with slug `id`s for
+anchor links), paragraphs and list items with lazy line-wrap continuation, fenced code blocks, and
+GFM-style pipe tables; checked against exactly what these four docs actually use, not a general
+CommonMark implementation. Same reasoning as the hand-rolled ZIP reader in `index.html`: no bundled
+library, so it behaves identically wherever it's served from. If a doc fails to load (`docs/` not
+reachable next to `docs.html` — a bare `file://` open, or a server started somewhere that doesn't
+include it), that one doc's pane shows an inline error with a "Read it on GitHub instead" link
+rather than the whole page breaking.
+
+`docs.html` isn't part of the Claude Artifact published from `index.html` (only that one
+self-contained file is ever published as an Artifact) — it only exists as a real page in the repo
+and the GitHub Pages deploy.
 
 ## What's simulator-only (nothing to port to firmware)
 

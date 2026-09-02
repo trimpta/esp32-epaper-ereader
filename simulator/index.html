@@ -779,8 +779,8 @@
 
       <div class="panel">
         <h2>Project docs</h2>
-        <p class="legend" style="margin-bottom:0.6rem;">Loaded live from <code>docs/</code> in the repo — the summaries below are pulled from each file's own opening lines, not retyped here, so they can't quietly drift out of sync. If this shows GitHub-only links instead, the docs folder isn't reachable from wherever this page is being served (always true for the published Claude Artifact, which is one self-contained file with nothing alongside it).</p>
-        <ul id="docsAboutList"><li class="legend">Loading…</li></ul>
+        <p class="legend" style="margin-bottom:0.7rem;">Architecture, the <code>.cebk</code> file format, the flash/RAM budget, and this simulator's own UI/UX reference — full text, rendered on this site, not just a summary linking out to GitHub. Only ships with the simulator; the ESP32's own hosted page (<code>firmware/data/index.html</code>, the book-upload loader) doesn't carry it.</p>
+        <a class="btn primary" href="docs.html" target="_blank" rel="noopener">Read the docs →</a>
       </div>
     </div>
   </main>
@@ -1353,71 +1353,6 @@ function addBookmark() {
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-
-/* ---------------- "Project docs" panel — fetched live from docs/*.md rather than
-   hand-copied into this page, so it can't silently go stale. Only reachable when this
-   page is served with docs/ alongside it (see .github/workflows/pages.yml); falls back
-   to a plain GitHub link per-file, same graceful-degradation pattern as everything else
-   here that behaves identically in-page and in the published (single-file) Artifact. */
-const DOCS_ABOUT_FILES = [
-  { file: 'ARCHITECTURE.md', fallbackTitle: 'Architecture' },
-  { file: 'FORMAT.md', fallbackTitle: '.cebk binary format' },
-  { file: 'FLASH_BUDGET.md', fallbackTitle: 'Flash & RAM budget' },
-  { file: 'SIMULATOR.md', fallbackTitle: 'Simulator UI/UX reference' },
-];
-function stripMdInline(s) {
-  return s
-    .replace(/`([^`]+)`/g, '$1')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/\*([^*]+)\*/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-    // A line pulled out of a multi-line bold/italic span (the emphasis markers close on
-    // a later line we're not including) leaves a stray, unmatched */` behind — drop those.
-    .replace(/[*`]+/g, '')
-    .trim();
-}
-// Title = the first "# " line. Intro = the first non-blank, non-heading line after it —
-// whatever that is (a paragraph, or a numbered/bulleted list item if the doc opens with
-// a list, as ARCHITECTURE.md does), stripped of markdown syntax and list markers.
-function extractDocIntro(text) {
-  const lines = text.split('\n');
-  let title = '';
-  let intro = '';
-  for (const raw of lines) {
-    const line = raw.trim();
-    if (!title) {
-      const m = line.match(/^#\s+(.+)/);
-      if (m) title = stripMdInline(m[1]);
-      continue;
-    }
-    if (!line || line.startsWith('#')) continue;
-    intro = stripMdInline(line.replace(/^[-*]\s+/, '').replace(/^\d+\.\s+/, ''));
-    break;
-  }
-  if (intro.length > 220) intro = intro.slice(0, 217).trimEnd() + '…';
-  return { title, intro };
-}
-async function loadDocsAbout() {
-  const el = document.getElementById('docsAboutList');
-  if (!el) return;
-  const results = await Promise.all(DOCS_ABOUT_FILES.map(async (d) => {
-    try {
-      const res = await fetch('docs/' + d.file, { cache: 'no-store' });
-      if (!res.ok) throw new Error('not ok');
-      const { title, intro } = extractDocIntro(await res.text());
-      return { ...d, title: title || d.fallbackTitle, intro, ok: true };
-    } catch {
-      return { ...d, title: d.fallbackTitle, intro: '', ok: false };
-    }
-  }));
-  el.innerHTML = results.map((d) => {
-    const ghUrl = `https://github.com/trimpta/esp32-epaper-ereader/blob/master/docs/${d.file}`;
-    const body = d.ok
-      ? `${escapeHtml(d.intro)} <a href="${ghUrl}" target="_blank" rel="noopener">Read the full doc →</a>`
-      : `<a href="${ghUrl}" target="_blank" rel="noopener">Read on GitHub →</a>`;
-    return `<li><b>${escapeHtml(d.title)}.</b> ${body}</li>`;
-  }).join('');
 }
 
 function renderLibraryPanel() {
@@ -3531,7 +3466,6 @@ function bootSequence() {
 preloadWallpaper(selectedWallpaper().id, selectedWallpaper().dataUri); // fire-and-forget prewarm; falls back cleanly if it's somehow not ready by the first sleep
 renderWallpaperPanel();
 updateMemoryDisplay();
-loadDocsAbout();
 
 if (document.fonts && document.fonts.ready) {
   Promise.all([
