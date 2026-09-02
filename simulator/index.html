@@ -605,6 +605,10 @@
       <div class="legend" style="margin-bottom:0.4rem;">Panel active area at true size (63.2 × 31.2mm, landscape):</div>
       <div id="realSizeBox" style="border:1.5px solid var(--copper); background:var(--paper); box-sizing:content-box;"></div>
     </div>
+    <label style="display:flex; align-items:center; gap:0.5rem; margin-top:1.1rem; cursor:pointer;">
+      <input type="checkbox" id="cTrueSizeDisplay">
+      <span class="legend" style="margin:0;">Also resize the simulator's actual display above to true size (not just the preview box)</span>
+    </label>
     <button class="btn" id="btnCalibrateDone" style="margin-top:1rem;">Done</button>
   </div>
 
@@ -673,6 +677,26 @@
           <input type="file" id="wallpaperInput" accept="image/*">
         </div>
         <div id="wallpaperStatus" class="legend" style="margin-top:0.5rem;">Dithered to the panel's real 1-bit palette in your browser on upload — only the ~3.7KB bitmap is what "reaches the device," never the source photo.</div>
+        <div id="wallpaperPreview" hidden style="margin-top:0.8rem;">
+          <canvas id="wallpaperPreviewCanvas" width="250" height="122" style="width:100%; image-rendering:pixelated; border:1px solid var(--copper); background:var(--paper);"></canvas>
+          <div class="param" style="margin-top:0.6rem;">
+            <label>Brightness <span class="val" id="vWpBrightness">0</span></label>
+            <input type="range" id="rWpBrightness" min="-100" max="100" step="1" value="0">
+          </div>
+          <div class="param">
+            <label>Contrast <span class="val" id="vWpContrast">0</span></label>
+            <input type="range" id="rWpContrast" min="-100" max="100" step="1" value="0">
+          </div>
+          <label style="display:flex; align-items:center; gap:0.5rem; margin:0.5rem 0;">
+            <input type="checkbox" id="cWpInvert">
+            <span class="legend" style="margin:0;">Invert</span>
+          </label>
+          <div class="legend" style="margin-bottom:0.5rem;">Adjust until the dithered preview above looks best for this image — these settings only affect this one wallpaper.</div>
+          <div class="file-row">
+            <button class="btn primary" id="btnWpConfirm">Use this wallpaper</button>
+            <button class="btn" id="btnWpCancel">Cancel</button>
+          </div>
+        </div>
         <div id="wallpaperPanel" style="margin-top:0.7rem;"></div>
       </div>
 
@@ -710,11 +734,31 @@
           <li><b>Italic.</b> Shown here as a synthetic slant for preview purposes. u8g2 has no real italic face at this size, so firmware currently falls back to regular — see <code>docs/ARCHITECTURE.md</code>.</li>
           <li><b>Refresh flash.</b> Modeled on real SSD1680/EPD behavior — full refresh flickers through a couple of black/white cycles (the datasheet-level description is "flickers multiple times," vs. once for fast-refresh and never for partial), and partial refresh accumulates faint ghosting that only a full refresh clears. But it's a stylized per-pixel approximation, not the SSD1680's actual waveform LUTs — real timing and exact ghosting patterns will differ. Real full refresh also takes ~2-3s; this is sped up to stay pleasant to use.</li>
           <li><b>Always landscape.</b> The panel is a 122×250 portrait sensor natively, but that's ~19 characters/line — bad enough that portrait was never worth shipping as an option. Rendered rotated (250×122) unconditionally, matching <code>display.setRotation(1)</code> in <code>firmware/src/renderer.cpp</code>.</li>
-          <li><b>Battery %.</b> Shown on MENU and boot here, but it's illustrative — the stock schematic has no battery-voltage sense line at all, so real hardware reads <code>-1</code> (hidden) until a resistor divider is added. See <code>firmware/src/config.h</code> / <code>battery.cpp</code> for the two-resistor fix.</li>
+          <li><b>No battery indicator.</b> The stock schematic has no battery-voltage sense line at all, so this simulator doesn't show one — real hardware reads <code>-1</code> (unavailable) until a resistor divider is added. See <code>firmware/src/config.h</code> / <code>battery.cpp</code> for the two-resistor fix; the UI can show a real percentage once that's wired up.</li>
           <li><b>Resume position / bookmarks.</b> Saved in this browser's <code>localStorage</code>, keyed by title+author — not the book file itself. Re-loading the <em>same</em> EPUB (or the sample) restores where you left off; on real hardware this is trivial by comparison, since the book is already sitting in flash — just a small per-book position/bookmark record next to it.</li>
           <li><b>Layout parameters aren't a runtime setting.</b> Changing margin/line-height/font-size here re-paginates instantly because this is a design-time tool — the real device can't do that. Page breaks are precomputed once, at conversion time, and baked into each <code>.cebk</code> file (<code>docs/FORMAT.md</code>); the whole point was zero text-layout work on the ESP32. Change a constant in <code>firmware/src/config.h</code> after books are already on the device and their saved page/line tables no longer match what gets rendered — every book has to be re-converted and re-uploaded. Use these sliders to pick final values, then hardcode them and reflash; they're not something a reader adjusts after the fact.</li>
           <li><b>Sleep wallpaper.</b> An image embedded directly in this page, dithered to the panel's actual 1-bit palette (a real EPD can't show grayscale, so drawing it as a photo would be dishonest to what this simulates) — not fetched, so it shows the same way here and in the published Artifact. Falls back to a small drawn lighthouse scene only if decoding ever fails.</li>
         </ul>
+      </div>
+
+      <div class="panel caveats">
+        <h2>About this project</h2>
+        <p class="legend" style="margin-bottom:0.7rem;">
+          🤖 <b>Disclosure: this is "vibe coded."</b> The firmware, converter, this simulator, and
+          its docs were written collaboratively with <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude</a>
+          (Anthropic), directed and reviewed by a human, without physical access to the target
+          hardware yet — see the panel above for what's reasoned-through rather than measured.
+        </p>
+        <p class="legend" style="margin-bottom:0.4rem;"><b>Sources &amp; inspirations:</b></p>
+        <ul>
+          <li><b>Hardware.</b> <a href="https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html" target="_blank" rel="noopener">Elecrow CrowPanel ESP32 2.13" E-Paper HMI Display</a>.</li>
+          <li><b>Precedent projects</b> (see <code>docs/ARCHITECTURE.md</code> for how this one differs): <a href="https://github.com/atomic14/diy-esp32-epub-reader" target="_blank" rel="noopener">atomic14/diy-esp32-epub-reader</a> (equivalent tag-stripping, done on-device) and Soldered's Inkplate 6FLICK (host-side Python EPUB pre-conversion) — this project follows the second pattern, in the browser, with pagination also moved off-device.</li>
+          <li><b>Firmware libraries.</b> GxEPD2, U8g2_for_Adafruit_GFX, Adafruit GFX Library, WiFiManager, ESPAsyncWebServer/AsyncTCP (esphome forks), ArduinoJson.</li>
+          <li><b>Converter.</b> JSZip, for standalone EPUB unzipping outside this simulator.</li>
+          <li><b>Fonts.</b> Silkscreen, IBM Plex Mono, and IBM Plex Sans (Google Fonts).</li>
+          <li><b>Sample books.</b> <em>Alice's Adventures in Wonderland</em>, <em>The Strange Case of Dr. Jekyll and Mr. Hyde</em>, and <em>The Wonderful Wizard of Oz</em> — genuinely US-public-domain texts via <a href="https://www.gutenberg.org/" target="_blank" rel="noopener">Project Gutenberg</a>.</li>
+        </ul>
+        <p class="legend" style="margin-top:0.6rem;">Full source, issues, and the README live at <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">github.com/trimpta/esp32-epaper-ereader</a>.</p>
       </div>
     </div>
   </main>
@@ -1128,10 +1172,6 @@ const state = {
   selectedWallpaperId: 'lighthouse',
   asleep: false,
   lightsOut: null,
-  // Illustrative only — see the "where this diverges" panel. The stock board has no
-  // battery-voltage sense line at all (confirmed against the schematic), so this isn't
-  // simulating a real reading, just showing what the UI would look like if wired up.
-  batteryPercent: 60 + Math.floor(Math.random() * 35),
 };
 
 /* ---------------- persistence — reading position + bookmarks only, per viewer's
@@ -1352,15 +1392,35 @@ function renderWallpaperPanel() {
   el.appendChild(grid);
 }
 
-// Dithering happens here, client-side, immediately — the same step a real device's
-// web upload would need the browser to do, since the device itself has neither the
-// RAM headroom nor the reason to carry an image decoder for a one-time conversion.
-// Only the finished bitmap (entry.canvas, ~3.7KB worth of pixels) is what "reaches the
-// device" in this model; the data URL read here is never stored past this function.
+// Dithering happens here, client-side — the same step a real device's web upload would
+// need the browser to do, since the device itself has neither the RAM headroom nor the
+// reason to carry an image decoder for a one-time conversion. Only the finished bitmap
+// (~3.7KB worth of pixels) is what "reaches the device" in this model; the source image
+// is held in memory only long enough to preview + adjust it, then discarded once the
+// user confirms — never stored past this upload session.
+//
+// Photos vary a lot in how a *fixed* threshold dithers them (a dim photo goes mostly
+// black, an overexposed one goes mostly white), so rather than committing immediately
+// on upload, this shows a live dithered preview with Brightness/Contrast/Invert sliders
+// (see ditherImageToPanelCanvas) and only commits the bitmap once the user is happy with
+// it and clicks "Use this wallpaper."
+let pendingWallpaperUpload = null; // { img, name } while the preview panel is open
+function renderWallpaperPreview() {
+  if (!pendingWallpaperUpload) return;
+  const brightness = Number(document.getElementById('rWpBrightness').value);
+  const contrast = Number(document.getElementById('rWpContrast').value);
+  const invert = document.getElementById('cWpInvert').checked;
+  document.getElementById('vWpBrightness').textContent = String(brightness);
+  document.getElementById('vWpContrast').textContent = String(contrast);
+  const dithered = ditherImageToPanelCanvas(pendingWallpaperUpload.img, canvas.width, canvas.height, { brightness, contrast, invert });
+  const pctx = document.getElementById('wallpaperPreviewCanvas').getContext('2d');
+  pctx.drawImage(dithered, 0, 0, 250, 122);
+  pendingWallpaperUpload.dithered = dithered;
+}
 async function handleWallpaperUpload(file) {
   const wpStatus = document.getElementById('wallpaperStatus');
   const setStatusText = (msg, cls) => { wpStatus.textContent = msg; wpStatus.className = 'legend' + (cls ? ' ' + cls : ''); };
-  setStatusText('Dithering ' + file.name + '…');
+  setStatusText('Loading ' + file.name + '…');
   try {
     const dataUri = await new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -1368,23 +1428,38 @@ async function handleWallpaperUpload(file) {
       reader.onerror = () => reject(new Error('Could not read that file.'));
       reader.readAsDataURL(file);
     });
-    const id = 'custom-' + Date.now();
-    const entry = preloadWallpaper(id, dataUri);
-    await new Promise((resolve) => {
-      const check = () => { if (entry.status === 'ready' || entry.status === 'failed') resolve(); else setTimeout(check, 30); };
-      check();
-    });
-    if (entry.status !== 'ready') throw new Error('Could not decode that image.');
-
-    const name = file.name.replace(/\.[^.]+$/, '').slice(0, 40) || 'Wallpaper';
-    state.customWallpapers.push({ id, name, sizeBytes: WALLPAPER_BITMAP_BYTES });
-    state.selectedWallpaperId = id;
-    renderWallpaperPanel();
-    updateMemoryDisplay();
-    setStatusText(`Added "${name}" — ${fmtBytes(WALLPAPER_BITMAP_BYTES)} as a 1-bit bitmap, selected.`, 'ok');
+    const img = await loadImage(dataUri);
+    pendingWallpaperUpload = { img, name: file.name.replace(/\.[^.]+$/, '').slice(0, 40) || 'Wallpaper' };
+    document.getElementById('rWpBrightness').value = '0';
+    document.getElementById('rWpContrast').value = '0';
+    document.getElementById('cWpInvert').checked = false;
+    document.getElementById('wallpaperPreview').hidden = false;
+    renderWallpaperPreview();
+    setStatusText('Adjust the sliders below to taste, then confirm.', 'ok');
   } catch (err) {
     setStatusText('ERROR: ' + err.message, 'err');
   }
+}
+function cancelWallpaperUpload() {
+  pendingWallpaperUpload = null;
+  document.getElementById('wallpaperPreview').hidden = true;
+  document.getElementById('wallpaperStatus').textContent = 'Dithered to the panel\'s real 1-bit palette in your browser on upload — only the ~3.7KB bitmap is what "reaches the device," never the source photo.';
+  document.getElementById('wallpaperStatus').className = 'legend';
+}
+function confirmWallpaperUpload() {
+  if (!pendingWallpaperUpload || !pendingWallpaperUpload.dithered) return;
+  const id = 'custom-' + Date.now();
+  wallpaperCache.set(id, { canvas: pendingWallpaperUpload.dithered, status: 'ready' });
+  const name = pendingWallpaperUpload.name;
+  state.customWallpapers.push({ id, name, sizeBytes: WALLPAPER_BITMAP_BYTES });
+  state.selectedWallpaperId = id;
+  pendingWallpaperUpload = null;
+  document.getElementById('wallpaperPreview').hidden = true;
+  renderWallpaperPanel();
+  updateMemoryDisplay();
+  const wpStatus = document.getElementById('wallpaperStatus');
+  wpStatus.textContent = `Added "${name}" — ${fmtBytes(WALLPAPER_BITMAP_BYTES)} as a 1-bit bitmap, selected.`;
+  wpStatus.className = 'legend ok';
 }
 
 function currentScreen() { return state.screenStack[state.screenStack.length - 1]; }
@@ -2375,42 +2450,63 @@ const BUILTIN_WALLPAPERS = [
 // (status starts 'loading' or whatever it already was) — callers that need to know
 // when it's actually ready (the upload flow) poll `.status`, same as this file
 // already does for the sample-book/EPUB async paths.
+// Shared dithering core for both the builtin/committed-custom wallpaper path (fixed,
+// neutral params) and the upload preview (live params from the Brightness/Contrast/
+// Invert sliders) — one Bayer 4x4 ordered-dither implementation instead of two copies
+// that could drift. brightness/contrast are -100..100 (0 = untouched); a photo that's
+// too dark or too washed-out at neutral settings is common enough on a 1-bit panel that
+// a fixed threshold alone often isn't "good enough" — these three params are what
+// actually move the result, so that's the full set exposed rather than guessing at more.
+function ditherImageToPanelCanvas(img, targetW, targetH, opts) {
+  const { brightness = 0, contrast = 0, invert = false } = opts || {};
+  const off = document.createElement('canvas');
+  off.width = targetW;
+  off.height = targetH;
+  const octx = off.getContext('2d');
+  const scale = Math.max(targetW / img.width, targetH / img.height);
+  const dw = img.width * scale, dh = img.height * scale;
+  octx.drawImage(img, (targetW - dw) / 2, (targetH - dh) / 2, dw, dh);
+  const frame = octx.getImageData(0, 0, targetW, targetH);
+  const d = frame.data;
+  const contrastFactor = 1 + contrast / 100;
+  const brightnessShift = brightness * 1.28; // -100..100 -> roughly -128..128
+  for (let y = 0; y < targetH; y++) {
+    for (let x = 0; x < targetW; x++) {
+      const i = (y * targetW + x) * 4;
+      let lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+      lum = (lum - 128) * contrastFactor + 128 + brightnessShift;
+      if (lum < 0) lum = 0; else if (lum > 255) lum = 255;
+      if (invert) lum = 255 - lum;
+      const threshold = ((BAYER_4X4[y & 3][x & 3] + 0.5) / 16) * 255;
+      const on = lum < threshold ? 0 : 255;
+      d[i] = d[i + 1] = d[i + 2] = on;
+      d[i + 3] = 255;
+    }
+  }
+  octx.putImageData(frame, 0, 0);
+  return off;
+}
+
+function loadImage(dataUri) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('Could not decode that image.'));
+    img.src = dataUri;
+  });
+}
+
 function preloadWallpaper(id, dataUri) {
   let entry = wallpaperCache.get(id);
   if (entry) return entry;
   entry = { canvas: null, status: 'loading' };
   wallpaperCache.set(id, entry);
-  const img = new Image();
-  img.onload = () => {
-    try {
-      const off = document.createElement('canvas');
-      off.width = canvas.width;
-      off.height = canvas.height;
-      const octx = off.getContext('2d');
-      const scale = Math.max(off.width / img.width, off.height / img.height);
-      const dw = img.width * scale, dh = img.height * scale;
-      octx.drawImage(img, (off.width - dw) / 2, (off.height - dh) / 2, dw, dh);
-      const frame = octx.getImageData(0, 0, off.width, off.height);
-      const d = frame.data;
-      for (let y = 0; y < off.height; y++) {
-        for (let x = 0; x < off.width; x++) {
-          const i = (y * off.width + x) * 4;
-          const lum = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-          const threshold = ((BAYER_4X4[y & 3][x & 3] + 0.5) / 16) * 255;
-          const on = lum < threshold ? 0 : 255;
-          d[i] = d[i + 1] = d[i + 2] = on;
-          d[i + 3] = 255;
-        }
-      }
-      octx.putImageData(frame, 0, 0);
-      entry.canvas = off;
+  loadImage(dataUri)
+    .then((img) => {
+      entry.canvas = ditherImageToPanelCanvas(img, canvas.width, canvas.height, {});
       entry.status = 'ready';
-    } catch {
-      entry.status = 'failed';
-    }
-  };
-  img.onerror = () => { entry.status = 'failed'; };
-  img.src = dataUri;
+    })
+    .catch(() => { entry.status = 'failed'; });
   return entry;
 }
 
@@ -2473,17 +2569,18 @@ function drawSleepWallpaper() {
   ctx.font = `400 7px 'Silkscreen', monospace`;
   ctx.textBaseline = 'alphabetic';
   const title = state.activeBook >= 0 ? state.library[state.activeBook].title : 'ROTARY READER';
-  // Backing plates behind the text — same reasoning as the menu screens' dithered
+  // Backing plate behind the text — same reasoning as the menu screens' dithered
   // background: a busy photo underneath would otherwise fight the glyphs.
-  [[title, h - 18], [`batt ${state.batteryPercent}%`, h - 8]].forEach(([text, y]) => {
-    const w = ctx.measureText(text).width;
+  {
+    const y = h - 10;
+    const w = ctx.measureText(title).width;
     ctx.globalAlpha = wp.status === 'ready' ? 0.85 : 1;
     ctx.fillStyle = paperColor();
     ctx.fillRect(2, y - 8, w + 4, 11);
     ctx.globalAlpha = 1;
     ctx.fillStyle = inkColor();
-    ctx.fillText(text, 4, y);
-  });
+    ctx.fillText(title, 4, y);
+  }
   ctx.restore();
 }
 
@@ -2934,8 +3031,11 @@ bindHoldGesture(document.getElementById('btnExit'), { onShort: () => handleInput
    across reloads since recalibrating every visit would be pointless friction — the
    same monitor at the same zoom level has the same correction factor every time. */
 const CSS_PX_PER_MM = 96 / 25.4; // the CSS spec's reference-pixel assumption (96dpi) — the *starting* guess, not the answer
+const PANEL_ACTIVE_MM = { w: 63.2, h: 31.2 }; // real active area, landscape — same figure as realSizeBox
 let rulerScale = 1;
 try { const saved = parseFloat(localStorage.getItem('rotaryReaderRulerScale_v1')); if (saved > 0) rulerScale = saved; } catch { /* ignore */ }
+let trueSizeDisplayEnabled = false;
+try { trueSizeDisplayEnabled = localStorage.getItem('rotaryReaderTrueSizeDisplay_v1') === '1'; } catch { /* ignore */ }
 
 function buildRulerTicks() {
   const svg = document.getElementById('rulerSvg');
@@ -2966,8 +3066,30 @@ function updateCalibrationVisuals() {
   document.getElementById('rulerSvg').style.width = (50 * pxPerMm) + 'px';
   document.getElementById('vRulerScale').textContent = rulerScale.toFixed(3) + '×';
   const box = document.getElementById('realSizeBox');
-  box.style.width = (63.2 * pxPerMm) + 'px';
-  box.style.height = (31.2 * pxPerMm) + 'px';
+  box.style.width = (PANEL_ACTIVE_MM.w * pxPerMm) + 'px';
+  box.style.height = (PANEL_ACTIVE_MM.h * pxPerMm) + 'px';
+  applyTrueSizeDisplay(pxPerMm);
+}
+
+// Unlike the inert preview box above, this resizes the actual interactive #screen canvas
+// (overriding its normal "fill the sidebar column" width:100% via inline style, which wins
+// on specificity) so the real UI — reading, games, everything — can be used at true physical
+// size, not just looked at in a same-size-as-nothing-else preview rectangle.
+function applyTrueSizeDisplay(pxPerMm) {
+  const screenFrame = document.querySelector('.screen-frame');
+  const deviceEl = document.querySelector('.device');
+  if (trueSizeDisplayEnabled) {
+    const px = PANEL_ACTIVE_MM.w * pxPerMm;
+    canvas.style.width = px + 'px';
+    canvas.style.maxWidth = 'none';
+    if (screenFrame) screenFrame.style.width = 'fit-content';
+    if (deviceEl) deviceEl.style.width = 'fit-content';
+  } else {
+    canvas.style.width = '';
+    canvas.style.maxWidth = '';
+    if (screenFrame) screenFrame.style.width = '';
+    if (deviceEl) deviceEl.style.width = '';
+  }
 }
 
 buildRulerTicks();
@@ -2990,6 +3112,13 @@ document.getElementById('rRulerScale').addEventListener('input', (e) => {
   try { localStorage.setItem('rotaryReaderRulerScale_v1', String(rulerScale)); } catch { /* ignore */ }
 });
 document.getElementById('rRulerScale').value = String(rulerScale);
+const cTrueSizeDisplay = document.getElementById('cTrueSizeDisplay');
+cTrueSizeDisplay.checked = trueSizeDisplayEnabled;
+cTrueSizeDisplay.addEventListener('change', (e) => {
+  trueSizeDisplayEnabled = e.target.checked;
+  try { localStorage.setItem('rotaryReaderTrueSizeDisplay_v1', trueSizeDisplayEnabled ? '1' : '0'); } catch { /* ignore */ }
+  updateCalibrationVisuals();
+});
 updateCalibrationVisuals();
 
 /* ---------------- fullscreen ---------------- */
@@ -3076,6 +3205,11 @@ document.getElementById('wallpaperInput').addEventListener('change', (e) => {
   if (file) handleWallpaperUpload(file);
   e.target.value = ''; // allow re-selecting the same file later
 });
+document.getElementById('rWpBrightness').addEventListener('input', renderWallpaperPreview);
+document.getElementById('rWpContrast').addEventListener('input', renderWallpaperPreview);
+document.getElementById('cWpInvert').addEventListener('change', renderWallpaperPreview);
+document.getElementById('btnWpConfirm').addEventListener('click', confirmWallpaperUpload);
+document.getElementById('btnWpCancel').addEventListener('click', cancelWallpaperUpload);
 
 document.getElementById('btnPickFile').addEventListener('click', () => document.getElementById('fileInput').click());
 document.getElementById('fileInput').addEventListener('change', async (e) => {
@@ -3152,7 +3286,7 @@ function bootSequence() {
   drawMessage(['ROTARY READER', '', 'Connecting to WiFi...']);
   updateStrip();
   setTimeout(() => {
-    drawMessage(['ROTARY READER', '', 'Connect at:', state.fakeIp, '', `Batt: ${state.batteryPercent}%`]);
+    drawMessage(['ROTARY READER', '', 'Connect at:', state.fakeIp]);
     flash();
     setTimeout(async () => {
       // Local EPUB next to the page (see tryAutoLoadLocalEpub) wins if there is one —

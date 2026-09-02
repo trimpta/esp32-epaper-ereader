@@ -1,5 +1,12 @@
 # esp32-epaper-ereader
 
+> 🤖 **Disclosure: this project is "vibe coded."** The firmware, converter, simulator, docs, and
+> this README were written collaboratively with [Claude](https://claude.com/claude-code) (Anthropic),
+> directed and reviewed by a human, without physical access to the target hardware. Nothing here has
+> run on a real board yet — see [Status / what needs real-hardware verification](#status--what-needs-real-hardware-verification)
+> for the specific things that are reasoned-through rather than measured. Treat pin mappings, driver
+> compatibility, and size estimates as a well-researched starting point to verify, not a guarantee.
+
 A DIY EPUB e-reader built on the [CrowPanel ESP32 2.13" E-Paper HMI Display](https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html)
 (ESP32-S3, SSD1680Z/JD79661, 122×250 mono, 8MB flash, no SD slot) — full firmware, a browser-side
 EPUB converter, a parametric enclosure, and a **fully-interactive browser simulator** so you can
@@ -24,13 +31,13 @@ python -m http.server 8420
 
 **[Live demo →](https://trimpta.com/esp32-epaper-ereader/)** *(deploys automatically from `simulator/` via GitHub Actions)*
 
-| Reading | Library | Sleep wallpaper |
+| Reading | Library | Menu |
 |---|---|---|
-| ![Reading a page](docs/screenshots/screen-reading.png) | ![Library screen](docs/screenshots/screen-library.png) | ![Sleep wallpaper](docs/screenshots/screen-sleep.png) |
+| ![Reading a page](docs/screenshots/screen-reading.png) | ![Library screen](docs/screenshots/screen-library.png) | ![Home menu](docs/screenshots/screen-menu.png) |
 
-| Settings | Lights Out |
-|---|---|
-| ![Settings screen](docs/screenshots/screen-settings.png) | ![Lights Out game](docs/screenshots/screen-lightsout.png) |
+| Settings | Hangman | Sleep wallpaper |
+|---|---|---|
+| ![Settings screen](docs/screenshots/screen-settings.png) | ![Hangman game](docs/screenshots/screen-hangman.png) | ![Sleep wallpaper](docs/screenshots/screen-sleep.png) |
 
 ### What the simulator covers
 
@@ -112,6 +119,27 @@ code and need confirming against the actual PCB before they'll work:
   placeholder and pagination will drift from what's actually rendered until replaced.
 - Compiled firmware binary size (see [docs/FLASH_BUDGET.md](docs/FLASH_BUDGET.md)) — reasoned from
   typical library sizes, not yet confirmed with a real `pio run` build.
+
+## Sources & inspirations
+
+- **Hardware:** [Elecrow CrowPanel ESP32 2.13" E-Paper HMI Display](https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html).
+- **Precedent projects** (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how this one differs):
+  [atomic14/diy-esp32-epub-reader](https://github.com/atomic14/diy-esp32-epub-reader) does
+  equivalent tag-stripping on-device; [Soldered's Inkplate 6FLICK](https://soldered.com/product/soldered-inkplate-6flick-e-paper-board/)
+  pre-converts EPUBs with a host-side Python script before they reach the device — this project
+  follows that second pattern, but in the browser and with pagination also moved off-device.
+- **Firmware libraries:** [GxEPD2](https://github.com/ZinggJM/GxEPD2),
+  [U8g2_for_Adafruit_GFX](https://github.com/olikraus/U8g2_for_Adafruit_GFX),
+  [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library),
+  [WiFiManager](https://github.com/tzapu/WiFiManager),
+  [ESPAsyncWebServer](https://github.com/esphome/ESPAsyncWebServer) /
+  [AsyncTCP](https://github.com/esphome/AsyncTCP) (esphome forks), [ArduinoJson](https://arduinojson.org/).
+- **Converter:** [JSZip](https://stuk.github.io/jszip/) for standalone EPUB unzipping outside the simulator.
+- **Fonts:** [Silkscreen](https://fonts.google.com/specimen/Silkscreen), [IBM Plex Mono, and IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) (Google Fonts).
+- **Sample books:** *Alice's Adventures in Wonderland*, *The Strange Case of Dr. Jekyll and Mr.
+  Hyde*, and *The Wonderful Wizard of Oz* — all genuinely US-public-domain texts via
+  [Project Gutenberg](https://www.gutenberg.org/), used as real conversion-pipeline test input
+  rather than placeholder text.
 
 ## Coming soon
 
