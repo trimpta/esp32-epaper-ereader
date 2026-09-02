@@ -16,6 +16,27 @@ Not aiming for EPUB spec compliance — CSS, embedded fonts, images, and complex
 intentionally dropped. The goal is fast, low-effort page turns on very limited hardware, and a
 project you can actually finish.
 
+## The hardware
+
+![CrowPanel ESP32 2.13" E-Paper HMI Display — front view with dimensions, and the back of the PCB with its components labelled](docs/images/hardware-overview.webp)
+
+<sub>Product image © [Elecrow](https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html) — not a photo of this build. Real photos of the assembled reader are in [Coming soon](#coming-soon).</sub>
+
+Two things on that board shape most of this project:
+
+- **The 63.19 × 31.2 mm active area.** That's tiny — about 38 characters per line at the font size
+  this uses, and only ~19 if you turned it portrait, which is why the UI is landscape-only. It's
+  also the exact figure the simulator's [true-size calibration](docs/SIMULATOR.md#true-size-calibration)
+  renders against, so the preview matches the real panel rather than just looking plausible.
+- **Three inputs: MENU, EXIT, and a rotary switch** (which has its own push-click, giving six
+  gestures once you count short vs. long presses). Every screen in the reader — menus, settings,
+  all five games — is built to be driven by just those.
+
+Note the `BAT` connector is a power input only: the schematic has no battery-voltage sense line to
+the MCU, which is why there's no battery indicator anywhere in the UI. See
+[docs/SIMULATOR.md](docs/SIMULATOR.md#deliberately-not-simulated-battery-percentage) for the
+two-resistor fix if you want one.
+
 ## Try it without any hardware
 
 The `simulator/` folder is a self-contained, single-file browser app that mimics the real device —
@@ -123,6 +144,9 @@ code and need confirming against the actual PCB before they'll work:
 ## Sources & inspirations
 
 - **Hardware:** [Elecrow CrowPanel ESP32 2.13" E-Paper HMI Display](https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html).
+  The annotated board image in [The hardware](#the-hardware) is Elecrow's own product image,
+  reproduced here for reference; their published schematic is also where the GPIO assignments in
+  `firmware/src/config.h` come from.
 - **Precedent projects** (see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how this one differs):
   [atomic14/diy-esp32-epub-reader](https://github.com/atomic14/diy-esp32-epub-reader) does
   equivalent tag-stripping on-device; [Soldered's Inkplate 6FLICK](https://soldered.com/product/soldered-inkplate-6flick-e-paper-board/)
