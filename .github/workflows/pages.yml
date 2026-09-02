@@ -5,6 +5,7 @@ on:
     branches: [master]
     paths:
       - "simulator/**"
+      - "docs/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -26,8 +27,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+      # simulator/ stays the site root (keeps the live URL stable) with docs/ published
+      # alongside it as a subfolder — the "About" panel's in-page doc summaries fetch
+      # from ./docs/*.md at runtime and fall back to GitHub links if that 404s (e.g. a
+      # local `cd simulator && python -m http.server` won't have this docs/ copy).
+      - name: Assemble site (simulator + docs)
+        run: |
+          mkdir -p _site
+          cp -r simulator/. _site/
+          mkdir -p _site/docs
+          cp -r docs/. _site/docs/
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: simulator
+          path: _site
       - id: deployment
         uses: actions/deploy-pages@v4

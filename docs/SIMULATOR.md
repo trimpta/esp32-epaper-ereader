@@ -38,7 +38,7 @@ MENU in Minesweeper (flag a cell) and Sudoku (cycle a digit downward instead of 
 
 Screens live on a stack (`state.screenStack`), pushed with `pushScreen(name)` and popped with
 `popScreen()` — EXIT is generically "pop the stack" except from the reading view, which is
-special-cased (see below). Six of the screens are plain scrollable lists (`LIST_SCREENS`), each
+special-cased (see below). Eight of the screens are plain scrollable lists (`LIST_SCREENS`), each
 just a title and a row-generator function; a shared renderer (`screenBlocks`/`selectableBlocks`/
 `drawBlockList`) handles multi-line wrapped rows, separators, and scroll-into-view windowing so
 list screens don't each reimplement scrolling.
@@ -46,7 +46,8 @@ list screens don't each reimplement scrolling.
 ```
 reading ──MENU──▶ bookMenu ──"Browse chapters"──▶ bookChapters
    │                  │
-   │                  └──"Bookmarks (N)"──▶ bookmarks
+   │                  ├──"Bookmarks (N)"──▶ bookmarks
+   │                  └──"Reading stats"──▶ stats
    │
    └──EXIT──▶ home ──▶ library ──(pick a book)──▶ bookMenu
                   │
@@ -64,11 +65,13 @@ reading ──MENU──▶ bookMenu ──"Browse chapters"──▶ bookChapte
 - **bookMenu** — context menu for one specific book. Shape depends on whether it's the book
   currently open (`state.browseBookIdx === state.activeBook`): the open book gets a quick
   "Bookmark this page" row instead of Continue/Start (you're already there), everything else gets
-  Continue (if it has saved progress) or Start reading, plus Browse chapters, Bookmarks, and a
-  "More… (Library, Settings, Wi-Fi, Games)" escape hatch to Home.
+  Continue (if it has saved progress) or Start reading, plus Browse chapters, Bookmarks, Reading
+  stats, and a "More… (Library, Settings, Wi-Fi, Games)" escape hatch to Home.
 - **bookChapters** — flat chapter list for the book in `state.browseBookIdx`; picking one jumps
   straight to page 1 of that chapter.
 - **bookmarks** — per-book bookmark list; picking one jumps to that saved position.
+- **stats** — read-only pace readout for the book in `state.browseBookIdx` (see
+  [Reading stats](#reading-stats) below); every row is a display line, not a selectable action.
 - **settings** — layout sliders (font size, line height, heading height, margin, full-refresh
   cadence) plus the wallpaper switcher, all scrub-editable (see below).
 - **wifi** — a fake connection-state screen (`state.wifiMode`), illustrating AP-mode-vs-connected
@@ -129,6 +132,36 @@ This is a stylized per-pixel approximation (luminance blending), not the SSD1680
 LUTs — exact timing and ghosting patterns will differ on real hardware, and real full refresh takes
 roughly 2-3 seconds (sped up here to stay pleasant to use in a browser).
 
+## Reading stats
+
+`bookMenu`'s "Reading stats" row opens a per-book pace readout: progress (pages read / total,
+with a percentage), pages read today, an average pages/day figure, an estimated days-to-finish,
+and cumulative time spent reading that book. All of it is derived from data the simulator was
+already tracking (page position, a book's total page count) plus one new small log
+(`readingLogFor`/`bookReadingStats` in `simulator/index.html`): one `{pages, seconds}` bucket per
+calendar day per book, in its own `localStorage` key (see [Persistence](#persistence)).
+
+- **Pages** only increments on a forward page turn while that book is the one open and on
+  screen (`logPageTurn`, called from `doNext()`) — paging backward to re-read something doesn't
+  count as progress, so it can't be inflated by flipping back and forth.
+- **Seconds** accumulates from a 5-second heartbeat that only counts time while a book is
+  actually on screen, awake, and the tab is visible (`document.visibilityState`) — not while
+  asleep, not while browsing menus or playing a game with a book still "open" underneath. Each
+  tick is capped at 2× the interval so a laptop suspending mid-session with the tab left open
+  can't log an hour of "reading" in one jump.
+- **Average pages/day** divides total logged pages by the number of *days with any logged
+  activity*, not calendar days since the book was first opened — taking a week off doesn't punish
+  the average, it just doesn't move it. Estimated days-to-finish divides remaining pages by that
+  average; both read as "not enough data yet" until at least one day has been logged.
+- The log is pruned to the most recent 120 days per book on write, so it can't grow unbounded in
+  `localStorage`.
+
+Like the rest of the menu system, this exists only in the simulator for now — see
+[What's simulator-only](#whats-simulator-only-nothing-to-port-to-firmware). Porting it to firmware
+would mean a tiny fixed-size per-book record (today's date, running page/second totals for a
+handful of recent days) rather than firmware growing an unbounded log — LittleFS write cycles are
+a real constraint the browser's `localStorage` doesn't share.
+
 ## Wallpapers
 
 Shown only on the sleep screen. `BUILTIN_WALLPAPERS` ships one built-in image (`lighthouse`,
@@ -147,14 +180,25 @@ grid of thumbnails to pick from directly.
 ### Adjustable dithering on upload
 
 A fixed threshold doesn't dither every photo well — a dim photo goes mostly black, an overexposed
-one goes mostly white. So uploading an image doesn't commit it immediately: it opens a live
-preview (`wallpaperPreview`) with **Brightness**, **Contrast**, and **Invert** controls, all
-re-dithering the same source image in place (`renderWallpaperPreview`) so you can see the actual
-1-bit result while you adjust, not a grayscale approximation of it. Only once you click "Use this
-wallpaper" does the currently-previewed dithered bitmap get committed to `wallpaperCache` and the
-source image get discarded — clicking Cancel discards the source without ever exposing it to
-`wallpaperCache` at all. These settings are per-upload, not global: each wallpaper keeps whatever
-bitmap you confirmed for it, not a live reference back to brightness/contrast values.
+one goes mostly white, and a photo's interesting part isn't always dead center. So uploading an
+image doesn't commit it immediately: it opens a live preview (`wallpaperPreview`) with **Fit**,
+**Pan X/Y**, **Brightness**, **Contrast**, and **Invert** controls, all re-dithering the same
+source image in place (`renderWallpaperPreview` → `ditherImageToPanelCanvas`) so you can see the
+actual 1-bit result while you adjust, not a grayscale approximation of it.
+
+- **Fit** picks how the source image maps onto the panel's 250×122 frame: **Cover** (scale to
+  fill, cropping whatever overflows — the default), **Contain** (scale to fit entirely inside the
+  frame, letterboxed with blank space), or **Stretch** (fill exactly, ignoring aspect ratio).
+- **Pan X/Y** slide the crop/letterbox window within the frame instead of always centering it —
+  meaningful for Cover (which part of a wider/taller source gets kept) and Contain (where the
+  letterboxed image sits); a no-op for Stretch, which has no leftover space to slide (the pan
+  sliders disable themselves in that mode).
+
+Only once you click "Use this wallpaper" does the currently-previewed dithered bitmap get
+committed to `wallpaperCache` and the source image get discarded — clicking Cancel discards the
+source without ever exposing it to `wallpaperCache` at all. These settings are per-upload, not
+global: each wallpaper keeps whatever bitmap you confirmed for it, not a live reference back to
+fit/pan/brightness/contrast values.
 
 ## Memory panel
 
@@ -230,17 +274,23 @@ landing on the Library screen so there's something to look at immediately.
 
 ## Persistence
 
-Two independent `localStorage` keys, both scoped to the browser/origin they're used in (not
-shared with real firmware, which would use a small LittleFS file per book instead):
+Independent `localStorage` keys, all scoped to the browser/origin they're used in (not shared with
+real firmware, which would use small LittleFS records instead):
 
 - `rotaryReaderLibrary_v1` — per-book resume position and bookmarks, keyed by `title::author`
   (not the book file itself — re-loading the *same* EPUB, or the built-in samples, restores where
   you left off; a different EPUB with the same title/author would collide, and a differently-titled
   copy of the same book wouldn't be recognized as the same book).
+- `rotaryReaderReadingLog_v1` — per-book daily `{pages, seconds}` buckets backing
+  [Reading stats](#reading-stats), also keyed by `title::author` and pruned to the most recent 120
+  days per book.
 - `rotaryReaderRulerScale_v1` — the true-size calibration slider's last value.
+- `rotaryReaderTrueSizeDisplay_v1` — whether the "also resize the simulator's actual display"
+  checkbox is on (see [True-size calibration](#true-size-calibration)).
 
-Both fail silently (try/catch) in private browsing or when storage is disabled — resume position,
-bookmarks, and calibration just won't persist in that case, rather than the app erroring out.
+All of them fail silently (try/catch) in private browsing or when storage is disabled — resume
+position, bookmarks, reading stats, and calibration just won't persist in that case, rather than
+the app erroring out.
 
 ## Deliberately not simulated: battery percentage
 
@@ -265,6 +315,16 @@ in the UI; this is a deliberate simplification, not an oversight or an unfinishe
 The sidebar's "About this project" panel carries the same AI-assistance disclosure and the same
 Sources & inspirations list as the root README, so anyone who lands on the deployed simulator
 without going through GitHub still sees both. Keep the two in sync when either changes.
+
+Below it, a separate "Project docs" panel pulls its content live from `docs/*.md` instead
+(`loadDocsAbout`/`extractDocIntro`) — a title and first-paragraph summary per doc, fetched at
+page load rather than retyped by hand, so it can't quietly drift from the actual files the way a
+hand-copied summary could. This only works when `docs/` is actually reachable next to
+`index.html`: [.github/workflows/pages.yml](../.github/workflows/pages.yml) publishes them as
+siblings for exactly this reason. It fails gracefully (per-file, via `fetch`'s rejection) to a
+plain "Read on GitHub" link wherever that layout doesn't hold — a bare
+`cd simulator && python -m http.server` per the README's local-serve instructions, and always in
+the published Claude Artifact, which is one self-contained file with nothing alongside it.
 
 ## What's simulator-only (nothing to port to firmware)
 

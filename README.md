@@ -77,9 +77,13 @@ python -m http.server 8420
   in directly, or just keep tapping +1/-1 like before.
 - **Five built-in games** — Lights Out, Minesweeper, Sudoku, Tic-Tac-Toe (real minimax AI), and
   Hangman, all built on the same rotary-cursor/MENU-select input pattern as the reader itself.
-- **A wallpaper system** — pick from built-in wallpapers or upload your own from the web panel;
-  dithering to the panel's real 1-bit palette happens client-side, and only the ~3.7KB dithered
-  bitmap is ever treated as what "reaches the device."
+- **A wallpaper system** — pick from built-in wallpapers or upload your own from the web panel,
+  with fit (cover/contain/stretch), pan, brightness, contrast, and invert controls on a live
+  preview before it's committed; dithering to the panel's real 1-bit palette happens client-side,
+  and only the ~3.7KB dithered bitmap is ever treated as what "reaches the device."
+- **Per-book reading stats** — progress, pages read today, average pages/day, an estimated
+  days-to-finish, and cumulative time spent reading, computed from a small per-day log rather than
+  invented numbers.
 - **A live memory panel** — real `.cebk`-equivalent byte accounting against the actual
   `firmware/partitions.csv` budget, not a placeholder estimate.
 - **True-size calibration** — a ruler overlay with an adjustable slider so you can match the

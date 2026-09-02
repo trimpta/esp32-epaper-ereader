@@ -680,6 +680,22 @@
         <div id="wallpaperPreview" hidden style="margin-top:0.8rem;">
           <canvas id="wallpaperPreviewCanvas" width="250" height="122" style="width:100%; image-rendering:pixelated; border:1px solid var(--copper); background:var(--paper);"></canvas>
           <div class="param" style="margin-top:0.6rem;">
+            <label>Fit</label>
+            <select id="selWpFit" class="btn" style="width:100%;">
+              <option value="cover">Cover (crop to fill)</option>
+              <option value="contain">Contain (fit, letterbox)</option>
+              <option value="stretch">Stretch (fill, distort)</option>
+            </select>
+          </div>
+          <div class="param">
+            <label>Pan X <span class="val" id="vWpPanX">50</span></label>
+            <input type="range" id="rWpPanX" min="0" max="100" step="1" value="50">
+          </div>
+          <div class="param">
+            <label>Pan Y <span class="val" id="vWpPanY">50</span></label>
+            <input type="range" id="rWpPanY" min="0" max="100" step="1" value="50">
+          </div>
+          <div class="param">
             <label>Brightness <span class="val" id="vWpBrightness">0</span></label>
             <input type="range" id="rWpBrightness" min="-100" max="100" step="1" value="0">
           </div>
@@ -691,7 +707,7 @@
             <input type="checkbox" id="cWpInvert">
             <span class="legend" style="margin:0;">Invert</span>
           </label>
-          <div class="legend" style="margin-bottom:0.5rem;">Adjust until the dithered preview above looks best for this image — these settings only affect this one wallpaper.</div>
+          <div class="legend" style="margin-bottom:0.5rem;">Adjust until the dithered preview above looks best for this image — these settings only affect this one wallpaper. Pan has no effect in Stretch mode (nothing left over to slide).</div>
           <div class="file-row">
             <button class="btn primary" id="btnWpConfirm">Use this wallpaper</button>
             <button class="btn" id="btnWpCancel">Cancel</button>
@@ -759,6 +775,12 @@
           <li><b>Sample books.</b> <em>Alice's Adventures in Wonderland</em>, <em>The Strange Case of Dr. Jekyll and Mr. Hyde</em>, and <em>The Wonderful Wizard of Oz</em> — genuinely US-public-domain texts via <a href="https://www.gutenberg.org/" target="_blank" rel="noopener">Project Gutenberg</a>.</li>
         </ul>
         <p class="legend" style="margin-top:0.6rem;">Full source, issues, and the README live at <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">github.com/trimpta/esp32-epaper-ereader</a>.</p>
+      </div>
+
+      <div class="panel">
+        <h2>Project docs</h2>
+        <p class="legend" style="margin-bottom:0.6rem;">Loaded live from <code>docs/</code> in the repo — the summaries below are pulled from each file's own opening lines, not retyped here, so they can't quietly drift out of sync. If this shows GitHub-only links instead, the docs folder isn't reachable from wherever this page is being served (always true for the published Claude Artifact, which is one self-contained file with nothing alongside it).</p>
+        <ul id="docsAboutList"><li class="legend">Loading…</li></ul>
       </div>
     </div>
   </main>
@@ -1201,6 +1223,95 @@ function syncActiveBookPosition() {
   renderLibraryPanel();
 }
 
+/* ---------------- reading stats — a separate localStorage record from the position/
+   bookmarks one above, keyed by the same book key, holding one {pages, seconds} bucket
+   per calendar day. "Pages" only counts forward page turns while a book is open (see
+   logPageTurn, called from doNext()) — going back to re-read doesn't count as progress.
+   "Seconds" is a coarse wall-clock accumulation from a 5s heartbeat (see the interval
+   below), not per-page timing, so it's an approximation, same spirit as the refresh-flash
+   timing already is. Pruned to the last 120 days so this can't grow unbounded. */
+const READING_LOG_STORAGE_KEY = 'rotaryReaderReadingLog_v1';
+const READING_LOG_MAX_DAYS = 120;
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function loadReadingLogStorage() {
+  try { return JSON.parse(localStorage.getItem(READING_LOG_STORAGE_KEY) || '{}'); } catch { return {}; }
+}
+function persistReadingLog(all) {
+  try { localStorage.setItem(READING_LOG_STORAGE_KEY, JSON.stringify(all)); } catch { /* storage disabled — stats just won't persist */ }
+}
+function readingLogFor(bookKey) {
+  return loadReadingLogStorage()[bookKey] || {};
+}
+function pruneOldLogDays(perBook) {
+  const days = Object.keys(perBook).sort();
+  const excess = days.length - READING_LOG_MAX_DAYS;
+  for (let i = 0; i < excess; i++) delete perBook[days[i]];
+}
+function touchReadingLogDay(bookKey) {
+  const all = loadReadingLogStorage();
+  const perBook = all[bookKey] || (all[bookKey] = {});
+  const day = perBook[todayKey()] || (perBook[todayKey()] = { pages: 0, seconds: 0 });
+  pruneOldLogDays(perBook);
+  return { all, day };
+}
+function logPageTurn(bookKey) {
+  const { all, day } = touchReadingLogDay(bookKey);
+  day.pages++;
+  persistReadingLog(all);
+}
+// Heartbeat: only counts time toward "hours read" while a book is actually the thing on
+// screen — not while asleep, not while browsing menus/games, not while the tab is hidden.
+// Each tick adds the elapsed wall-clock delta, capped at 2x the tick interval so a laptop
+// suspend/resume while the tab sat open on the reading screen can't log an hour in one tick.
+const READING_HEARTBEAT_MS = 5000;
+let lastReadingHeartbeat = Date.now();
+setInterval(() => {
+  const now = Date.now();
+  const elapsedSec = (now - lastReadingHeartbeat) / 1000;
+  lastReadingHeartbeat = now;
+  if (state.activeBook < 0 || state.asleep || currentScreen() !== 'reading') return;
+  if (document.visibilityState !== 'visible') return;
+  const book = state.library[state.activeBook];
+  const { all, day } = touchReadingLogDay(book.key);
+  day.seconds += Math.min(elapsedSec, (READING_HEARTBEAT_MS / 1000) * 2);
+  persistReadingLog(all);
+}, READING_HEARTBEAT_MS);
+
+function absolutePageNumber(book, chapterIdx, pageIdx) {
+  let n = 0;
+  for (let i = 0; i < chapterIdx; i++) n += book.chapters[i].pageStarts.length;
+  return n + pageIdx + 1;
+}
+function totalPagesOf(book) {
+  return book.chapters.reduce((sum, ch) => sum + ch.pageStarts.length, 0);
+}
+function fmtDuration(totalSeconds) {
+  const totalMinutes = Math.round(totalSeconds / 60);
+  const h = Math.floor(totalMinutes / 60);
+  const m = totalMinutes % 60;
+  if (h === 0) return `${m}m`;
+  return `${h}h ${m}m`;
+}
+// Pages/day is averaged over days that actually have logged activity (not calendar days
+// since first open, which would quietly punish a reader for taking a week off) — a rough
+// "at your current pace" figure, same honesty tradeoff as everything else self-reported here.
+function bookReadingStats(book) {
+  const log = readingLogFor(book.key);
+  const days = Object.keys(log);
+  const totalPagesLogged = days.reduce((s, d) => s + (log[d].pages || 0), 0);
+  const totalSeconds = days.reduce((s, d) => s + (log[d].seconds || 0), 0);
+  const avgPagesPerDay = days.length ? totalPagesLogged / days.length : 0;
+  const pagesRead = absolutePageNumber(book, book.lastChapterIdx, book.lastPageIdx);
+  const totalPages = totalPagesOf(book);
+  const pagesRemaining = Math.max(0, totalPages - pagesRead);
+  const daysLeft = avgPagesPerDay > 0 ? Math.ceil(pagesRemaining / avgPagesPerDay) : null;
+  const todayPages = (log[todayKey()] && log[todayKey()].pages) || 0;
+  return { pagesRead, totalPages, avgPagesPerDay, daysLeft, totalSeconds, todayPages, daysLogged: days.length };
+}
+
 // Loads (or re-activates, if already open) a book, restoring saved position/bookmarks
 // by title+author — used by both the file-upload and sample-book paths so there's one
 // place that handles "I already have this book open" instead of piling up duplicates.
@@ -1242,6 +1353,71 @@ function addBookmark() {
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* ---------------- "Project docs" panel — fetched live from docs/*.md rather than
+   hand-copied into this page, so it can't silently go stale. Only reachable when this
+   page is served with docs/ alongside it (see .github/workflows/pages.yml); falls back
+   to a plain GitHub link per-file, same graceful-degradation pattern as everything else
+   here that behaves identically in-page and in the published (single-file) Artifact. */
+const DOCS_ABOUT_FILES = [
+  { file: 'ARCHITECTURE.md', fallbackTitle: 'Architecture' },
+  { file: 'FORMAT.md', fallbackTitle: '.cebk binary format' },
+  { file: 'FLASH_BUDGET.md', fallbackTitle: 'Flash & RAM budget' },
+  { file: 'SIMULATOR.md', fallbackTitle: 'Simulator UI/UX reference' },
+];
+function stripMdInline(s) {
+  return s
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/\*\*([^*]+)\*\*/g, '$1')
+    .replace(/\*([^*]+)\*/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+    // A line pulled out of a multi-line bold/italic span (the emphasis markers close on
+    // a later line we're not including) leaves a stray, unmatched */` behind — drop those.
+    .replace(/[*`]+/g, '')
+    .trim();
+}
+// Title = the first "# " line. Intro = the first non-blank, non-heading line after it —
+// whatever that is (a paragraph, or a numbered/bulleted list item if the doc opens with
+// a list, as ARCHITECTURE.md does), stripped of markdown syntax and list markers.
+function extractDocIntro(text) {
+  const lines = text.split('\n');
+  let title = '';
+  let intro = '';
+  for (const raw of lines) {
+    const line = raw.trim();
+    if (!title) {
+      const m = line.match(/^#\s+(.+)/);
+      if (m) title = stripMdInline(m[1]);
+      continue;
+    }
+    if (!line || line.startsWith('#')) continue;
+    intro = stripMdInline(line.replace(/^[-*]\s+/, '').replace(/^\d+\.\s+/, ''));
+    break;
+  }
+  if (intro.length > 220) intro = intro.slice(0, 217).trimEnd() + '…';
+  return { title, intro };
+}
+async function loadDocsAbout() {
+  const el = document.getElementById('docsAboutList');
+  if (!el) return;
+  const results = await Promise.all(DOCS_ABOUT_FILES.map(async (d) => {
+    try {
+      const res = await fetch('docs/' + d.file, { cache: 'no-store' });
+      if (!res.ok) throw new Error('not ok');
+      const { title, intro } = extractDocIntro(await res.text());
+      return { ...d, title: title || d.fallbackTitle, intro, ok: true };
+    } catch {
+      return { ...d, title: d.fallbackTitle, intro: '', ok: false };
+    }
+  }));
+  el.innerHTML = results.map((d) => {
+    const ghUrl = `https://github.com/trimpta/esp32-epaper-ereader/blob/master/docs/${d.file}`;
+    const body = d.ok
+      ? `${escapeHtml(d.intro)} <a href="${ghUrl}" target="_blank" rel="noopener">Read the full doc →</a>`
+      : `<a href="${ghUrl}" target="_blank" rel="noopener">Read on GitHub →</a>`;
+    return `<li><b>${escapeHtml(d.title)}.</b> ${body}</li>`;
+  }).join('');
 }
 
 function renderLibraryPanel() {
@@ -1407,12 +1583,20 @@ function renderWallpaperPanel() {
 let pendingWallpaperUpload = null; // { img, name } while the preview panel is open
 function renderWallpaperPreview() {
   if (!pendingWallpaperUpload) return;
+  const fit = document.getElementById('selWpFit').value;
+  const panXEl = document.getElementById('rWpPanX');
+  const panYEl = document.getElementById('rWpPanY');
+  panXEl.disabled = panYEl.disabled = (fit === 'stretch');
+  const panX = Number(panXEl.value) / 100;
+  const panY = Number(panYEl.value) / 100;
   const brightness = Number(document.getElementById('rWpBrightness').value);
   const contrast = Number(document.getElementById('rWpContrast').value);
   const invert = document.getElementById('cWpInvert').checked;
+  document.getElementById('vWpPanX').textContent = String(Math.round(panX * 100));
+  document.getElementById('vWpPanY').textContent = String(Math.round(panY * 100));
   document.getElementById('vWpBrightness').textContent = String(brightness);
   document.getElementById('vWpContrast').textContent = String(contrast);
-  const dithered = ditherImageToPanelCanvas(pendingWallpaperUpload.img, canvas.width, canvas.height, { brightness, contrast, invert });
+  const dithered = ditherImageToPanelCanvas(pendingWallpaperUpload.img, canvas.width, canvas.height, { brightness, contrast, invert, fit, panX, panY });
   const pctx = document.getElementById('wallpaperPreviewCanvas').getContext('2d');
   pctx.drawImage(dithered, 0, 0, 250, 122);
   pendingWallpaperUpload.dithered = dithered;
@@ -1430,6 +1614,9 @@ async function handleWallpaperUpload(file) {
     });
     const img = await loadImage(dataUri);
     pendingWallpaperUpload = { img, name: file.name.replace(/\.[^.]+$/, '').slice(0, 40) || 'Wallpaper' };
+    document.getElementById('selWpFit').value = 'cover';
+    document.getElementById('rWpPanX').value = '50';
+    document.getElementById('rWpPanY').value = '50';
     document.getElementById('rWpBrightness').value = '0';
     document.getElementById('rWpContrast').value = '0';
     document.getElementById('cWpInvert').checked = false;
@@ -1558,6 +1745,7 @@ function bookMenuRows() {
   }
   rows.push({ label: 'Browse chapters', action: () => pushScreen('bookChapters') });
   if (book.bookmarks.length) rows.push({ label: `Bookmarks (${book.bookmarks.length})`, action: () => pushScreen('bookmarks') });
+  rows.push({ label: 'Reading stats', action: () => pushScreen('stats') });
   rows.push({ label: 'More… (Library, Settings, Wi-Fi, Games)', action: () => pushScreen('home') });
   return rows;
 }
@@ -1587,6 +1775,22 @@ function bookmarksRows() {
       syncActiveBookPosition();
     },
   }));
+}
+
+// All rows are non-selectable (no action) — this is a readout, not a settings list.
+// Numbers come from bookReadingStats(), computed from the reading-log block above.
+function statsRows() {
+  const book = browseBook();
+  if (!book) return [{ label: '(no book selected)', action: () => {} }];
+  const s = bookReadingStats(book);
+  const pct = s.totalPages ? Math.round((s.pagesRead / s.totalPages) * 100) : 0;
+  return [
+    { label: `Progress: ${s.pagesRead}/${s.totalPages} pg (${pct}%)`, action: () => {} },
+    { label: `Today: ${s.todayPages} page${s.todayPages === 1 ? '' : 's'}`, action: () => {} },
+    { label: s.daysLogged ? `Avg pace: ${s.avgPagesPerDay.toFixed(1)} pg/day` : 'Avg pace: no data yet', action: () => {} },
+    { label: s.daysLeft != null ? `Est. finish: ~${s.daysLeft} day${s.daysLeft === 1 ? '' : 's'}` : 'Est. finish: keep reading', action: () => {} },
+    { label: `Time reading: ${fmtDuration(s.totalSeconds)}`, action: () => {} },
+  ];
 }
 
 // Cycles a sidebar <input type="range"> one step and re-paginates, so the on-device
@@ -1665,6 +1869,7 @@ const LIST_SCREENS = {
   bookMenu: { title: () => (browseBook() ? browseBook().title : 'BOOK'), rows: bookMenuRows },
   bookChapters: { title: () => (browseBook() ? browseBook().title : 'CHAPTERS'), rows: bookChaptersRows },
   bookmarks: { title: 'BOOKMARKS', rows: bookmarksRows },
+  stats: { title: 'READING STATS', rows: statsRows },
   settings: { title: 'SETTINGS', rows: settingsRows },
   wifi: { title: 'WI-FI', rows: wifiRows },
   games: { title: 'GAMES', rows: gamesRows },
@@ -2458,14 +2663,31 @@ const BUILTIN_WALLPAPERS = [
 // a fixed threshold alone often isn't "good enough" — these three params are what
 // actually move the result, so that's the full set exposed rather than guessing at more.
 function ditherImageToPanelCanvas(img, targetW, targetH, opts) {
-  const { brightness = 0, contrast = 0, invert = false } = opts || {};
+  const { brightness = 0, contrast = 0, invert = false, fit = 'cover', panX = 0.5, panY = 0.5 } = opts || {};
   const off = document.createElement('canvas');
   off.width = targetW;
   off.height = targetH;
   const octx = off.getContext('2d');
-  const scale = Math.max(targetW / img.width, targetH / img.height);
-  const dw = img.width * scale, dh = img.height * scale;
-  octx.drawImage(img, (targetW - dw) / 2, (targetH - dh) / 2, dw, dh);
+  // 'contain' can leave the frame partly uncovered (letterboxing) — paint white first so
+  // that dithers to blank/off pixels instead of whatever garbage was already in the canvas.
+  octx.fillStyle = '#fff';
+  octx.fillRect(0, 0, targetW, targetH);
+  let dw, dh, dx, dy;
+  if (fit === 'stretch') {
+    // Fills the frame exactly, ignoring aspect ratio — no free space, so panX/panY do nothing.
+    dw = targetW; dh = targetH; dx = 0; dy = 0;
+  } else {
+    const scale = fit === 'contain'
+      ? Math.min(targetW / img.width, targetH / img.height)  // whole image visible, letterboxed
+      : Math.max(targetW / img.width, targetH / img.height); // 'cover' — fills the frame, crops overflow
+    dw = img.width * scale;
+    dh = img.height * scale;
+    // panX/panY (0..1) slide the crop/letterbox window instead of always centering —
+    // useful for 'cover' when the interesting part of a photo isn't dead center.
+    dx = (targetW - dw) * panX;
+    dy = (targetH - dh) * panY;
+  }
+  octx.drawImage(img, dx, dy, dw, dh);
   const frame = octx.getImageData(0, 0, targetW, targetH);
   const d = frame.data;
   const contrastFactor = 1 + contrast / 100;
@@ -2805,6 +3027,7 @@ function doNext() {
   else if (state.chapterIdx + 1 < book.chapters.length) { state.chapterIdx++; state.pageIdx = 0; }
   else return;
   syncActiveBookPosition();
+  logPageTurn(book.key); // only forward turns count toward "pages read" — see the stats block above
   renderCurrentPage();
 }
 
@@ -3205,6 +3428,9 @@ document.getElementById('wallpaperInput').addEventListener('change', (e) => {
   if (file) handleWallpaperUpload(file);
   e.target.value = ''; // allow re-selecting the same file later
 });
+document.getElementById('selWpFit').addEventListener('change', renderWallpaperPreview);
+document.getElementById('rWpPanX').addEventListener('input', renderWallpaperPreview);
+document.getElementById('rWpPanY').addEventListener('input', renderWallpaperPreview);
 document.getElementById('rWpBrightness').addEventListener('input', renderWallpaperPreview);
 document.getElementById('rWpContrast').addEventListener('input', renderWallpaperPreview);
 document.getElementById('cWpInvert').addEventListener('change', renderWallpaperPreview);
@@ -3305,6 +3531,7 @@ function bootSequence() {
 preloadWallpaper(selectedWallpaper().id, selectedWallpaper().dataUri); // fire-and-forget prewarm; falls back cleanly if it's somehow not ready by the first sleep
 renderWallpaperPanel();
 updateMemoryDisplay();
+loadDocsAbout();
 
 if (document.fonts && document.fonts.ready) {
   Promise.all([
