@@ -74,7 +74,7 @@ Defined once in `converter/converter.js` (`LAYOUT` object) and mirrored in
 - `PAGE_WIDTH_PX = 250`, `PAGE_HEIGHT_PX = 122` — landscape. The panel is natively
   122×250 portrait, but that's ~19 characters/line; firmware renders rotated
   (`display.setRotation(1)`, a draw-surface transpose, not a hardware change) for a
-  reading-width line length. See `firmware/src/config.h` and `simulator/index.html`.
+  reading-width line length. See `firmware/src/config.h` and `simulator/sim.html`.
 - `MARGIN_PX = 4` on all sides
 - `LINE_HEIGHT_PX = 11` (regular/bold/italic body text)
 - `HEADING_LINE_HEIGHT_PX = 14`

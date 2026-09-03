@@ -1,0 +1,40 @@
+name: Feature request
+description: Suggest something the reader (or the simulator) should do.
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Worth knowing before you file: this device does **zero text layout at runtime** —
+        line and page breaks are computed in the browser at conversion time and baked into
+        each `.cebk` file. Anything that implies re-flowing text on the device (runtime font
+        size, margins, orientation) is a much bigger change than it looks. See
+        [Architecture](https://trimpta.com/esp32-epaper-ereader/docs.html#architecture).
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's the problem?
+      description: What are you trying to do that's awkward or impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like it to do?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: scope
+    attributes:
+      label: Where would this live?
+      multiple: true
+      options:
+        - On the device (firmware)
+        - In the simulator
+        - In the converter
+        - In the enclosure
+        - Not sure

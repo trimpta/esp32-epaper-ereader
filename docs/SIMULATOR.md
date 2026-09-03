@@ -1,6 +1,6 @@
 # Simulator UI/UX reference
 
-`simulator/index.html` is a single, self-contained browser page that mimics the on-device reading
+`simulator/sim.html` is a single, self-contained browser page that mimics the on-device reading
 experience: same pagination logic as `converter/`, the same three-input model as the real board
 (rotary + MENU + EXIT), and an approximation of e-ink's partial-refresh/ghosting behavior. This
 doc is the complete reference for how it behaves — what maps to real firmware and what's
@@ -138,7 +138,7 @@ roughly 2-3 seconds (sped up here to stay pleasant to use in a browser).
 with a percentage), pages read today, an average pages/day figure, an estimated days-to-finish,
 and cumulative time spent reading that book. All of it is derived from data the simulator was
 already tracking (page position, a book's total page count) plus one new small log
-(`readingLogFor`/`bookReadingStats` in `simulator/index.html`): one `{pages, seconds}` bucket per
+(`readingLogFor`/`bookReadingStats` in `simulator/sim.html`): one `{pages, seconds}` bucket per
 calendar day per book, in its own `localStorage` key (see [Persistence](#persistence)).
 
 - **Pages** only increments on a forward page turn while that book is the one open and on
@@ -193,6 +193,31 @@ actual 1-bit result while you adjust, not a grayscale approximation of it.
   meaningful for Cover (which part of a wider/taller source gets kept) and Contain (where the
   letterboxed image sits); a no-op for Stretch, which has no leftover space to slide (the pan
   sliders disable themselves in that mode).
+
+### Picking a dither by looking at it
+
+There's no algorithm that's right for every image on a 1-bit panel: text and line art want a hard
+threshold, photographs want error diffusion, and a smooth gradient wants an ordered matrix so it
+doesn't break into worms. Rather than asking which one you want up front, the upload flow renders
+**all five** from the same source and lets you click the one that looks best:
+
+| Algorithm | Character |
+|---|---|
+| **Threshold** | Hard 50% cut. Line art, logos, text. |
+| **Bayer 4×4** | Coarse ordered crosshatch — the default, and the most legible at this size. |
+| **Bayer 8×8** | Finer grain, smoother gradients, softer edges. |
+| **Floyd–Steinberg** | Classic error diffusion. Most detail, can read as noisy. |
+| **Atkinson** | Diffuses only ¾ of the error, which is exactly what makes it crisper and higher-contrast. |
+
+The comparison is only meaningful if everything *except* the algorithm is identical, so
+`imageToPanelLuminance()` does the fit and tone-mapping once and each algorithm gets its own copy
+of that buffer (`renderWallpaperPreview`). Changing Brightness/Contrast re-renders the whole set,
+because which algorithm wins genuinely changes with the tone curve. The selected option's pixels
+are also what gets committed — the full-size canvas is built from the same `ImageData` as its
+thumbnail rather than re-dithered, so the two can't disagree.
+
+The luminance buffer is `Float32Array`, not `Uint8`: the diffusion algorithms carry fractional
+error between pixels, and rounding at every step visibly banded the result.
 
 Only once you click "Use this wallpaper" does the currently-previewed dithered bitmap get
 committed to `wallpaperCache` and the source image get discarded — clicking Cancel discards the
@@ -265,7 +290,7 @@ acting on it. Long-press EXIT sleeps immediately, bypassing the timer.
 ## Book loading: local EPUB vs. built-in library
 
 On boot, the simulator first tries `tryAutoLoadLocalEpub()` — a dev-server convenience that looks
-for an EPUB file sitting next to `index.html` (via a directory listing fetch) and auto-loads it if
+for an EPUB file sitting next to `sim.html` (via a directory listing fetch) and auto-loads it if
 found, landing straight in that book. This only works when actually serving the folder locally
 (`python -m http.server`, per the README); the published Artifact/GitHub Pages deployment has no
 filesystem to list, so it always falls through to `loadBuiltinLibrary()` instead — three genuinely
@@ -310,6 +335,22 @@ simulator renders unconditionally rotated (250×122 landscape), matching a hardc
 `display.setRotation(1)` in `firmware/src/renderer.cpp`. There is no orientation toggle anywhere
 in the UI; this is a deliberate simplification, not an oversight or an unfinished feature.
 
+## The site around the simulator
+
+`sim.html` is one page of four, all deployed together from `simulator/`:
+
+| Page | What it's for |
+|---|---|
+| `index.html` | The landing page — what the project is, its features, how you'd set one up. Content only, no simulator. |
+| `sim.html` | This document's subject: the device simulator. |
+| `install.html` | A Web Serial installer that flashes a connected ESP32-S3 straight from the browser, using binaries the Pages workflow builds. |
+| `docs.html` | Renders every doc in `docs/` (see [Docs page](#docs-page)). |
+
+The three content pages share `site.css` and `theme.js` (a light/dark toggle that defaults to the
+OS setting and remembers an explicit choice). `sim.html` deliberately shares nothing: it's also
+published standalone as a Claude Artifact, which is a single self-contained file with no siblings
+to link to, so everything it needs has to be inside it.
+
 ## The sidebar, and what isn't in it
 
 The sidebar is deliberately limited to things that act on the simulated device: loading a
@@ -319,7 +360,7 @@ divergences — used to be panels on this page and now lives on the [docs page](
 instead. The reading UI is supposed to preview what the device feels like; a wall of project
 prose underneath it was working against that, and none of it has an on-device counterpart.
 
-What stays on `index.html` is a one-line disclosure with links into the docs, so the
+What stays on `sim.html` is a one-line disclosure with links into the docs, so the
 "vibe coded" statement is never more than a sentence away from the thing it's about — that
 matters most in the published Artifact, which is a single file with no docs page next to it.
 Those links (`[data-site-link]`) are relative by default and get repointed at the deployed
@@ -328,7 +369,7 @@ the Artifact case.
 
 ## Docs page
 
-`simulator/docs.html` is a standalone page — reached from `index.html`'s footer links, never
+`simulator/docs.html` is a standalone page — reached from `sim.html`'s footer links, never
 embedded inside it — that renders the full text of every doc in `docs/`, in-site, with a
 grouped left-hand index to switch between them. Hash-routed (`#about`, `#divergences`,
 `#firmware-review`, `#architecture`, `#format`, `#flash-budget`, `#simulator`), so a link to a
@@ -336,7 +377,7 @@ specific doc is shareable. It exists only because this simulator does, and is de
 kept out of the main page:
 
 - **It's a design/dev-reference tool, not part of the on-device experience.** The reading UI
-  (`index.html`'s canvas + sidebar) is meant to preview what the actual reader will feel like;
+  (`sim.html`'s canvas + sidebar) is meant to preview what the actual reader will feel like;
   a documentation browser doesn't belong inside that illusion.
 - **The real device doesn't get any of this.** `firmware/data/index.html` — the small loader page
   the ESP32's own `web_server.cpp` actually serves for uploading books — is a separate, much
@@ -347,13 +388,13 @@ Content is fetched at page load (`fetch('docs/' + file)`) and rendered by a smal
 markdown-to-HTML converter (`renderMarkdown` in `docs.html`) — headings (with slug `id`s for
 anchor links), paragraphs and list items with lazy line-wrap continuation, fenced code blocks, and
 GFM-style pipe tables; checked against exactly what these docs actually use, not a general
-CommonMark implementation. Same reasoning as the hand-rolled ZIP reader in `index.html`: no bundled
+CommonMark implementation. Same reasoning as the hand-rolled ZIP reader in `sim.html`: no bundled
 library, so it behaves identically wherever it's served from. If a doc fails to load (`docs/` not
 reachable next to `docs.html` — a bare `file://` open, or a server started somewhere that doesn't
 include it), that one doc's pane shows an inline error with a "Read it on GitHub instead" link
 rather than the whole page breaking.
 
-`docs.html` isn't part of the Claude Artifact published from `index.html` (only that one
+`docs.html` isn't part of the Claude Artifact published from `sim.html` (only that one
 self-contained file is ever published as an Artifact) — it only exists as a real page in the repo
 and the GitHub Pages deploy.
 

@@ -1,4 +1,4 @@
-name: Deploy simulator to GitHub Pages
+name: Build firmware and deploy the site
 
 on:
   push:
@@ -6,6 +6,7 @@ on:
     paths:
       - "simulator/**"
       - "docs/**"
+      - "firmware/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -27,16 +28,92 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      # simulator/ stays the site root (keeps the live URL stable) with docs/ published
-      # alongside it as a subfolder — the "About" panel's in-page doc summaries fetch
-      # from ./docs/*.md at runtime and fall back to GitHub links if that 404s (e.g. a
-      # local `cd simulator && python -m http.server` won't have this docs/ copy).
-      - name: Assemble site (simulator + docs)
+
+      # The firmware is built here rather than in a separate workflow so the binaries land
+      # on the same origin as install.html — ESP Web Tools fetches each .bin relative to the
+      # manifest, and cross-origin release assets make that fragile for no benefit.
+      #
+      # arduino-cli, not PlatformIO: this is the toolchain the firmware was actually verified
+      # against (ESP32 core 3.3.10 / IDF 5.x). PlatformIO's official espressif32 platform still
+      # ships Arduino core 2.x, where the light-sleep wake API this uses doesn't exist.
+      - name: Cache Arduino toolchain
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.arduino15
+            ~/Arduino/libraries
+          key: arduino-esp32-3.3.10-${{ hashFiles('firmware/platformio.ini') }}
+
+      - name: Install arduino-cli and dependencies
         run: |
-          mkdir -p _site
+          curl -fsSL https://raw.githubusercontent.com/arduino/arduino-cli/master/install.sh | BINDIR=/usr/local/bin sh
+          arduino-cli config init --overwrite
+          arduino-cli config add board_manager.additional_urls https://espressif.github.io/arduino-esp32/package_esp32_index.json
+          arduino-cli core update-index
+          arduino-cli core install esp32:esp32@3.3.10
+          arduino-cli lib install \
+            "GxEPD2@1.6.9" \
+            "U8g2_for_Adafruit_GFX@1.8.0" \
+            "Adafruit GFX Library" \
+            "WiFiManager@2.0.17" \
+            "ESP Async WebServer" \
+            "Async TCP" \
+            "ArduinoJson"
+
+      # A sketch folder is just the sources plus an empty .ino. partitions.csv is copied in
+      # alongside them because a partitions.csv sitting in the sketch directory overrides the
+      # selected partition scheme — that's how the build gets the repo's real table
+      # (2MB app / 5.94MB LittleFS) instead of a stock Arduino one.
+      - name: Build firmware
+        run: |
+          mkdir -p build/rotary_reader
+          cp firmware/src/*.cpp firmware/src/*.h build/rotary_reader/
+          cp firmware/partitions.csv build/rotary_reader/
+          : > build/rotary_reader/rotary_reader.ino
+          arduino-cli compile \
+            --fqbn "esp32:esp32:esp32s3:PSRAM=opi,FlashSize=8M,PartitionScheme=custom" \
+            --output-dir build/out \
+            build/rotary_reader
+          ls -la build/out
+
+      # ESP Web Tools flashes a list of (binary, offset) pairs. These four offsets are the
+      # standard ESP32-S3 Arduino layout; the app at 0x10000 matches partitions.csv's factory
+      # partition offset.
+      - name: Assemble firmware manifest
+        run: |
+          mkdir -p _site/firmware
+          cp build/out/rotary_reader.ino.bootloader.bin _site/firmware/bootloader.bin
+          cp build/out/rotary_reader.ino.partitions.bin _site/firmware/partitions.bin
+          cp build/out/rotary_reader.ino.bin            _site/firmware/app.bin
+          cp "$(find ~/.arduino15 -name boot_app0.bin | head -n1)" _site/firmware/boot_app0.bin
+          cat > _site/firmware/manifest.json <<JSON
+          {
+            "name": "Rotary Reader",
+            "version": "${GITHUB_SHA::7}",
+            "new_install_prompt_erase": true,
+            "builds": [
+              {
+                "chipFamily": "ESP32-S3",
+                "parts": [
+                  { "path": "bootloader.bin", "offset": 0 },
+                  { "path": "partitions.bin", "offset": 32768 },
+                  { "path": "boot_app0.bin",  "offset": 57344 },
+                  { "path": "app.bin",        "offset": 65536 }
+                ]
+              }
+            ]
+          }
+          JSON
+          cat _site/firmware/manifest.json
+
+      # simulator/ is the site root (index.html is the landing page, sim.html the simulator),
+      # with docs/ published alongside as a subfolder — docs.html fetches ./docs/*.md at runtime.
+      - name: Assemble site
+        run: |
           cp -r simulator/. _site/
           mkdir -p _site/docs
           cp -r docs/. _site/docs/
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

@@ -1,0 +1,61 @@
+name: Bug report
+description: Something in the simulator, converter, or firmware behaves wrong.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If this is about behavior on a physical board, please use the
+        **Hardware verification report** template instead — those get triaged differently,
+        since almost nothing here has been confirmed on real hardware yet.
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Where?
+      options:
+        - Simulator (the browser page)
+        - Converter (EPUB → .cebk)
+        - Firmware (source / build)
+        - Enclosure (OpenSCAD model)
+        - Docs / README
+    validations:
+      required: true
+
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what you expected instead
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the simulator
+        2. Load an EPUB with ...
+        3. Press MENU twice
+    validations:
+      required: true
+
+  - type: input
+    id: book
+    attributes:
+      label: If it involves a specific EPUB, which one?
+      description: A Project Gutenberg link or the title is fine. EPUBs vary wildly in markup, so this often matters more than it looks.
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser / OS
+      placeholder: "Firefox 141, Windows 11"
+
+  - type: textarea
+    id: console
+    attributes:
+      label: Console errors
+      description: For simulator or converter issues, anything red in the browser console.
+      render: text

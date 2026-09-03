@@ -39,7 +39,7 @@ two-resistor fix if you want one.
 
 ## Try it without any hardware
 
-The `simulator/` folder is a self-contained, single-file browser app that mimics the real device —
+`simulator/sim.html` is a self-contained, single-file browser app that mimics the real device —
 same pagination logic as the converter, the same rotary/MENU/EXIT input model, and an accurate
 e-ink partial-refresh/ghosting simulation — so you can load a real EPUB and see exactly how it will
 look and behave on the panel.
@@ -50,7 +50,14 @@ python -m http.server 8420
 # open http://localhost:8420
 ```
 
-**[Live demo →](https://trimpta.com/esp32-epaper-ereader/)** *(deploys automatically from `simulator/` via GitHub Actions)*
+**[Try the simulator →](https://trimpta.com/esp32-epaper-ereader/sim.html)** ·
+[Flash a board from your browser →](https://trimpta.com/esp32-epaper-ereader/install.html) ·
+[Docs →](https://trimpta.com/esp32-epaper-ereader/docs.html)
+
+The `simulator/` folder is the whole published site, not just the simulator: `index.html` is the
+landing page, `sim.html` the simulator, `install.html` a Web Serial firmware installer, and
+`docs.html` renders everything in `docs/`. GitHub Actions builds the firmware and deploys all of it
+together.
 
 | Reading | Library | Menu |
 |---|---|---|
@@ -113,11 +120,15 @@ the reasoning behind the design choices (transport, refresh strategy, storage co
 
 ## Repo layout
 
-- `simulator/` — standalone browser preview of the on-device reading UI (no hardware needed): same
-  tag-stripping/wrap/paginate logic as the converter, rotary→scroll and MENU/EXIT→LMB/RMB input
-  mapping, live layout-parameter sliders, games, wallpapers, and a memory/calibration panel.
-  `simulator/docs.html` is a separate in-site page rendering the four docs below in full, with an
-  index to switch between them — simulator-only, not part of what the ESP32 itself ever serves.
+- `simulator/` — the published website, deployed as-is to GitHub Pages:
+  - `sim.html` — standalone browser preview of the on-device reading UI (no hardware needed): same
+    tag-stripping/wrap/paginate logic as the converter, rotary→scroll and MENU/EXIT→LMB/RMB input
+    mapping, live layout-parameter sliders, games, wallpapers, and a memory/calibration panel.
+  - `index.html` — the landing page (what this is, features, setup).
+  - `install.html` — Web Serial installer that flashes a connected ESP32-S3 from the browser.
+  - `docs.html` — renders every doc below in full, with an index to switch between them.
+  - None of this is on the device: `firmware/data/index.html` is the small book-upload page the
+    ESP32 itself serves, and it's a separate file entirely.
 - `converter/` — browser-side EPUB → `.cebk` converter (JSZip + vanilla JS). Runs standalone or
   loaded from the page the device itself serves.
 - `docs/FORMAT.md` — the `.cebk` binary format spec (must stay in sync between converter and firmware).
@@ -183,15 +194,15 @@ caught the display-init bug and several others; see
 
 ## Coming soon
 
-Real hardware photos, an unboxing/assembly walkthrough, and side-by-side simulator-vs-actual-panel
-comparison shots will go here once the board arrives and the `TODO(verify)` items above get closed
-out against it.
+Real hardware photos, an assembly walkthrough, and side-by-side simulator-vs-actual-panel
+comparison shots will go here once the `TODO(verify)` items above are closed out against a
+physical board.
 
 ## Building one yourself
 
 1. Order the [CrowPanel ESP32 2.13" E-Paper HMI Display](https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html).
-2. While it's in transit, poke around the [simulator](#try-it-without-any-hardware) — load your
-   own EPUB, try the games, pick a wallpaper, get a feel for the actual reading experience.
+2. Poke around the [simulator](#try-it-without-any-hardware) — load your own EPUB, try the games,
+   pick a wallpaper, get a feel for the actual reading experience before committing to anything.
 3. Skim [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) and [docs/FORMAT.md](docs/FORMAT.md) to
    understand the conversion pipeline, then [docs/FLASH_BUDGET.md](docs/FLASH_BUDGET.md) for what
    fits on the device.

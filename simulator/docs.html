@@ -1,104 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rotary Reader — Docs</title>
+<title>Documentation — Rotary Reader</title>
+<meta name="description" content="Full documentation for Rotary Reader: architecture, the .cebk binary book format, the flash and RAM budget, the firmware review, and where the browser simulator diverges from the real e-paper hardware.">
+<link rel="canonical" href="https://trimpta.com/esp32-epaper-ereader/docs.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rotary Reader">
+<meta property="og:title" content="Rotary Reader documentation">
+<meta property="og:description" content="Architecture, the .cebk file format, the flash budget, the firmware review, and where the simulator diverges from real hardware.">
+<meta property="og:url" content="https://trimpta.com/esp32-epaper-ereader/docs.html">
+<meta property="og:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
+<meta name="theme-color" content="#23261f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('rotaryReaderTheme_v1');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 <style>
-  :root {
-    --bench: #23261f;
-    --bench-2: #191b16;
-    --panel: #2c2f27;
-    --panel-border: #454a3a;
-    --panel-border-lo: #3a3d33;
-    --copper: #c8863f;
-    --copper-bright: #e7ab6c;
-    --text-hi: #ece7d8;
-    --text-lo: #98988a;
-    --text-faint: #6b6c60;
-    --good: #86ac72;
-    --bad: #c97b6a;
-  }
-
-  * { box-sizing: border-box; }
-
-  html, body {
-    background: var(--bench);
-    color: var(--text-hi);
-    margin: 0;
-    min-height: 100%;
-  }
-
-  body {
-    font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
-    line-height: 1.6;
-  }
-
-  a { color: var(--copper-bright); }
-  a:hover { color: var(--copper); }
-
-  code {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.86em;
-    background: var(--bench-2);
-    border: 1px solid var(--panel-border-lo);
-    border-radius: 4px;
-    padding: 0.05rem 0.35rem;
-  }
-
-  header.top {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-    padding: 0.9rem 1.4rem;
-    border-bottom: 1px solid var(--panel-border-lo);
-    background: var(--bench-2);
-    position: sticky;
-    top: 0;
-    z-index: 5;
-  }
-
-  header.top a.back {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    text-decoration: none;
-    color: var(--text-lo);
-    border: 1px solid var(--panel-border);
-    border-radius: 6px;
-    padding: 0.4rem 0.7rem;
-    white-space: nowrap;
-  }
-  header.top a.back:hover { color: var(--copper-bright); border-color: var(--copper); }
-
-  header.top .mark {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.14em;
-    color: var(--copper);
-    border: 1px solid var(--copper);
-    border-radius: 3px;
-    padding: 0.15rem 0.4rem;
-  }
-
-  header.top h1 {
-    font-size: 1rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 600;
-    margin: 0;
-  }
-
-  header.top .spacer { flex: 1; }
-
-  header.top .gh {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text-faint);
-    text-decoration: none;
-  }
-  header.top .gh:hover { color: var(--copper-bright); }
-
   .layout {
     display: grid;
     grid-template-columns: 240px minmax(0, 1fr);
@@ -227,12 +156,17 @@
 </head>
 <body>
 
-<header class="top">
-  <a class="back" href="index.html">&larr; Rotary Reader</a>
-  <span class="mark">DOCS</span>
-  <h1>Project documentation</h1>
-  <span class="spacer"></span>
-  <a class="gh" href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">github.com/trimpta/esp32-epaper-ereader</a>
+<header class="topbar">
+  <a class="mark" href="./">RR</a>
+  <a class="wordmark" href="./">Rotary Reader</a>
+  <nav>
+    <a href="./">Home</a>
+    <a href="sim.html">Simulator</a>
+    <a href="install.html">Install</a>
+    <a href="docs.html" aria-current="page">Docs</a>
+    <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">GitHub</a>
+    <button class="theme-toggle" data-theme-toggle type="button">◐ Light</button>
+  </nav>
 </header>
 
 <div class="layout">
@@ -433,5 +367,6 @@ function currentSlug() {
 window.addEventListener('hashchange', () => loadDoc(currentSlug()));
 loadDoc(currentSlug());
 </script>
+<script src="theme.js"></script>
 </body>
 </html>

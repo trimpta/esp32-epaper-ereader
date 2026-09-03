@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Install the firmware — Rotary Reader</title>
+<meta name="description" content="Flash Rotary Reader firmware onto a connected ESP32-S3 CrowPanel directly from your browser over Web Serial. No toolchain, no command line.">
+<link rel="canonical" href="https://trimpta.com/esp32-epaper-ereader/install.html">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Rotary Reader">
+<meta property="og:title" content="Install Rotary Reader firmware from your browser">
+<meta property="og:description" content="Plug in a CrowPanel ESP32-S3 over USB-C and flash it straight from this page — no toolchain, no command line.">
+<meta property="og:url" content="https://trimpta.com/esp32-epaper-ereader/install.html">
+<meta property="og:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
+
+<meta name="theme-color" content="#23261f" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="site.css">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('rotaryReaderTheme_v1');
+      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  main.wrap { padding-top: clamp(2rem, 5vw, 3.5rem); padding-bottom: 4rem; max-width: 820px; }
+  h1 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); margin: 0 0 0.7rem; }
+  .lede { color: var(--text-lo); margin: 0 0 2rem; }
+  section { margin: 2.4rem 0; }
+  h2 { font-size: 1.1rem; margin: 0 0 0.7rem; }
+  p { font-size: 0.95rem; }
+
+  .warn {
+    border: 1px solid var(--copper);
+    border-left-width: 3px;
+    border-radius: 8px;
+    padding: 1.1rem 1.3rem;
+    background: color-mix(in srgb, var(--copper) 7%, transparent);
+  }
+  .warn h2 { color: var(--copper-bright); margin-top: 0; }
+  .warn p:last-child { margin-bottom: 0; }
+
+  .install-box {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    background: var(--panel);
+  }
+  .status-line { font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; }
+  .status-line.ok { color: var(--good); }
+  .status-line.err { color: var(--bad); }
+
+  ol.checklist { padding-left: 1.3rem; }
+  ol.checklist li { margin-bottom: 0.5rem; font-size: 0.95rem; }
+
+  pre {
+    background: var(--bench-2);
+    border: 1px solid var(--panel-border-lo);
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    overflow-x: auto;
+    font-size: 0.82rem;
+  }
+  pre code { background: none; border: none; padding: 0; }
+
+  esp-web-install-button { --esp-tools-button-color: var(--copper-bright); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="mark" href="./">RR</a>
+  <a class="wordmark" href="./">Rotary Reader</a>
+  <nav>
+    <a href="./">Home</a>
+    <a href="sim.html">Simulator</a>
+    <a href="install.html" aria-current="page">Install</a>
+    <a href="docs.html">Docs</a>
+    <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">GitHub</a>
+    <button class="theme-toggle" data-theme-toggle type="button">◐ Light</button>
+  </nav>
+</header>
+
+<main class="wrap">
+  <p class="eyebrow">Web Serial installer</p>
+  <h1>Flash it from this page</h1>
+  <p class="lede">
+    Plug a CrowPanel ESP32-S3 into this computer over USB-C and your browser can write the
+    firmware to it directly — no PlatformIO, no esptool, no command line.
+  </p>
+
+  <div class="warn">
+    <h2>Read this first</h2>
+    <p>
+      <strong>This firmware has never run on a physical board.</strong> It compiles clean and has
+      been reviewed line by line, but the display driver class, the SPI pin mapping and the panel's
+      power-gating pin are all read off Elecrow's schematic rather than measured. The most likely
+      outcome of a first flash is a working device with a blank screen.
+    </p>
+    <p>
+      Flashing replaces whatever is currently on the board, including the demo firmware it shipped
+      with. That's recoverable — you can always reflash Elecrow's own example — but it isn't
+      undone by a power cycle. If any of that gives you pause, the
+      <a href="sim.html">simulator</a> shows the entire interface with nothing at stake.
+    </p>
+  </div>
+
+  <section>
+    <h2>Install</h2>
+    <div class="install-box">
+      <div id="unsupported" hidden>
+        <p class="status-line err" style="margin-top:0;">This browser can't talk to serial devices.</p>
+        <p style="margin-bottom:0;">
+          Web Serial is Chromium-only — Chrome, Edge, Opera or Arc on desktop will work. Firefox and
+          Safari have no equivalent API, and it's unavailable on iOS entirely. On an unsupported
+          browser, use the <a href="#manual">manual route</a> below.
+        </p>
+      </div>
+
+      <div id="supported" hidden>
+        <esp-web-install-button manifest="firmware/manifest.json">
+          <button class="btn primary" slot="activate">⚡ Connect and install</button>
+          <span slot="unsupported" class="status-line err">Web Serial isn't available in this browser.</span>
+          <span slot="not-allowed" class="status-line err">This page has to be served over HTTPS to reach a serial port.</span>
+        </esp-web-install-button>
+        <p class="legend" style="margin:0;">
+          Your browser will ask which serial port to use. On Windows the board usually appears as a
+          <code>USB Serial Device (COMn)</code>; on macOS as <code>/dev/cu.usbmodem*</code>.
+        </p>
+      </div>
+
+      <p id="no-build" class="status-line err" hidden>
+        No firmware build is published on this site yet — the installer has nothing to flash.
+        Use the <a href="#manual">manual route</a> below, which builds from source.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <h2>If the board isn't detected</h2>
+    <ol class="checklist">
+      <li>Use a cable that carries data. A charge-only USB-C cable produces exactly this symptom and is by far the most common cause.</li>
+      <li>Try the other USB-C port if your board exposes two — one may be wired for power only.</li>
+      <li>Hold <strong>BOOT</strong>, tap <strong>RESET</strong>, then release BOOT to force the ROM bootloader, and try again.</li>
+      <li>On Windows, if it shows up as an unknown device, install the CH340 or CP210x driver depending on which USB-to-serial chip your unit carries.</li>
+      <li>Close anything else holding the port — a serial monitor, Arduino IDE, or another tab that already connected.</li>
+    </ol>
+  </section>
+
+  <section id="manual">
+    <h2>Building and flashing it yourself</h2>
+    <p>
+      The installer above just automates this. Building from source is also how you'd change a pin
+      mapping or the driver class if your board turns out to need it.
+    </p>
+    <pre><code>git clone https://github.com/trimpta/esp32-epaper-ereader
+cd esp32-epaper-ereader/firmware
+pio run --target upload</code></pre>
+    <p class="legend">
+      Verified to compile against ESP32 Arduino core 3.3.10. If your PlatformIO platform pulls core
+      2.x instead, the light-sleep wake code needs the newer IDF and won't build — see
+      <code>platformio.ini</code> for notes.
+    </p>
+  </section>
+
+  <section>
+    <h2>After it's flashed</h2>
+    <ol class="checklist">
+      <li>The panel shows <em>Connecting to WiFi…</em>, then opens a setup hotspot called <code>CrowPanel-Reader-Setup</code> on first boot.</li>
+      <li>Join that hotspot from your phone or laptop and pick your own network.</li>
+      <li>The reader prints its address on the panel. Open it in a browser to upload books.</li>
+      <li>Hold <strong>MENU</strong> while powering on if you ever need to redo the Wi-Fi setup.</li>
+    </ol>
+    <p>
+      <a class="btn" href="docs.html#architecture">How the pipeline works →</a>
+    </p>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="legend" style="margin:0;">
+      Flashing is handled by <a href="https://esphome.github.io/esp-web-tools/" target="_blank" rel="noopener">ESP Web Tools</a>,
+      running entirely in your browser — the firmware is served from this site and nothing is uploaded anywhere.
+    </p>
+  </div>
+</footer>
+
+<script type="module" src="https://cdn.jsdelivr.net/npm/esp-web-tools@10/dist/web/install-button.js"></script>
+<script src="theme.js"></script>
+<script>
+  // Two independent checks: can this browser do Web Serial at all, and is there actually
+  // a build on this site to flash? Either one failing should say so plainly rather than
+  // leaving a button that quietly does nothing.
+  (function () {
+    'use strict';
+    var supported = 'serial' in navigator;
+    document.getElementById('unsupported').hidden = supported;
+    if (!supported) return;
+
+    fetch('firmware/manifest.json', { method: 'HEAD' })
+      .then(function (res) {
+        if (!res.ok) throw new Error('no manifest');
+        document.getElementById('supported').hidden = false;
+      })
+      .catch(function () {
+        document.getElementById('no-build').hidden = false;
+      });
+  })();
+</script>
+</body>
+</html>

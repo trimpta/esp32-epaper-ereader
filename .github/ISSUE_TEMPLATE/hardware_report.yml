@@ -1,0 +1,77 @@
+name: Hardware verification report
+description: You ran this on a real CrowPanel board — tell us what actually happened.
+title: "[hardware] "
+labels: ["hardware-verification"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **This is the most useful issue you can file.** Nothing in this repo has been
+        confirmed on a physical board — pin mappings, the display driver class and refresh
+        behavior are all reasoned from Elecrow's schematic and datasheets, not measured.
+        A report either way (it worked / it didn't) turns a guess into a fact.
+
+        See [Status / what needs real-hardware verification](https://github.com/trimpta/esp32-epaper-ereader#status--what-needs-real-hardware-verification)
+        for the current list of unknowns.
+
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: What happened?
+      options:
+        - It worked as documented
+        - It worked, but only after changes (please describe below)
+        - It flashed but the display stayed blank
+        - It didn't build / didn't flash
+        - Something else
+    validations:
+      required: true
+
+  - type: input
+    id: board
+    attributes:
+      label: Exact board
+      description: Which variant, and where from? Elecrow dual-sources the panel driver, so batch matters.
+      placeholder: "CrowPanel ESP32 2.13\" E-Paper HMI (DIE01021S), bought Jan 2026"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the unknown list does this cover?
+      multiple: true
+      options:
+        - Display driver class (GxEPD2_213_BN vs. SSD1680Z / JD79661)
+        - EPD SPI pin mapping (CS/DC/RST/BUSY/MOSI/SCK)
+        - Panel power-rail gating pin (IO7_LCD_3.3_CTL)
+        - Button / rotary GPIO mapping
+        - ext1 wake pins (light sleep)
+        - Real refresh timing / ghosting behavior
+        - Font metrics vs. converter pagination
+        - Firmware binary size against the partition table
+        - Battery sense (if you added the resistor divider)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: detail
+    attributes:
+      label: What you saw
+      description: |
+        Serial output, photos of the panel, and any values you measured are all
+        enormously helpful. If you changed a constant to make it work, say which one and
+        what you changed it to.
+      placeholder: |
+        Display stayed blank with GxEPD2_213_BN. Swapped to GxEPD2_213_B74 and it drew fine.
+        Also had to change PIN_EPD_BUSY from 9 to ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Build environment
+      description: PlatformIO or arduino-cli, core version, OS.
+      placeholder: "PlatformIO, espressif32 @ 6.9.0 (Arduino core 2.0.17), Windows 11"

@@ -1,0 +1,202 @@
+/* Shared styling for the content pages (index / install / docs).
+   sim.html deliberately does NOT use this — it's published standalone as a Claude
+   Artifact, which is a single self-contained file with nothing alongside it.
+
+   Palette: dark is the design's native look (a workshop bench); light is a real
+   second theme, not an inversion. Both are defined as tokens on :root so the toggle
+   only ever swaps one attribute. */
+
+:root {
+  color-scheme: dark;
+  --bench: #23261f;
+  --bench-2: #191b16;
+  --panel: #2c2f27;
+  --panel-2: #333730;
+  --panel-border: #454a3a;
+  --panel-border-lo: #3a3d33;
+  --copper: #c8863f;
+  --copper-bright: #e7ab6c;
+  --paper: #e9e4d3;
+  --eink: #2c2a22;
+  --text-hi: #ece7d8;
+  --text-lo: #98988a;
+  --text-faint: #6b6c60;
+  --good: #86ac72;
+  --bad: #c97b6a;
+  --shadow: rgba(0, 0, 0, 0.35);
+  --glow: rgba(255, 226, 170, 0.05);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bench: #f2efe6;
+  --bench-2: #e6e1d3;
+  --panel: #fbf9f3;
+  --panel-2: #f2eee3;
+  --panel-border: #c7c0ab;
+  --panel-border-lo: #d8d2c1;
+  --copper: #9a5f1d;
+  --copper-bright: #7d4c14;
+  --paper: #ffffff;
+  --eink: #2c2a22;
+  --text-hi: #2a2820;
+  --text-lo: #5c5a4e;
+  --text-faint: #7d7a6b;
+  --good: #4a7a36;
+  --bad: #a8442f;
+  --shadow: rgba(90, 80, 50, 0.14);
+  --glow: rgba(200, 134, 63, 0.06);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bench);
+  color: var(--text-hi);
+}
+
+body {
+  font-family: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+  background:
+    radial-gradient(ellipse 900px 500px at 20% -10%, var(--glow), transparent 60%),
+    var(--bench);
+}
+
+a { color: var(--copper-bright); }
+a:hover { color: var(--copper); }
+
+code, kbd {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 0.88em;
+  background: var(--bench-2);
+  border: 1px solid var(--panel-border-lo);
+  border-radius: 4px;
+  padding: 0.05rem 0.35rem;
+}
+
+/* ---- top bar, shared across every content page ---- */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 0.75rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--panel-border-lo);
+  background: var(--bench-2);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.topbar .mark {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  color: var(--copper);
+  border: 1px solid var(--copper);
+  border-radius: 3px;
+  padding: 0.15rem 0.4rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topbar .wordmark {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-hi);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.topbar nav a {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--text-lo);
+  text-decoration: none;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+}
+.topbar nav a:hover { color: var(--text-hi); background: var(--panel); }
+.topbar nav a[aria-current="page"] { color: var(--copper-bright); background: var(--panel); }
+
+.theme-toggle {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--text-lo);
+  background: transparent;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.theme-toggle:hover { color: var(--copper-bright); border-color: var(--copper); }
+
+/* ---- generic building blocks ---- */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2.5rem); }
+
+.btn {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  color: var(--text-hi);
+  background: var(--bench-2);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 0.7rem 1.15rem;
+  cursor: pointer;
+  transition: border-color 120ms ease, color 120ms ease, transform 120ms ease;
+}
+.btn:hover { border-color: var(--copper); color: var(--copper-bright); transform: translateY(-1px); }
+.btn.primary {
+  border-color: var(--copper);
+  color: var(--copper-bright);
+  background: color-mix(in srgb, var(--copper) 10%, var(--bench-2));
+}
+.btn.primary:hover { background: color-mix(in srgb, var(--copper) 18%, var(--bench-2)); }
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--panel-border-lo);
+  border-radius: 10px;
+  padding: 1.3rem 1.4rem;
+}
+
+.legend {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  line-height: 1.7;
+}
+
+.eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--copper);
+  margin: 0 0 0.6rem;
+}
+
+h1, h2, h3 { font-family: 'IBM Plex Mono', monospace; line-height: 1.25; }
+
+footer.site {
+  border-top: 1px solid var(--panel-border-lo);
+  margin-top: 4rem;
+  padding: 2rem 0 3rem;
+}
+footer.site .legend a { color: var(--text-lo); }
+footer.site .legend a:hover { color: var(--copper-bright); }

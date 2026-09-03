@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Try the simulator first
+    url: https://trimpta.com/esp32-epaper-ereader/
+    about: Most UI/layout questions can be answered (or reproduced) in the browser simulator without any hardware.
+  - name: Project documentation
+    url: https://trimpta.com/esp32-epaper-ereader/docs.html
+    about: Architecture, the .cebk file format, the flash budget, the firmware review, and where the simulator diverges from real hardware.

@@ -25,7 +25,7 @@ that's the whole basis for the device doing zero text-layout work at runtime (se
 one of these constants after books are already converted silently desyncs their saved tables from
 whatever the new constants would actually render.
 
-`simulator/index.html`'s Layout Parameters sliders (and the on-device Settings screen) look like a
+`simulator/sim.html`'s Layout Parameters sliders (and the on-device Settings screen) look like a
 live user preference — they re-paginate instantly — but that's a design-time convenience for
 picking values before they're hardcoded into `config.h` and flashed, not a runtime capability real
 firmware has. If per-user adjustable text size ever becomes a real feature, it needs on-device
