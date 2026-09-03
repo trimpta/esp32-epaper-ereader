@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Documentation — Rotary Reader</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <meta name="description" content="Full documentation for Rotary Reader: architecture, the .cebk binary book format, the flash and RAM budget, the firmware review, and where the browser simulator diverges from the real e-paper hardware.">
 <link rel="canonical" href="https://trimpta.com/esp32-epaper-ereader/docs.html">
 <meta property="og:type" content="website">
@@ -228,10 +229,13 @@ function splitTableRow(line) {
 
 const BLOCK_START = /^(#{1,6}\s+|[-*]\s+|\d+\.\s+|```)/;
 
-// Small hand-rolled renderer covering exactly what these four docs actually use
-// (checked against them directly): headings, paragraphs with lazy line-wrap
-// continuation, single-level bulleted/numbered lists, fenced code blocks, and GFM
-// pipe tables. Not a general CommonMark implementation — doesn't need to be one.
+// Small hand-rolled renderer covering exactly what docs/*.md actually use (checked
+// against them directly): headings, paragraphs with lazy line-wrap continuation,
+// single-level bulleted/numbered lists, fenced code blocks, and GFM pipe tables. Not a
+// general CommonMark implementation — doesn't need to be one, as long as new docs stay
+// within that set. It does NOT support: blockquotes (>), nested/indented lists, images,
+// or footnotes — any of those will render as a stray paragraph rather than an error, so
+// check a new doc's rendered output here before relying on one of them.
 function renderMarkdown(md) {
   const lines = md.replace(/\r\n/g, '\n').split('\n');
   const out = [];
