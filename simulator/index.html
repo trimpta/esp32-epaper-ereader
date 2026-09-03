@@ -103,17 +103,24 @@
   ol.steps h3 { font-size: 0.95rem; margin: 0 0 0.25rem; }
   ol.steps p { margin: 0; color: var(--ink-2); }
 
-  .shot { border: 1px solid var(--rule); background: var(--paper-2); padding: 0.5rem; }
+  /* margin:0 matters — <figure> carries a 40px default margin in every browser, which was
+     silently eating 80px out of each grid cell and pulling the images out of line with the
+     column edge. */
+  .shot { margin: 0; border: 1px solid var(--rule); background: var(--paper-2); padding: 0.5rem; }
   .shot img { display: block; width: 100%; height: auto; }
   .shot figcaption { margin-top: 0.45rem; }
 
+  /* Two up, inside the text column — not broken out wider than it.
+     These were once four across at ~230px, narrower than the panel's own 250px, which made
+     the on-screen text unreadable. The fix at the time was to widen the grid past the column,
+     which traded one problem for a worse one: the page lost its single measure and the
+     screenshots visibly failed to line up with everything above them. Two columns within the
+     column still gives ~450px each — nearly twice the panel's native width — and the page
+     keeps one edge all the way down. */
   .gallery {
     display: grid;
     gap: 1.2rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: min(1500px, 100vw - 3rem);
-    margin-left: 50%;
-    transform: translateX(-50%);
   }
   @media (max-width: 780px) { .gallery { grid-template-columns: minmax(0, 1fr); } }
 
