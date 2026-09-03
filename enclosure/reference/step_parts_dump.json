@@ -1,0 +1,8120 @@
+[
+  {
+    "name": "Part__Feature",
+    "label": "SOLID",
+    "type": "Part::Feature",
+    "xmin": -14.6,
+    "xmax": 14.6,
+    "ymin": -2.084,
+    "ymax": 0.9,
+    "zmin": -29.6,
+    "zmax": 30.448,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "_2_13_LCD",
+    "label": "2_13-LCD",
+    "type": "App::Part",
+    "xmin": -14.6,
+    "xmax": 14.6,
+    "ymin": -2.084,
+    "ymax": 0.9,
+    "zmin": -29.6,
+    "zmax": 30.448,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin",
+    "label": "Origin",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis",
+    "label": "X-axis",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis",
+    "label": "Y-axis",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis",
+    "label": "Z-axis",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane",
+    "label": "XY-plane",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane",
+    "label": "XZ-plane",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane",
+    "label": "YZ-plane",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin001",
+    "label": "Origin001",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature001",
+    "label": "SOLID001",
+    "type": "Part::Feature",
+    "xmin": -15.6,
+    "xmax": 15.6,
+    "ymin": -0.5,
+    "ymax": 1.6,
+    "zmin": -31.6,
+    "zmax": 31.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "_2_13_PCB",
+    "label": "2_13_PCB",
+    "type": "App::Part",
+    "xmin": -15.6,
+    "xmax": 15.6,
+    "ymin": -2.1,
+    "ymax": 0.0,
+    "zmin": -31.6,
+    "zmax": 31.6,
+    "placement": [
+      0.0,
+      -1.6,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin002",
+    "label": "Origin004",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis001",
+    "label": "X-axis001",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis001",
+    "label": "Y-axis001",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis001",
+    "label": "Z-axis001",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane001",
+    "label": "XY-plane001",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane001",
+    "label": "XZ-plane001",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane001",
+    "label": "YZ-plane001",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin003",
+    "label": "Origin003",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature002",
+    "label": "XB-TM-2024A",
+    "type": "Part::Feature",
+    "xmin": -6.582,
+    "xmax": 6.582,
+    "ymin": -3.8,
+    "ymax": -1.0,
+    "zmin": -34.349,
+    "zmax": -25.35,
+    "placement": [
+      0.0,
+      -3.8,
+      -25.4
+    ]
+  },
+  {
+    "name": "Part__Feature003",
+    "label": "BREP_61",
+    "type": "Part::Feature",
+    "xmin": 78.569,
+    "xmax": 81.418,
+    "ymin": 8.735,
+    "ymax": 16.185,
+    "zmin": -6.1,
+    "zmax": -2.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature004",
+    "label": "BREP_62",
+    "type": "Part::Feature",
+    "xmin": 78.569,
+    "xmax": 81.019,
+    "ymin": 8.61,
+    "ymax": 16.31,
+    "zmin": -6.1,
+    "zmax": -2.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature005",
+    "label": "BREP_63",
+    "type": "Part::Feature",
+    "xmin": 80.569,
+    "xmax": 82.069,
+    "ymin": 10.936,
+    "ymax": 13.985,
+    "zmin": -5.117,
+    "zmax": -3.568,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "KEY_579_ASM",
+    "label": "KEY-579_ASM",
+    "type": "App::Part",
+    "xmin": -15.0,
+    "xmax": -7.3,
+    "ymin": -5.1,
+    "ymax": -1.6,
+    "zmin": -32.4,
+    "zmax": -28.9,
+    "placement": [
+      1.31,
+      1.0,
+      49.669
+    ]
+  },
+  {
+    "name": "Origin004",
+    "label": "Origin007",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis002",
+    "label": "X-axis002",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis002",
+    "label": "Y-axis002",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis002",
+    "label": "Z-axis002",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane002",
+    "label": "XY-plane002",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane002",
+    "label": "XZ-plane002",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane002",
+    "label": "YZ-plane002",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin005",
+    "label": "Origin006",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature006",
+    "label": "BREP_001",
+    "type": "Part::Feature",
+    "xmin": 78.569,
+    "xmax": 81.418,
+    "ymin": 8.735,
+    "ymax": 16.185,
+    "zmin": -6.1,
+    "zmax": -2.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature007",
+    "label": "BREP_002",
+    "type": "Part::Feature",
+    "xmin": 78.569,
+    "xmax": 81.019,
+    "ymin": 8.61,
+    "ymax": 16.31,
+    "zmin": -6.1,
+    "zmax": -2.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature008",
+    "label": "BREP_003",
+    "type": "Part::Feature",
+    "xmin": 80.569,
+    "xmax": 82.069,
+    "ymin": 10.936,
+    "ymax": 13.985,
+    "zmin": -5.117,
+    "zmax": -3.568,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "KEY_579_ASM001",
+    "label": "KEY-579_ASM001",
+    "type": "App::Part",
+    "xmin": 7.3,
+    "xmax": 15.0,
+    "ymin": -5.1,
+    "ymax": -1.6,
+    "zmin": -32.4,
+    "zmax": -28.9,
+    "placement": [
+      23.61,
+      1.0,
+      49.669
+    ]
+  },
+  {
+    "name": "Origin006",
+    "label": "Origin010",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis003",
+    "label": "X-axis003",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis003",
+    "label": "Y-axis003",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis003",
+    "label": "Z-axis003",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane003",
+    "label": "XY-plane003",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane003",
+    "label": "XZ-plane003",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane003",
+    "label": "YZ-plane003",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin007",
+    "label": "Origin009",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature009",
+    "label": "BOSS-EXTRUDE7_4__1_1",
+    "type": "Part::Feature",
+    "xmin": 1.35,
+    "xmax": 1.65,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature010",
+    "label": "BOSS-EXTRUDE7_5__1_1",
+    "type": "Part::Feature",
+    "xmin": 1.85,
+    "xmax": 2.15,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature011",
+    "label": "BOSS-EXTRUDE7_8__1_1",
+    "type": "Part::Feature",
+    "xmin": -1.65,
+    "xmax": -1.35,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature012",
+    "label": "BOSS-EXTRUDE7_3__1_1",
+    "type": "Part::Feature",
+    "xmin": 0.85,
+    "xmax": 1.15,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature013",
+    "label": "BOSS-EXTRUDE7_7__1_1",
+    "type": "Part::Feature",
+    "xmin": -1.15,
+    "xmax": -0.85,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature014",
+    "label": "BOSS-EXTRUDE14_4__1_1",
+    "type": "Part::Feature",
+    "xmin": 1.1,
+    "xmax": 1.4,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature015",
+    "label": "BOSS-EXTRUDE14_2__1_1",
+    "type": "Part::Feature",
+    "xmin": 2.15,
+    "xmax": 2.75,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature016",
+    "label": "BOSS-EXTRUDE14_8__1_1",
+    "type": "Part::Feature",
+    "xmin": -2.75,
+    "xmax": -2.15,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature017",
+    "label": "BOSS-EXTRUDE14_5__1_1",
+    "type": "Part::Feature",
+    "xmin": 1.6,
+    "xmax": 1.9,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature018",
+    "label": "BOSS-EXTRUDE7_6__1_1",
+    "type": "Part::Feature",
+    "xmin": -0.65,
+    "xmax": -0.35,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature019",
+    "label": "CHAMFER9_1_1",
+    "type": "Part::Feature",
+    "xmin": -4.47,
+    "xmax": 4.47,
+    "ymin": 0.0,
+    "ymax": 7.3,
+    "zmin": -1.605,
+    "zmax": 2.595,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature020",
+    "label": "CUT-EXTRUDE5_1_1",
+    "type": "Part::Feature",
+    "xmin": -4.433,
+    "xmax": 4.433,
+    "ymin": -0.0,
+    "ymax": 2.0,
+    "zmin": -1.383,
+    "zmax": 2.285,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature021",
+    "label": "MIRROR2_1_1",
+    "type": "Part::Feature",
+    "xmin": -3.35,
+    "xmax": 3.35,
+    "ymin": 2.0,
+    "ymax": 6.6,
+    "zmin": -0.35,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature022",
+    "label": "BOSS-EXTRUDE7_1__1_1",
+    "type": "Part::Feature",
+    "xmin": -0.15,
+    "xmax": 0.15,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature023",
+    "label": "BOSS-EXTRUDE14_10__1_1",
+    "type": "Part::Feature",
+    "xmin": -1.4,
+    "xmax": -1.1,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature024",
+    "label": "BOSS-EXTRUDE14_11__1_1",
+    "type": "Part::Feature",
+    "xmin": -0.9,
+    "xmax": -0.6,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature025",
+    "label": "BOSS-EXTRUDE14_9__1_1",
+    "type": "Part::Feature",
+    "xmin": -1.9,
+    "xmax": -1.6,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature026",
+    "label": "BOSS-EXTRUDE14_6__1_1",
+    "type": "Part::Feature",
+    "xmin": 2.95,
+    "xmax": 3.55,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature027",
+    "label": "BOSS-EXTRUDE14_12__1_1",
+    "type": "Part::Feature",
+    "xmin": -0.4,
+    "xmax": -0.1,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature028",
+    "label": "BOSS-EXTRUDE14_3__1_1",
+    "type": "Part::Feature",
+    "xmin": 0.6,
+    "xmax": 0.9,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature029",
+    "label": "BOSS-EXTRUDE14_7__1_1",
+    "type": "Part::Feature",
+    "xmin": -3.55,
+    "xmax": -2.95,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature030",
+    "label": "BOSS-EXTRUDE7_9__1_1",
+    "type": "Part::Feature",
+    "xmin": -2.15,
+    "xmax": -1.85,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature031",
+    "label": "BOSS-EXTRUDE7_2__1_1",
+    "type": "Part::Feature",
+    "xmin": 0.35,
+    "xmax": 0.65,
+    "ymin": 2.153,
+    "ymax": 5.937,
+    "zmin": -0.375,
+    "zmax": 0.375,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature032",
+    "label": "NONE_1_1_1",
+    "type": "Part::Feature",
+    "xmin": 0.1,
+    "xmax": 0.4,
+    "ymin": -0.6,
+    "ymax": 0.4,
+    "zmin": 1.305,
+    "zmax": 1.605,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "_9899277F_4995_40C0_B099_C6A92_1_ASM",
+    "label": "9899277F-4995-40C0-B099-C6A92_1_ASM",
+    "type": "App::Part",
+    "xmin": -4.47,
+    "xmax": 4.47,
+    "ymin": -0.6,
+    "ymax": 7.3,
+    "zmin": -1.605,
+    "zmax": 2.595,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin008",
+    "label": "Origin012",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis004",
+    "label": "X-axis004",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis004",
+    "label": "Y-axis004",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis004",
+    "label": "Z-axis004",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane004",
+    "label": "XY-plane004",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane004",
+    "label": "XZ-plane004",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane004",
+    "label": "YZ-plane004",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin009",
+    "label": "Origin011",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "TYPE_C_PORT_SMD_TYPE__ASM_2_1_ASM",
+    "label": "TYPE_C_PORT_SMD_TYPE__ASM_2_1_ASM",
+    "type": "App::Part",
+    "xmin": 7.7,
+    "xmax": 15.6,
+    "ymin": -4.81,
+    "ymax": -0.61,
+    "zmin": -3.87,
+    "zmax": 5.07,
+    "placement": [
+      8.3,
+      -3.205,
+      0.6
+    ]
+  },
+  {
+    "name": "Origin010",
+    "label": "Origin015",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis005",
+    "label": "X-axis005",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis005",
+    "label": "Y-axis005",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis005",
+    "label": "Z-axis005",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane005",
+    "label": "XY-plane005",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane005",
+    "label": "XZ-plane005",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane005",
+    "label": "YZ-plane005",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin011",
+    "label": "Origin014",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature033",
+    "label": "BODY1_1_3_1",
+    "type": "Part::Feature",
+    "xmin": -2.25,
+    "xmax": 2.25,
+    "ymin": -2.25,
+    "ymax": 2.25,
+    "zmin": 0.0,
+    "zmax": 6.5,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature034",
+    "label": "BODY2_1_1_1",
+    "type": "Part::Feature",
+    "xmin": -2.275,
+    "xmax": 2.275,
+    "ymin": -2.275,
+    "ymax": 2.275,
+    "zmin": 2.7,
+    "zmax": 2.9,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature035",
+    "label": "BODY3_1_1",
+    "type": "Part::Feature",
+    "xmin": 1.081,
+    "xmax": 1.919,
+    "ymin": 1.096,
+    "ymax": 1.904,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature036",
+    "label": "BODY4_1_1",
+    "type": "Part::Feature",
+    "xmin": -1.919,
+    "xmax": -1.081,
+    "ymin": -1.904,
+    "ymax": -1.096,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature037",
+    "label": "BODY5_1_1",
+    "type": "Part::Feature",
+    "xmin": -1.919,
+    "xmax": -1.081,
+    "ymin": 1.096,
+    "ymax": 1.904,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature038",
+    "label": "BODY6_1_1",
+    "type": "Part::Feature",
+    "xmin": 1.081,
+    "xmax": 1.919,
+    "ymin": -1.904,
+    "ymax": -1.096,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature039",
+    "label": "SMT_PIN_2_1_1",
+    "type": "Part::Feature",
+    "xmin": 2.095,
+    "xmax": 3.75,
+    "ymin": 1.15,
+    "ymax": 1.85,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature040",
+    "label": "SMT_PIN_4_1_1",
+    "type": "Part::Feature",
+    "xmin": 2.095,
+    "xmax": 3.75,
+    "ymin": -1.85,
+    "ymax": -1.15,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature041",
+    "label": "SMT_PIN_1_1_1",
+    "type": "Part::Feature",
+    "xmin": -3.75,
+    "xmax": -2.095,
+    "ymin": 1.15,
+    "ymax": 1.85,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature042",
+    "label": "SMT_PIN_3_1_1",
+    "type": "Part::Feature",
+    "xmin": -3.75,
+    "xmax": -2.095,
+    "ymin": -1.85,
+    "ymax": -1.15,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "TACT_SWITCH_ASM_2_1_ASM",
+    "label": "TACT_SWITCH_ASM_2_1_ASM",
+    "type": "App::Part",
+    "xmin": -14.175,
+    "xmax": -9.625,
+    "ymin": -8.1,
+    "ymax": -1.584,
+    "zmin": 11.45,
+    "zmax": 18.95,
+    "placement": [
+      -11.9,
+      -1.6,
+      15.2
+    ]
+  },
+  {
+    "name": "Origin012",
+    "label": "Origin018",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis006",
+    "label": "X-axis006",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis006",
+    "label": "Y-axis006",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis006",
+    "label": "Z-axis006",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane006",
+    "label": "XY-plane006",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane006",
+    "label": "XZ-plane006",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane006",
+    "label": "YZ-plane006",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin013",
+    "label": "Origin017",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature043",
+    "label": "BODY1_1_3_001",
+    "type": "Part::Feature",
+    "xmin": -2.25,
+    "xmax": 2.25,
+    "ymin": -2.25,
+    "ymax": 2.25,
+    "zmin": 0.0,
+    "zmax": 6.5,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature044",
+    "label": "BODY2_1_1_001",
+    "type": "Part::Feature",
+    "xmin": -2.275,
+    "xmax": 2.275,
+    "ymin": -2.275,
+    "ymax": 2.275,
+    "zmin": 2.7,
+    "zmax": 2.9,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature045",
+    "label": "BODY3_1_001",
+    "type": "Part::Feature",
+    "xmin": 1.081,
+    "xmax": 1.919,
+    "ymin": 1.096,
+    "ymax": 1.904,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature046",
+    "label": "BODY4_1_001",
+    "type": "Part::Feature",
+    "xmin": -1.919,
+    "xmax": -1.081,
+    "ymin": -1.904,
+    "ymax": -1.096,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature047",
+    "label": "BODY5_1_001",
+    "type": "Part::Feature",
+    "xmin": -1.919,
+    "xmax": -1.081,
+    "ymin": 1.096,
+    "ymax": 1.904,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature048",
+    "label": "BODY6_1_001",
+    "type": "Part::Feature",
+    "xmin": 1.081,
+    "xmax": 1.919,
+    "ymin": -1.904,
+    "ymax": -1.096,
+    "zmin": 2.7,
+    "zmax": 3.204,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature049",
+    "label": "SMT_PIN_2_1_001",
+    "type": "Part::Feature",
+    "xmin": 2.095,
+    "xmax": 3.75,
+    "ymin": 1.15,
+    "ymax": 1.85,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature050",
+    "label": "SMT_PIN_4_1_001",
+    "type": "Part::Feature",
+    "xmin": 2.095,
+    "xmax": 3.75,
+    "ymin": -1.85,
+    "ymax": -1.15,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature051",
+    "label": "SMT_PIN_1_1_001",
+    "type": "Part::Feature",
+    "xmin": -3.75,
+    "xmax": -2.095,
+    "ymin": 1.15,
+    "ymax": 1.85,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature052",
+    "label": "SMT_PIN_3_1_001",
+    "type": "Part::Feature",
+    "xmin": -3.75,
+    "xmax": -2.095,
+    "ymin": -1.85,
+    "ymax": -1.15,
+    "zmin": -0.016,
+    "zmax": 1.116,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "TACT_SWITCH_ASM_2_1_ASM001",
+    "label": "TACT_SWITCH_ASM_2_1_ASM001",
+    "type": "App::Part",
+    "xmin": -14.175,
+    "xmax": -9.625,
+    "ymin": -8.1,
+    "ymax": -1.584,
+    "zmin": 21.92,
+    "zmax": 29.42,
+    "placement": [
+      -11.9,
+      -1.6,
+      25.67
+    ]
+  },
+  {
+    "name": "Origin014",
+    "label": "Origin021",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis007",
+    "label": "X-axis007",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis007",
+    "label": "Y-axis007",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis007",
+    "label": "Z-axis007",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane007",
+    "label": "XY-plane007",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane007",
+    "label": "XZ-plane007",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane007",
+    "label": "YZ-plane007",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin015",
+    "label": "Origin020",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature053",
+    "label": "IC-1",
+    "type": "Part::Feature",
+    "xmin": -5.01,
+    "xmax": 2.09,
+    "ymin": -2.5,
+    "ymax": -1.6,
+    "zmin": -18.23,
+    "zmax": -11.13,
+    "placement": [
+      -1.46,
+      -2.5,
+      -14.68
+    ]
+  },
+  {
+    "name": "Part__Feature054",
+    "label": "L2",
+    "type": "Part::Feature",
+    "xmin": -7.4,
+    "xmax": -3.4,
+    "ymin": -2.8,
+    "ymax": -1.6,
+    "zmin": 5.3,
+    "zmax": 9.3,
+    "placement": [
+      -5.4,
+      -2.8,
+      7.3
+    ]
+  },
+  {
+    "name": "Part__Feature055",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_1",
+    "type": "Part::Feature",
+    "xmin": -6.0,
+    "xmax": -5.2,
+    "ymin": -3.895,
+    "ymax": -0.115,
+    "zmin": 0.0,
+    "zmax": 5.15,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature056",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_2",
+    "type": "Part::Feature",
+    "xmin": 5.2,
+    "xmax": 6.0,
+    "ymin": -3.895,
+    "ymax": -0.115,
+    "zmin": 0.0,
+    "zmax": 5.15,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature057",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_3",
+    "type": "Part::Feature",
+    "xmin": -6.0,
+    "xmax": 6.0,
+    "ymin": -4.305,
+    "ymax": 1.799,
+    "zmin": -0.062,
+    "zmax": 8.15,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature058",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_4",
+    "type": "Part::Feature",
+    "xmin": -2.996,
+    "xmax": -2.824,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 5.464,
+    "zmax": 5.79,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature059",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_5",
+    "type": "Part::Feature",
+    "xmin": -2.81,
+    "xmax": -2.565,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 5.457,
+    "zmax": 5.794,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature060",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_6",
+    "type": "Part::Feature",
+    "xmin": -2.502,
+    "xmax": -2.327,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 5.46,
+    "zmax": 5.787,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature061",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_7",
+    "type": "Part::Feature",
+    "xmin": -2.266,
+    "xmax": -1.999,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 5.459,
+    "zmax": 5.785,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature062",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_8",
+    "type": "Part::Feature",
+    "xmin": -1.983,
+    "xmax": -1.69,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 5.456,
+    "zmax": 5.782,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature063",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CO_9",
+    "type": "Part::Feature",
+    "xmin": -3.0,
+    "xmax": -2.824,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.947,
+    "zmax": 5.274,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature064",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_10",
+    "type": "Part::Feature",
+    "xmin": -2.785,
+    "xmax": -2.597,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.941,
+    "zmax": 5.184,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature065",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_11",
+    "type": "Part::Feature",
+    "xmin": -2.544,
+    "xmax": -2.386,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.939,
+    "zmax": 5.183,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature066",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_12",
+    "type": "Part::Feature",
+    "xmin": -2.364,
+    "xmax": -2.141,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.834,
+    "zmax": 5.177,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature067",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_13",
+    "type": "Part::Feature",
+    "xmin": -2.098,
+    "xmax": -1.923,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.941,
+    "zmax": 5.268,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature068",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_14",
+    "type": "Part::Feature",
+    "xmin": -1.862,
+    "xmax": -1.595,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.94,
+    "zmax": 5.266,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature069",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_15",
+    "type": "Part::Feature",
+    "xmin": -1.579,
+    "xmax": -1.286,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.937,
+    "zmax": 5.263,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature070",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_C_16",
+    "type": "Part::Feature",
+    "xmin": -4.74,
+    "xmax": -3.264,
+    "ymin": -4.306,
+    "ymax": -4.305,
+    "zmin": 4.803,
+    "zmax": 5.885,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "CONN_SMD_4P_P2_00_HY2_0_4P_CONN_ASM",
+    "label": "CONN-SMD_4P-P2_00_HY2_0-4P_CONN_ASM",
+    "type": "App::Part",
+    "xmin": -15.601,
+    "xmax": -9.496,
+    "ymin": -9.75,
+    "ymax": -1.538,
+    "zmin": -2.06,
+    "zmax": 9.94,
+    "placement": [
+      -11.295,
+      -1.6,
+      3.94
+    ]
+  },
+  {
+    "name": "Origin016",
+    "label": "Origin023",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis008",
+    "label": "X-axis008",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis008",
+    "label": "Y-axis008",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis008",
+    "label": "Z-axis008",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane008",
+    "label": "XY-plane008",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane008",
+    "label": "XZ-plane008",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane008",
+    "label": "YZ-plane008",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin017",
+    "label": "Origin022",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature071",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_1",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 7.26,
+    "ymin": -3.212,
+    "ymax": -0.132,
+    "zmin": 0.0,
+    "zmax": 4.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature072",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_2",
+    "type": "Part::Feature",
+    "xmin": -7.26,
+    "xmax": -6.31,
+    "ymin": -3.212,
+    "ymax": -0.132,
+    "zmin": 0.0,
+    "zmax": 4.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature073",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_3",
+    "type": "Part::Feature",
+    "xmin": -7.56,
+    "xmax": 7.56,
+    "ymin": -3.95,
+    "ymax": 4.05,
+    "zmin": -0.092,
+    "zmax": 8.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature074",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_4",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": -0.06,
+    "ymax": 0.069,
+    "zmin": 6.039,
+    "zmax": 6.283,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature075",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_5",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.079,
+    "ymax": 0.261,
+    "zmin": 6.035,
+    "zmax": 6.287,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature076",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_6",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.31,
+    "ymax": 0.441,
+    "zmin": 6.039,
+    "zmax": 6.283,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature077",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_7",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.488,
+    "ymax": 0.686,
+    "zmin": 6.039,
+    "zmax": 6.283,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature078",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_8",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.7,
+    "ymax": 0.919,
+    "zmin": 6.039,
+    "zmax": 6.283,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature079",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_9",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": -0.06,
+    "ymax": 0.071,
+    "zmin": 5.652,
+    "zmax": 5.896,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature080",
+    "label": "CONN-SMD_4P-P2_54_C990001275_10",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.1,
+    "ymax": 0.241,
+    "zmin": 5.648,
+    "zmax": 5.83,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature081",
+    "label": "CONN-SMD_4P-P2_54_C990001275_11",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.282,
+    "ymax": 0.4,
+    "zmin": 5.648,
+    "zmax": 5.83,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature082",
+    "label": "CONN-SMD_4P-P2_54_C990001275_12",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.416,
+    "ymax": 0.583,
+    "zmin": 5.57,
+    "zmax": 5.826,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature083",
+    "label": "CONN-SMD_4P-P2_54_C990001275_13",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.616,
+    "ymax": 0.747,
+    "zmin": 5.652,
+    "zmax": 5.896,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature084",
+    "label": "CONN-SMD_4P-P2_54_C990001275_14",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 0.793,
+    "ymax": 0.992,
+    "zmin": 5.652,
+    "zmax": 5.896,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature085",
+    "label": "CONN-SMD_4P-P2_54_C990001275_15",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": 1.005,
+    "ymax": 1.225,
+    "zmin": 5.652,
+    "zmax": 5.896,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature086",
+    "label": "CONN-SMD_4P-P2_54_C990001275_16",
+    "type": "Part::Feature",
+    "xmin": 6.31,
+    "xmax": 6.311,
+    "ymin": -1.367,
+    "ymax": -0.26,
+    "zmin": 5.536,
+    "zmax": 6.348,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "CONN_SMD_4P_P2_54_C9900012758_C_ASM",
+    "label": "CONN-SMD_4P-P2_54_C9900012758_C_ASM",
+    "type": "App::Part",
+    "xmin": 7.6,
+    "xmax": 15.6,
+    "ymin": -9.4,
+    "ymax": -1.308,
+    "zmin": -22.8,
+    "zmax": -7.68,
+    "placement": [
+      11.65,
+      -1.4,
+      -15.24
+    ]
+  },
+  {
+    "name": "Origin018",
+    "label": "Origin026",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis009",
+    "label": "X-axis009",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis009",
+    "label": "Y-axis009",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis009",
+    "label": "Z-axis009",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane009",
+    "label": "XY-plane009",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane009",
+    "label": "XZ-plane009",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane009",
+    "label": "YZ-plane009",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin019",
+    "label": "Origin025",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature087",
+    "label": "XSON-8_L4_0-W4_0-P0_80-TL-EP_XS",
+    "type": "Part::Feature",
+    "xmin": 2.6,
+    "xmax": 6.6,
+    "ymin": -2.051,
+    "ymax": -1.6,
+    "zmin": -17.51,
+    "zmax": -13.49,
+    "placement": [
+      4.6,
+      -1.6,
+      -15.5
+    ]
+  },
+  {
+    "name": "Part__Feature088",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_1",
+    "type": "Part::Feature",
+    "xmin": -2.45,
+    "xmax": 2.45,
+    "ymin": -3.075,
+    "ymax": 3.075,
+    "zmin": 0.0,
+    "zmax": 1.45,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature089",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_2",
+    "type": "Part::Feature",
+    "xmin": 0.958,
+    "xmax": 1.033,
+    "ymin": -0.856,
+    "ymax": -0.714,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature090",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_3",
+    "type": "Part::Feature",
+    "xmin": 1.039,
+    "xmax": 1.146,
+    "ymin": -0.859,
+    "ymax": -0.712,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature091",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_4",
+    "type": "Part::Feature",
+    "xmin": 1.174,
+    "xmax": 1.251,
+    "ymin": -0.856,
+    "ymax": -0.714,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature092",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_5",
+    "type": "Part::Feature",
+    "xmin": 1.278,
+    "xmax": 1.394,
+    "ymin": -0.856,
+    "ymax": -0.714,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature093",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_6",
+    "type": "Part::Feature",
+    "xmin": 1.401,
+    "xmax": 1.53,
+    "ymin": -0.856,
+    "ymax": -0.714,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature094",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_7",
+    "type": "Part::Feature",
+    "xmin": 0.958,
+    "xmax": 1.035,
+    "ymin": -1.082,
+    "ymax": -0.94,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature095",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_8",
+    "type": "Part::Feature",
+    "xmin": 1.052,
+    "xmax": 1.134,
+    "ymin": -1.085,
+    "ymax": -0.978,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature096",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2_9",
+    "type": "Part::Feature",
+    "xmin": 1.158,
+    "xmax": 1.226,
+    "ymin": -1.085,
+    "ymax": -0.978,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature097",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6__10",
+    "type": "Part::Feature",
+    "xmin": 1.236,
+    "xmax": 1.333,
+    "ymin": -1.13,
+    "ymax": -0.981,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature098",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6__11",
+    "type": "Part::Feature",
+    "xmin": 1.352,
+    "xmax": 1.429,
+    "ymin": -1.082,
+    "ymax": -0.94,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature099",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6__12",
+    "type": "Part::Feature",
+    "xmin": 1.456,
+    "xmax": 1.572,
+    "ymin": -1.082,
+    "ymax": -0.94,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature100",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6__13",
+    "type": "Part::Feature",
+    "xmin": 1.58,
+    "xmax": 1.708,
+    "ymin": -1.082,
+    "ymax": -0.94,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature101",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6__14",
+    "type": "Part::Feature",
+    "xmin": 0.196,
+    "xmax": 0.842,
+    "ymin": -1.149,
+    "ymax": -0.676,
+    "zmin": 1.45,
+    "zmax": 1.451,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "ESOP_10_L4_9_W3_9_P1_00_LS6_2_B_ASM",
+    "label": "ESOP-10_L4_9-W3_9-P1_00-LS6_2-B_ASM",
+    "type": "App::Part",
+    "xmin": -1.95,
+    "xmax": 2.95,
+    "ymin": -3.051,
+    "ymax": -1.6,
+    "zmin": 3.925,
+    "zmax": 10.075,
+    "placement": [
+      0.5,
+      -1.6,
+      7.0
+    ]
+  },
+  {
+    "name": "Origin020",
+    "label": "Origin029",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis010",
+    "label": "X-axis010",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis010",
+    "label": "Y-axis010",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis010",
+    "label": "Z-axis010",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane010",
+    "label": "XY-plane010",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane010",
+    "label": "XZ-plane010",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane010",
+    "label": "YZ-plane010",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin021",
+    "label": "Origin028",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature102",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__1",
+    "type": "Part::Feature",
+    "xmin": -1.46,
+    "xmax": 1.46,
+    "ymin": -1.4,
+    "ymax": 1.4,
+    "zmin": 0.0,
+    "zmax": 1.15,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature103",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__2",
+    "type": "Part::Feature",
+    "xmin": 0.919,
+    "xmax": 0.951,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature104",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__3",
+    "type": "Part::Feature",
+    "xmin": 0.954,
+    "xmax": 0.999,
+    "ymin": 0.571,
+    "ymax": 0.635,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature105",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__4",
+    "type": "Part::Feature",
+    "xmin": 1.012,
+    "xmax": 1.045,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature106",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__5",
+    "type": "Part::Feature",
+    "xmin": 1.056,
+    "xmax": 1.106,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature107",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__6",
+    "type": "Part::Feature",
+    "xmin": 1.109,
+    "xmax": 1.164,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature108",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__7",
+    "type": "Part::Feature",
+    "xmin": 0.919,
+    "xmax": 0.952,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature109",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__8",
+    "type": "Part::Feature",
+    "xmin": 0.959,
+    "xmax": 0.994,
+    "ymin": 0.475,
+    "ymax": 0.52,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature110",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__9",
+    "type": "Part::Feature",
+    "xmin": 1.005,
+    "xmax": 1.034,
+    "ymin": 0.475,
+    "ymax": 0.52,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature111",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_10",
+    "type": "Part::Feature",
+    "xmin": 1.038,
+    "xmax": 1.08,
+    "ymin": 0.455,
+    "ymax": 0.519,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature112",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_11",
+    "type": "Part::Feature",
+    "xmin": 1.088,
+    "xmax": 1.121,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature113",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_12",
+    "type": "Part::Feature",
+    "xmin": 1.132,
+    "xmax": 1.182,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature114",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_13",
+    "type": "Part::Feature",
+    "xmin": 1.186,
+    "xmax": 1.24,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature115",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_14",
+    "type": "Part::Feature",
+    "xmin": 0.592,
+    "xmax": 0.869,
+    "ymin": 0.447,
+    "ymax": 0.65,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "SOT_23_5_L2_9_W1_6_P0_95_LS2_8__ASM",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_8-_ASM",
+    "type": "App::Part",
+    "xmin": 6.04,
+    "xmax": 8.96,
+    "ymin": -2.701,
+    "ymax": -1.55,
+    "zmin": 24.5,
+    "zmax": 27.3,
+    "placement": [
+      7.5,
+      -1.55,
+      25.9
+    ]
+  },
+  {
+    "name": "Origin022",
+    "label": "Origin032",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis011",
+    "label": "X-axis011",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis011",
+    "label": "Y-axis011",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis011",
+    "label": "Z-axis011",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane011",
+    "label": "XY-plane011",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane011",
+    "label": "XZ-plane011",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane011",
+    "label": "YZ-plane011",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin023",
+    "label": "Origin031",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature116",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__001",
+    "type": "Part::Feature",
+    "xmin": -1.46,
+    "xmax": 1.46,
+    "ymin": -1.4,
+    "ymax": 1.4,
+    "zmin": 0.0,
+    "zmax": 1.15,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature117",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__002",
+    "type": "Part::Feature",
+    "xmin": 0.919,
+    "xmax": 0.951,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature118",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__003",
+    "type": "Part::Feature",
+    "xmin": 0.954,
+    "xmax": 0.999,
+    "ymin": 0.571,
+    "ymax": 0.635,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature119",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__004",
+    "type": "Part::Feature",
+    "xmin": 1.012,
+    "xmax": 1.045,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature120",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__005",
+    "type": "Part::Feature",
+    "xmin": 1.056,
+    "xmax": 1.106,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature121",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__006",
+    "type": "Part::Feature",
+    "xmin": 1.109,
+    "xmax": 1.164,
+    "ymin": 0.573,
+    "ymax": 0.634,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature122",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__007",
+    "type": "Part::Feature",
+    "xmin": 0.919,
+    "xmax": 0.952,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature123",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__008",
+    "type": "Part::Feature",
+    "xmin": 0.959,
+    "xmax": 0.994,
+    "ymin": 0.475,
+    "ymax": 0.52,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature124",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2__009",
+    "type": "Part::Feature",
+    "xmin": 1.005,
+    "xmax": 1.034,
+    "ymin": 0.475,
+    "ymax": 0.52,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature125",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_001",
+    "type": "Part::Feature",
+    "xmin": 1.038,
+    "xmax": 1.08,
+    "ymin": 0.455,
+    "ymax": 0.519,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature126",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_002",
+    "type": "Part::Feature",
+    "xmin": 1.088,
+    "xmax": 1.121,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature127",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_003",
+    "type": "Part::Feature",
+    "xmin": 1.132,
+    "xmax": 1.182,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature128",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_004",
+    "type": "Part::Feature",
+    "xmin": 1.186,
+    "xmax": 1.24,
+    "ymin": 0.476,
+    "ymax": 0.537,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature129",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_005",
+    "type": "Part::Feature",
+    "xmin": 0.592,
+    "xmax": 0.869,
+    "ymin": 0.447,
+    "ymax": 0.65,
+    "zmin": 1.15,
+    "zmax": 1.151,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "SOT_23_5_L2_9_W1_6_P0_95_LS2_8__ASM001",
+    "label": "SOT-23-5_L2_9-W1_6-P0_95-LS2_8-_ASM001",
+    "type": "App::Part",
+    "xmin": 4.04,
+    "xmax": 6.96,
+    "ymin": -2.701,
+    "ymax": -1.55,
+    "zmin": 5.9,
+    "zmax": 8.7,
+    "placement": [
+      5.5,
+      -1.55,
+      7.3
+    ]
+  },
+  {
+    "name": "Origin024",
+    "label": "Origin034",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis012",
+    "label": "X-axis012",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis012",
+    "label": "Y-axis012",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis012",
+    "label": "Z-axis012",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane012",
+    "label": "XY-plane012",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane012",
+    "label": "XZ-plane012",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane012",
+    "label": "YZ-plane012",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin025",
+    "label": "Origin033",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature130",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_1",
+    "type": "Part::Feature",
+    "xmin": 12.635,
+    "xmax": 13.885,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 13.58,
+    "zmax": 16.08,
+    "placement": [
+      13.26,
+      -1.6,
+      14.83
+    ]
+  },
+  {
+    "name": "Part__Feature131",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_001",
+    "type": "Part::Feature",
+    "xmin": 9.71,
+    "xmax": 12.21,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 15.705,
+    "zmax": 16.955,
+    "placement": [
+      10.96,
+      -1.6,
+      16.33
+    ]
+  },
+  {
+    "name": "Part__Feature132",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_002",
+    "type": "Part::Feature",
+    "xmin": 10.735,
+    "xmax": 11.985,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 17.58,
+    "zmax": 20.08,
+    "placement": [
+      11.36,
+      -1.6,
+      18.83
+    ]
+  },
+  {
+    "name": "Part__Feature133",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_003",
+    "type": "Part::Feature",
+    "xmin": 9.235,
+    "xmax": 10.485,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 17.58,
+    "zmax": 20.08,
+    "placement": [
+      9.86,
+      -1.6,
+      18.83
+    ]
+  },
+  {
+    "name": "Part__Feature134",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_004",
+    "type": "Part::Feature",
+    "xmin": 10.25,
+    "xmax": 12.75,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 20.775,
+    "zmax": 22.025,
+    "placement": [
+      11.5,
+      -1.6,
+      21.4
+    ]
+  },
+  {
+    "name": "Part__Feature135",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_005",
+    "type": "Part::Feature",
+    "xmin": 10.25,
+    "xmax": 12.75,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 22.175,
+    "zmax": 23.425,
+    "placement": [
+      11.5,
+      -1.6,
+      22.8
+    ]
+  },
+  {
+    "name": "Part__Feature136",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_006",
+    "type": "Part::Feature",
+    "xmin": 5.875,
+    "xmax": 7.125,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 12.05,
+    "zmax": 14.55,
+    "placement": [
+      6.5,
+      -1.6,
+      13.3
+    ]
+  },
+  {
+    "name": "Part__Feature137",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_007",
+    "type": "Part::Feature",
+    "xmin": -9.425,
+    "xmax": -8.175,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 10.85,
+    "zmax": 13.35,
+    "placement": [
+      -8.8,
+      -1.6,
+      12.1
+    ]
+  },
+  {
+    "name": "Part__Feature138",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_008",
+    "type": "Part::Feature",
+    "xmin": -8.025,
+    "xmax": -6.775,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 10.85,
+    "zmax": 13.35,
+    "placement": [
+      -7.4,
+      -1.6,
+      12.1
+    ]
+  },
+  {
+    "name": "Part__Feature139",
+    "label": "SOD-323_L1_7-W1_3-LS2_5-FD_SO_009",
+    "type": "Part::Feature",
+    "xmin": -6.525,
+    "xmax": -5.275,
+    "ymin": -2.55,
+    "ymax": -1.6,
+    "zmin": 11.15,
+    "zmax": 13.65,
+    "placement": [
+      -5.9,
+      -1.6,
+      12.4
+    ]
+  },
+  {
+    "name": "Part__Feature140",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_2",
+    "type": "Part::Feature",
+    "xmin": 12.3,
+    "xmax": 14.3,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": 17.35,
+    "zmax": 19.45,
+    "placement": [
+      13.3,
+      -1.6,
+      18.4
+    ]
+  },
+  {
+    "name": "Part__Feature141",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_001",
+    "type": "Part::Feature",
+    "xmin": 9.85,
+    "xmax": 11.95,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": 13.3,
+    "zmax": 15.3,
+    "placement": [
+      10.9,
+      -1.6,
+      14.3
+    ]
+  },
+  {
+    "name": "Part__Feature142",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_002",
+    "type": "Part::Feature",
+    "xmin": -1.9,
+    "xmax": 0.1,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": -2.45,
+    "zmax": -0.35,
+    "placement": [
+      -0.9,
+      -1.6,
+      -1.4
+    ]
+  },
+  {
+    "name": "Part__Feature143",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_003",
+    "type": "Part::Feature",
+    "xmin": 1.2,
+    "xmax": 3.2,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": -2.45,
+    "zmax": -0.35,
+    "placement": [
+      2.2,
+      -1.6,
+      -1.4
+    ]
+  },
+  {
+    "name": "Part__Feature144",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_004",
+    "type": "Part::Feature",
+    "xmin": -4.35,
+    "xmax": -2.25,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": 10.5,
+    "zmax": 12.5,
+    "placement": [
+      -3.3,
+      -1.6,
+      11.5
+    ]
+  },
+  {
+    "name": "Part__Feature145",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1__1",
+    "type": "Part::Feature",
+    "xmin": -0.81,
+    "xmax": -0.47,
+    "ymin": -0.395,
+    "ymax": 0.405,
+    "zmin": -0.0,
+    "zmax": 0.27,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature146",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1__2",
+    "type": "Part::Feature",
+    "xmin": 0.47,
+    "xmax": 0.81,
+    "ymin": -0.395,
+    "ymax": 0.405,
+    "zmin": -0.0,
+    "zmax": 0.27,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature147",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1__3",
+    "type": "Part::Feature",
+    "xmin": -0.121,
+    "xmax": 0.204,
+    "ymin": -0.176,
+    "ymax": 0.196,
+    "zmin": 0.009,
+    "zmax": 0.01,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature148",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1__4",
+    "type": "Part::Feature",
+    "xmin": -0.8,
+    "xmax": 0.8,
+    "ymin": -0.395,
+    "ymax": 0.405,
+    "zmin": 0.01,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature149",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1__5",
+    "type": "Part::Feature",
+    "xmin": -0.6,
+    "xmax": 0.6,
+    "ymin": -0.491,
+    "ymax": 0.502,
+    "zmin": 0.242,
+    "zmax": 0.96,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "LED_SMD_L1_6_W0_8_FD_GREEN_1_LE_ASM",
+    "label": "LED-SMD_L1_6-W0_8-FD_GREEN-1_LE_ASM",
+    "type": "App::Part",
+    "xmin": 10.98,
+    "xmax": 12.6,
+    "ymin": -2.56,
+    "ymax": -1.6,
+    "zmin": 28.604,
+    "zmax": 29.596,
+    "placement": [
+      11.79,
+      -1.6,
+      29.095
+    ]
+  },
+  {
+    "name": "Origin026",
+    "label": "Origin037",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis013",
+    "label": "X-axis013",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis013",
+    "label": "Y-axis013",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis013",
+    "label": "Z-axis013",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane013",
+    "label": "XY-plane013",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane013",
+    "label": "XZ-plane013",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane013",
+    "label": "YZ-plane013",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin027",
+    "label": "Origin036",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature150",
+    "label": "CRYSTAL-SMD_4P-L3_2-W2_5-BL_OSC",
+    "type": "Part::Feature",
+    "xmin": -2.8,
+    "xmax": 0.4,
+    "ymin": -2.411,
+    "ymax": -1.6,
+    "zmin": -8.2,
+    "zmax": -5.7,
+    "placement": [
+      -1.2,
+      -1.61,
+      -6.95
+    ]
+  },
+  {
+    "name": "Part__Feature151",
+    "label": "C0402_C0402_L1_0-W0_5-H0_5_TEDU",
+    "type": "Part::Feature",
+    "xmin": -8.8,
+    "xmax": -7.8,
+    "ymin": -2.1,
+    "ymax": -1.6,
+    "zmin": -17.25,
+    "zmax": -16.75,
+    "placement": [
+      -8.3,
+      -1.85,
+      -16.75
+    ]
+  },
+  {
+    "name": "Part__Feature152",
+    "label": "C0402_C0402_L1_0-W0_5-H0_5_TEDU001",
+    "type": "Part::Feature",
+    "xmin": -8.8,
+    "xmax": -7.8,
+    "ymin": -2.1,
+    "ymax": -1.6,
+    "zmin": -16.2,
+    "zmax": -15.7,
+    "placement": [
+      -8.3,
+      -1.85,
+      -15.7
+    ]
+  },
+  {
+    "name": "Part__Feature153",
+    "label": "C0402_C0402_L1_0-W0_5-H0_5_TEDU002",
+    "type": "Part::Feature",
+    "xmin": -8.8,
+    "xmax": -7.8,
+    "ymin": -2.1,
+    "ymax": -1.6,
+    "zmin": -15.15,
+    "zmax": -14.65,
+    "placement": [
+      -8.3,
+      -1.85,
+      -14.65
+    ]
+  },
+  {
+    "name": "Part__Feature154",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_005",
+    "type": "Part::Feature",
+    "xmin": 6.4,
+    "xmax": 8.4,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": -8.75,
+    "zmax": -6.65,
+    "placement": [
+      7.4,
+      -1.6,
+      -7.7
+    ]
+  },
+  {
+    "name": "Part__Feature155",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_006",
+    "type": "Part::Feature",
+    "xmin": 3.8,
+    "xmax": 5.8,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": -8.75,
+    "zmax": -6.65,
+    "placement": [
+      4.8,
+      -1.6,
+      -7.7
+    ]
+  },
+  {
+    "name": "Part__Feature156",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_1",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature157",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_2",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature158",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_3",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM",
+    "type": "App::Part",
+    "xmin": -8.901,
+    "xmax": -8.4,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -10.5,
+    "zmax": -9.5,
+    "placement": [
+      -8.65,
+      -1.6,
+      -10.0
+    ]
+  },
+  {
+    "name": "Origin028",
+    "label": "Origin040",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis014",
+    "label": "X-axis014",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis014",
+    "label": "Y-axis014",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis014",
+    "label": "Z-axis014",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane014",
+    "label": "XY-plane014",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane014",
+    "label": "XZ-plane014",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane014",
+    "label": "YZ-plane014",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin029",
+    "label": "Origin039",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature159",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_001",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature160",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_002",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature161",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_003",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM001",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM001",
+    "type": "App::Part",
+    "xmin": -6.001,
+    "xmax": -5.5,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -10.5,
+    "zmax": -9.5,
+    "placement": [
+      -5.75,
+      -1.6,
+      -10.0
+    ]
+  },
+  {
+    "name": "Origin030",
+    "label": "Origin042",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis015",
+    "label": "X-axis015",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis015",
+    "label": "Y-axis015",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis015",
+    "label": "Z-axis015",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane015",
+    "label": "XY-plane015",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane015",
+    "label": "XZ-plane015",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane015",
+    "label": "YZ-plane015",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin031",
+    "label": "Origin041",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature162",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_004",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature163",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_005",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature164",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_006",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM002",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM002",
+    "type": "App::Part",
+    "xmin": -7.673,
+    "xmax": -6.673,
+    "ymin": -1.959,
+    "ymax": -1.599,
+    "zmin": -10.711,
+    "zmax": -10.21,
+    "placement": [
+      -7.173,
+      -1.599,
+      -10.461
+    ]
+  },
+  {
+    "name": "Origin032",
+    "label": "Origin045",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis016",
+    "label": "X-axis016",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis016",
+    "label": "Y-axis016",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis016",
+    "label": "Z-axis016",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane016",
+    "label": "XY-plane016",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane016",
+    "label": "XZ-plane016",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane016",
+    "label": "YZ-plane016",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin033",
+    "label": "Origin044",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature165",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_1",
+    "type": "Part::Feature",
+    "xmin": -5.825,
+    "xmax": -5.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature166",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_2",
+    "type": "Part::Feature",
+    "xmin": -5.325,
+    "xmax": -5.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature167",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_3",
+    "type": "Part::Feature",
+    "xmin": -4.825,
+    "xmax": -4.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature168",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_4",
+    "type": "Part::Feature",
+    "xmin": -4.325,
+    "xmax": -4.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature169",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_5",
+    "type": "Part::Feature",
+    "xmin": -3.825,
+    "xmax": -3.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature170",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_6",
+    "type": "Part::Feature",
+    "xmin": -3.325,
+    "xmax": -3.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature171",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_7",
+    "type": "Part::Feature",
+    "xmin": -2.825,
+    "xmax": -2.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature172",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_8",
+    "type": "Part::Feature",
+    "xmin": -2.325,
+    "xmax": -2.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature173",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24_9",
+    "type": "Part::Feature",
+    "xmin": -1.825,
+    "xmax": -1.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature174",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_10",
+    "type": "Part::Feature",
+    "xmin": -1.325,
+    "xmax": -1.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature175",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_11",
+    "type": "Part::Feature",
+    "xmin": -0.825,
+    "xmax": -0.675,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature176",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_12",
+    "type": "Part::Feature",
+    "xmin": -0.325,
+    "xmax": -0.175,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature177",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_13",
+    "type": "Part::Feature",
+    "xmin": 0.175,
+    "xmax": 0.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature178",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_14",
+    "type": "Part::Feature",
+    "xmin": 0.675,
+    "xmax": 0.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature179",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_15",
+    "type": "Part::Feature",
+    "xmin": 1.175,
+    "xmax": 1.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature180",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_16",
+    "type": "Part::Feature",
+    "xmin": 1.675,
+    "xmax": 1.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature181",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_17",
+    "type": "Part::Feature",
+    "xmin": 2.175,
+    "xmax": 2.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature182",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_18",
+    "type": "Part::Feature",
+    "xmin": 2.675,
+    "xmax": 2.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature183",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_19",
+    "type": "Part::Feature",
+    "xmin": 3.175,
+    "xmax": 3.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature184",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_20",
+    "type": "Part::Feature",
+    "xmin": 3.675,
+    "xmax": 3.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature185",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_21",
+    "type": "Part::Feature",
+    "xmin": 4.175,
+    "xmax": 4.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature186",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_22",
+    "type": "Part::Feature",
+    "xmin": 4.675,
+    "xmax": 4.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature187",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_23",
+    "type": "Part::Feature",
+    "xmin": 5.175,
+    "xmax": 5.325,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature188",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_24",
+    "type": "Part::Feature",
+    "xmin": 5.675,
+    "xmax": 5.825,
+    "ymin": -3.425,
+    "ymax": 1.775,
+    "zmin": 0.0,
+    "zmax": 0.41,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature189",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_25",
+    "type": "Part::Feature",
+    "xmin": -5.825,
+    "xmax": -5.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature190",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_26",
+    "type": "Part::Feature",
+    "xmin": -5.325,
+    "xmax": -5.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature191",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_27",
+    "type": "Part::Feature",
+    "xmin": -4.825,
+    "xmax": -4.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature192",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_28",
+    "type": "Part::Feature",
+    "xmin": -4.325,
+    "xmax": -4.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature193",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_29",
+    "type": "Part::Feature",
+    "xmin": 6.75,
+    "xmax": 7.65,
+    "ymin": -3.525,
+    "ymax": -0.825,
+    "zmin": 0.03,
+    "zmax": 1.79,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature194",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_30",
+    "type": "Part::Feature",
+    "xmin": -3.825,
+    "xmax": -3.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature195",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_31",
+    "type": "Part::Feature",
+    "xmin": -3.325,
+    "xmax": -3.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature196",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_32",
+    "type": "Part::Feature",
+    "xmin": -2.825,
+    "xmax": -2.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature197",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_33",
+    "type": "Part::Feature",
+    "xmin": -2.325,
+    "xmax": -2.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature198",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_34",
+    "type": "Part::Feature",
+    "xmin": -1.825,
+    "xmax": -1.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature199",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_35",
+    "type": "Part::Feature",
+    "xmin": -1.325,
+    "xmax": -1.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature200",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_36",
+    "type": "Part::Feature",
+    "xmin": -0.825,
+    "xmax": -0.675,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature201",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_37",
+    "type": "Part::Feature",
+    "xmin": -0.325,
+    "xmax": -0.175,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature202",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_38",
+    "type": "Part::Feature",
+    "xmin": 0.175,
+    "xmax": 0.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature203",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_39",
+    "type": "Part::Feature",
+    "xmin": 0.675,
+    "xmax": 0.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature204",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_40",
+    "type": "Part::Feature",
+    "xmin": 1.175,
+    "xmax": 1.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature205",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_41",
+    "type": "Part::Feature",
+    "xmin": 1.675,
+    "xmax": 1.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature206",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_42",
+    "type": "Part::Feature",
+    "xmin": 2.175,
+    "xmax": 2.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature207",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_43",
+    "type": "Part::Feature",
+    "xmin": 2.675,
+    "xmax": 2.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature208",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_44",
+    "type": "Part::Feature",
+    "xmin": 3.175,
+    "xmax": 3.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature209",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_45",
+    "type": "Part::Feature",
+    "xmin": 3.675,
+    "xmax": 3.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature210",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_46",
+    "type": "Part::Feature",
+    "xmin": 4.175,
+    "xmax": 4.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature211",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_47",
+    "type": "Part::Feature",
+    "xmin": 4.675,
+    "xmax": 4.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature212",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_48",
+    "type": "Part::Feature",
+    "xmin": 5.175,
+    "xmax": 5.325,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature213",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_49",
+    "type": "Part::Feature",
+    "xmin": 5.675,
+    "xmax": 5.825,
+    "ymin": -3.225,
+    "ymax": 0.875,
+    "zmin": 1.518,
+    "zmax": 1.84,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature214",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_50",
+    "type": "Part::Feature",
+    "xmin": -7.65,
+    "xmax": -6.75,
+    "ymin": -3.525,
+    "ymax": -0.825,
+    "zmin": 0.03,
+    "zmax": 1.79,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature215",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_51",
+    "type": "Part::Feature",
+    "xmin": -7.1,
+    "xmax": 7.1,
+    "ymin": -0.525,
+    "ymax": 1.875,
+    "zmin": 0.8,
+    "zmax": 2.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature216",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-2_52",
+    "type": "Part::Feature",
+    "xmin": -7.75,
+    "xmax": 7.75,
+    "ymin": -3.525,
+    "ymax": 1.375,
+    "zmin": 0.0,
+    "zmax": 2.01,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "FPC_SMD_24P_P0_50_FPC_05FB_24PH_ASM",
+    "label": "FPC-SMD_24P-P0_50_FPC-05FB-24PH_ASM",
+    "type": "App::Part",
+    "xmin": -7.75,
+    "xmax": 7.75,
+    "ymin": -3.525,
+    "ymax": 1.875,
+    "zmin": 0.0,
+    "zmax": 2.01,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin034",
+    "label": "Origin048",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis017",
+    "label": "X-axis017",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis017",
+    "label": "Y-axis017",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis017",
+    "label": "Z-axis017",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane017",
+    "label": "XY-plane017",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane017",
+    "label": "XZ-plane017",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane017",
+    "label": "YZ-plane017",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin035",
+    "label": "Origin047",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "FPC1_FPC_SMD_24P_P0_50_FPC_05FB_ASM",
+    "label": "FPC1_FPC-SMD_24P-P0_50_FPC-05FB_ASM",
+    "type": "App::Part",
+    "xmin": 0.55,
+    "xmax": 16.05,
+    "ymin": -10.779,
+    "ymax": -5.379,
+    "zmin": 1.6,
+    "zmax": 3.61,
+    "placement": [
+      8.3,
+      -7.254,
+      1.6
+    ]
+  },
+  {
+    "name": "Origin036",
+    "label": "Origin051",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis018",
+    "label": "X-axis018",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis018",
+    "label": "Y-axis018",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis018",
+    "label": "Z-axis018",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane018",
+    "label": "XY-plane018",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane018",
+    "label": "XZ-plane018",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane018",
+    "label": "YZ-plane018",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin037",
+    "label": "Origin050",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "EASYEDA_PCB_MODEL_RGXT_ASM",
+    "label": "EASYEDA_PCB_MODEL_RGXT_ASM",
+    "type": "App::Part",
+    "xmin": 0.55,
+    "xmax": 16.05,
+    "ymin": -10.779,
+    "ymax": -5.379,
+    "zmin": 1.6,
+    "zmax": 3.61,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin038",
+    "label": "Origin053",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis019",
+    "label": "X-axis019",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis019",
+    "label": "Y-axis019",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis019",
+    "label": "Z-axis019",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane019",
+    "label": "XY-plane019",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane019",
+    "label": "XZ-plane019",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane019",
+    "label": "YZ-plane019",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin039",
+    "label": "Origin052",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "_3D_PCB1_2025_03_27_12__ASM",
+    "label": "3D_PCB1_2025-03-27_12__ASM",
+    "type": "App::Part",
+    "xmin": -7.75,
+    "xmax": 7.75,
+    "ymin": -3.61,
+    "ymax": -1.6,
+    "zmin": 16.4,
+    "zmax": 21.8,
+    "placement": [
+      8.3,
+      0.0,
+      11.021
+    ]
+  },
+  {
+    "name": "Origin040",
+    "label": "Origin056",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis020",
+    "label": "X-axis020",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis020",
+    "label": "Y-axis020",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis020",
+    "label": "Z-axis020",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane020",
+    "label": "XY-plane020",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane020",
+    "label": "XZ-plane020",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane020",
+    "label": "YZ-plane020",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin041",
+    "label": "Origin055",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature217",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_007",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature218",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_008",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature219",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_009",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM003",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM003",
+    "type": "App::Part",
+    "xmin": -2.754,
+    "xmax": -1.754,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -5.1,
+    "zmax": -4.599,
+    "placement": [
+      -2.254,
+      -1.6,
+      -4.85
+    ]
+  },
+  {
+    "name": "Origin042",
+    "label": "Origin059",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis021",
+    "label": "X-axis021",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis021",
+    "label": "Y-axis021",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis021",
+    "label": "Z-axis021",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane021",
+    "label": "XY-plane021",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane021",
+    "label": "XZ-plane021",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane021",
+    "label": "YZ-plane021",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin043",
+    "label": "Origin058",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature220",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_010",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature221",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_011",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature222",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_012",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM004",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM004",
+    "type": "App::Part",
+    "xmin": -0.454,
+    "xmax": 0.546,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -5.1,
+    "zmax": -4.599,
+    "placement": [
+      0.046,
+      -1.6,
+      -4.85
+    ]
+  },
+  {
+    "name": "Origin044",
+    "label": "Origin062",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis022",
+    "label": "X-axis022",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis022",
+    "label": "Y-axis022",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis022",
+    "label": "Z-axis022",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane022",
+    "label": "XY-plane022",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane022",
+    "label": "XZ-plane022",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane022",
+    "label": "YZ-plane022",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin045",
+    "label": "Origin061",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature223",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_013",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature224",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_014",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature225",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_015",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM005",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM005",
+    "type": "App::Part",
+    "xmin": -0.06,
+    "xmax": 0.94,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -9.88,
+    "zmax": -9.379,
+    "placement": [
+      0.44,
+      -1.6,
+      -9.63
+    ]
+  },
+  {
+    "name": "Origin046",
+    "label": "Origin064",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis023",
+    "label": "X-axis023",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis023",
+    "label": "Y-axis023",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis023",
+    "label": "Z-axis023",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane023",
+    "label": "XY-plane023",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane023",
+    "label": "XZ-plane023",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane023",
+    "label": "YZ-plane023",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin047",
+    "label": "Origin063",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature226",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_016",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature227",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_017",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature228",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_018",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM006",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM006",
+    "type": "App::Part",
+    "xmin": 4.2,
+    "xmax": 4.701,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -19.9,
+    "zmax": -18.9,
+    "placement": [
+      4.45,
+      -1.6,
+      -19.4
+    ]
+  },
+  {
+    "name": "Origin048",
+    "label": "Origin067",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis024",
+    "label": "X-axis024",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis024",
+    "label": "Y-axis024",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis024",
+    "label": "Z-axis024",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane024",
+    "label": "XY-plane024",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane024",
+    "label": "XZ-plane024",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane024",
+    "label": "YZ-plane024",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin049",
+    "label": "Origin066",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature229",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_019",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature230",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_020",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature231",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_021",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM007",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM007",
+    "type": "App::Part",
+    "xmin": 3.05,
+    "xmax": 3.551,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": -19.9,
+    "zmax": -18.9,
+    "placement": [
+      3.3,
+      -1.6,
+      -19.4
+    ]
+  },
+  {
+    "name": "Origin050",
+    "label": "Origin070",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis025",
+    "label": "X-axis025",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis025",
+    "label": "Y-axis025",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis025",
+    "label": "Z-axis025",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane025",
+    "label": "XY-plane025",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane025",
+    "label": "XZ-plane025",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane025",
+    "label": "YZ-plane025",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin051",
+    "label": "Origin069",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature232",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_022",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature233",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_023",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature234",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_024",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM008",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM008",
+    "type": "App::Part",
+    "xmin": 4.2,
+    "xmax": 5.2,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": 4.28,
+    "zmax": 4.781,
+    "placement": [
+      4.7,
+      -1.6,
+      4.53
+    ]
+  },
+  {
+    "name": "Origin052",
+    "label": "Origin073",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis026",
+    "label": "X-axis026",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis026",
+    "label": "Y-axis026",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis026",
+    "label": "Z-axis026",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane026",
+    "label": "XY-plane026",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane026",
+    "label": "XZ-plane026",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane026",
+    "label": "YZ-plane026",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin053",
+    "label": "Origin072",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature235",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_025",
+    "type": "Part::Feature",
+    "xmin": -0.5,
+    "xmax": 0.5,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.0,
+    "zmax": 0.35,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature236",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_026",
+    "type": "Part::Feature",
+    "xmin": -0.3,
+    "xmax": 0.3,
+    "ymin": -0.25,
+    "ymax": 0.25,
+    "zmin": 0.325,
+    "zmax": 0.36,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature237",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TE_027",
+    "type": "Part::Feature",
+    "xmin": -0.475,
+    "xmax": 0.475,
+    "ymin": -0.25,
+    "ymax": 0.251,
+    "zmin": 0.025,
+    "zmax": 0.325,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "R0402_R0402_L1_0_W0_5_H0_4_TEDU_ASM009",
+    "label": "R0402_R0402_L1_0-W0_5-H0_4_TEDU_ASM009",
+    "type": "App::Part",
+    "xmin": -9.201,
+    "xmax": -8.7,
+    "ymin": -1.96,
+    "ymax": -1.6,
+    "zmin": 22.5,
+    "zmax": 23.5,
+    "placement": [
+      -8.95,
+      -1.6,
+      23.0
+    ]
+  },
+  {
+    "name": "Origin054",
+    "label": "Origin075",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis027",
+    "label": "X-axis027",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis027",
+    "label": "Y-axis027",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis027",
+    "label": "Z-axis027",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane027",
+    "label": "XY-plane027",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane027",
+    "label": "XZ-plane027",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane027",
+    "label": "YZ-plane027",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin055",
+    "label": "Origin074",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Part__Feature238",
+    "label": "SOT-323-3_L2_1-W1_3-P1_32-LS2_007",
+    "type": "Part::Feature",
+    "xmin": -7.297,
+    "xmax": -5.259,
+    "ymin": -2.775,
+    "ymax": -1.6,
+    "zmin": 1.053,
+    "zmax": 3.181,
+    "placement": [
+      -6.278,
+      -1.6,
+      2.128
+    ]
+  },
+  {
+    "name": "Part__Feature239",
+    "label": "CONN-SMD_2P-P1_00_HX-1_0-2P-WT_",
+    "type": "Part::Feature",
+    "xmin": -2.0,
+    "xmax": 2.0,
+    "ymin": -2.961,
+    "ymax": 2.239,
+    "zmin": -0.0,
+    "zmax": 2.96,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "U1_CONN_SMD_2P_P1_00_HX_1_0_2P__ASM",
+    "label": "U1_CONN-SMD_2P-P1_00_HX-1_0-2P-_ASM",
+    "type": "App::Part",
+    "xmin": 0.286,
+    "xmax": 4.286,
+    "ymin": -10.561,
+    "ymax": -5.361,
+    "zmin": 1.6,
+    "zmax": 4.56,
+    "placement": [
+      2.286,
+      -7.6,
+      1.6
+    ]
+  },
+  {
+    "name": "Origin056",
+    "label": "Origin078",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis028",
+    "label": "X-axis028",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis028",
+    "label": "Y-axis028",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis028",
+    "label": "Z-axis028",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane028",
+    "label": "XY-plane028",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane028",
+    "label": "XZ-plane028",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane028",
+    "label": "YZ-plane028",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin057",
+    "label": "Origin077",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "EASYEDA_PCB_MODEL_3QFF_ASM",
+    "label": "EASYEDA_PCB_MODEL_3QFF_ASM",
+    "type": "App::Part",
+    "xmin": 10.1,
+    "xmax": 15.3,
+    "ymin": -4.51,
+    "ymax": -1.55,
+    "zmin": 8.131,
+    "zmax": 12.131,
+    "placement": [
+      20.661,
+      0.05,
+      12.417
+    ]
+  },
+  {
+    "name": "Origin058",
+    "label": "Origin081",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis029",
+    "label": "X-axis029",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis029",
+    "label": "Y-axis029",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis029",
+    "label": "Z-axis029",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane029",
+    "label": "XY-plane029",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane029",
+    "label": "XZ-plane029",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane029",
+    "label": "YZ-plane029",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin059",
+    "label": "Origin080",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "_00_2_13_VIEW_ASM",
+    "label": "00-2-13_VIEW_ASM",
+    "type": "App::Part",
+    "xmin": -15.601,
+    "xmax": 15.6,
+    "ymin": -9.75,
+    "ymax": 0.9,
+    "zmin": -34.349,
+    "zmax": 31.6,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin060",
+    "label": "Origin083",
+    "type": "App::Origin",
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "X_Axis030",
+    "label": "X-axis030",
+    "type": "App::Line",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Y_Axis030",
+    "label": "Y-axis030",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Z_Axis030",
+    "label": "Z-axis030",
+    "type": "App::Line",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XY_Plane030",
+    "label": "XY-plane030",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "XZ_Plane030",
+    "label": "XZ-plane030",
+    "type": "App::Plane",
+    "xmin": -1e+100,
+    "xmax": 1e+100,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "YZ_Plane030",
+    "label": "YZ-plane030",
+    "type": "App::Plane",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": -1e+100,
+    "ymax": 1e+100,
+    "zmin": -1e+100,
+    "zmax": 1e+100,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  {
+    "name": "Origin061",
+    "label": "Origin082",
+    "type": "App::Point",
+    "xmin": 0.0,
+    "xmax": 0.0,
+    "ymin": 0.0,
+    "ymax": 0.0,
+    "zmin": 0.0,
+    "zmax": 0.0,
+    "placement": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+]

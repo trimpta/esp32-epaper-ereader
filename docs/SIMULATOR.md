@@ -29,8 +29,11 @@ touch drag) maps to rotary scroll. Every input funnels through `handleInput(kind
 the idle-sleep timer first, then — if the device is asleep — treats the input as *only* a wake
 signal, matching how a real e-reader doesn't act on the same button press that woke it.
 
-The rotary's click (`ROTARY_CONF`) is a genuine third input confirmed against the schematic
-(component `TM_2024A`, pins `IO4_DOWN`/`IO6_UP`/`IO5_CONF`) — not a simulator invention. It's a
+The rotary's click (`ROTARY_CONF`) is a genuine third input, and one of the few things here that
+is **confirmed on physical hardware** — the owner checked a real board and the dial does press in,
+on top of turning. It also shows up twice in Elecrow's own material: as `TM_2024A` on the schematic
+(pins `IO4_DOWN`/`IO6_UP`/`IO5_CONF`) and as part `XB-TM-2024A` in their CAD assembly. So the
+six-gesture model rests on three inputs that all definitely exist. It's a
 harmless alternate "select" on plain list/menu screens (same as MENU), and only diverges from
 MENU in Minesweeper (flag a cell) and Sudoku (cycle a digit downward instead of up).
 
