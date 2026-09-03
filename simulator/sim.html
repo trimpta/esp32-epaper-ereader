@@ -16,27 +16,66 @@
 <meta name="twitter:title" content="Rotary Reader simulator — the whole device, in a browser tab">
 <meta name="twitter:description" content="Load a real EPUB and use the entire interface: rotary dial, menus, bookmarks, games, e-ink ghosting and all. No hardware needed.">
 <meta name="twitter:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
-<meta name="theme-color" content="#23261f">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
+<script>
+  // Same key the rest of the site uses, so a theme picked on another page carries here.
+  // Inline rather than shared: this file is also published standalone as an Artifact.
+  (function () {
+    try {
+      var t = localStorage.getItem('rotaryReaderTheme_v1');
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
+  /* Two palettes in here, and they answer to different things.
+
+     The PAGE around the device follows the rest of the site: electronic paper, near
+     monochrome, light by default and dark on request (same localStorage key as the other
+     pages, so a choice made there carries here).
+
+     The DEVICE does not. --case/--paper/--eink are the colours of a physical object — beige
+     plastic, an off-white panel, dark ink — and a real one doesn't change colour because
+     you flipped a theme. Those stay fixed in both modes, deliberately. */
   :root {
-    --bench: #23261f;
-    --bench-2: #191b16;
-    --panel: #2c2f27;
-    --panel-border: #454a3a;
-    --panel-border-lo: #3a3d33;
-    --copper: #c8863f;
-    --copper-bright: #e7ab6c;
+    color-scheme: light;
+    --bench: #ffffff;
+    --bench-2: #f6f6f4;
+    --panel: #f6f6f4;
+    --panel-border: #b4b4a8;
+    --panel-border-lo: #dcdcd4;
+    --copper: #14140f;
+    --copper-bright: #14140f;
+    --text-hi: #14140f;
+    --text-lo: #45453d;
+    --text-faint: #74746a;
+    --good: #2f6b3f;
+
+    /* the physical object — fixed */
     --paper: #e9e4d3;
     --paper-shadow: #d6d0ba;
     --eink: #2c2a22;
-    --text-hi: #ece7d8;
-    --text-lo: #98988a;
-    --text-faint: #6b6c60;
     --case: #d9d5c3;
     --case-shade: #b3af9b;
     --case-deep: #8f8c7a;
-    --good: #86ac72;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bench: #101010;
+    --bench-2: #191918;
+    --panel: #191918;
+    --panel-border: #4a4a44;
+    --panel-border-lo: #2c2c29;
+    --copper: #ecece6;
+    --copper-bright: #ecece6;
+    --text-hi: #ecece6;
+    --text-lo: #b6b6ad;
+    --text-faint: #85857c;
+    --good: #7fb587;
   }
 
   * { box-sizing: border-box; }
@@ -232,6 +271,10 @@
 
   .device {
     position: relative;
+    /* Fingers miss a 250px-wide screen constantly. Without this, a drag that starts a few
+       pixels onto the bezel scrolls the page instead of driving the reader — which is what
+       "swipe just scrolls the page" was. */
+    touch-action: none;
     background: linear-gradient(160deg, var(--case), var(--case-shade) 92%);
     border-radius: 20px;
     padding: 22px 20px 26px;
@@ -307,6 +350,18 @@
     padding: 0 2px;
   }
 
+  /* Every simulated hardware control needs these three, not just the screen. Without
+     them Android starts its own long-press gesture — the word-selection/callout overlay
+     pops up over the button, and the resulting pointercancel kills our hold timer, so
+     "hold MENU" silently did nothing some of the time. touch-action:none also stops the
+     browser claiming a drag as a page scroll before our handlers see the moves. */
+  .hw-btn, .rotary {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+  }
+
   .hw-btn {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.62rem;
@@ -335,25 +390,42 @@
   }
   .hw-btn.menu { border: 1px solid rgba(200,134,63,0.0); }
 
+  /* This is a thumbwheel, not a knob. The real part (XB-TM-2024A) is a flat wheel lying
+     in the board's own plane — 13.2mm across, poking 2.75mm out past the edge, with a
+     toothed rim you roll with a thumb. It was previously drawn as a round knob with a
+     pointer tick, which is a rotary encoder shaft: the wrong component, and it invited
+     people to try turning something that doesn't turn that way. Drawn edge-on now, so
+     the only gesture it suggests is the one it actually has. */
   .rotary {
-    width: 46px;
-    height: 46px;
-    border-radius: 50%;
-    background:
-      radial-gradient(circle at 34% 30%, #f4f1e6, var(--case-shade) 65%);
-    box-shadow: 0 2px 0 var(--case-deep), 0 3px 6px rgba(0,0,0,0.35), inset 0 0 0 6px rgba(0,0,0,0.06);
+    width: 30px;
+    height: 54px;
+    border-radius: 5px / 7px;
     position: relative;
     cursor: ns-resize;
+    background:
+      repeating-linear-gradient(180deg,
+        rgba(0, 0, 0, 0.28) 0 1px,
+        rgba(255, 255, 255, 0.22) 1px 2px,
+        rgba(0, 0, 0, 0) 2px 5px),
+      linear-gradient(90deg,
+        var(--case-deep) 0%, #e8e4d6 22%, #fbf9f1 44%, var(--case-shade) 78%, var(--case-deep) 100%);
+    box-shadow:
+      0 2px 0 var(--case-deep),
+      0 3px 6px rgba(0, 0, 0, 0.35),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.25);
   }
-  .rotary::after {
+  /* The slot it emerges from — sells "only the rim is reachable". */
+  .rotary::before {
     content: "";
     position: absolute;
-    left: 50%; top: 8px;
-    width: 3px; height: 10px;
-    background: var(--case-deep);
-    transform: translateX(-50%);
-    border-radius: 2px;
+    inset: -3px -5px;
+    border-radius: 8px;
+    background: linear-gradient(90deg, rgba(0,0,0,0.20), rgba(0,0,0,0.06) 40%, rgba(0,0,0,0.20));
+    z-index: -1;
   }
+  .rotary:active { filter: brightness(0.97); }
+  .rotary.is-rolling { box-shadow: 0 2px 0 var(--case-deep), 0 0 0 2px var(--copper); }
 
   .mapping-note {
     font-family: 'IBM Plex Mono', monospace;
@@ -642,6 +714,7 @@
     <div class="file-row" style="flex-shrink:0;">
       <button class="btn" id="btnCalibrate" aria-pressed="false">📏 True size</button>
       <button class="btn" id="btnFullscreen" aria-pressed="false">⤢ Fullscreen</button>
+      <button class="btn" id="btnTheme" type="button">Dark</button>
       <a class="btn" data-site-link href="./">← Home</a>
       <a class="btn" data-site-link href="docs.html">📄 Docs</a>
     </div>
@@ -1343,6 +1416,72 @@ function bookReadingStats(book) {
   return { pagesRead, totalPages, avgPagesPerDay, daysLeft, totalSeconds, todayPages, daysLogged: days.length };
 }
 
+// Everything across every book, not just the one you're in. Reads the whole log rather
+// than only the currently-loaded library, so a book you've since removed still counts
+// toward your all-time totals — the reading happened either way.
+function overallReadingStats() {
+  const all = loadReadingLogStorage();
+  const today = todayKey();
+  const perDay = {};   // date -> {pages, seconds}, merged across books
+  let booksTouched = 0;
+
+  for (const key of Object.keys(all)) {
+    const log = all[key] || {};
+    const days = Object.keys(log);
+    if (days.length) booksTouched++;
+    for (const d of days) {
+      const bucket = perDay[d] || (perDay[d] = { pages: 0, seconds: 0 });
+      bucket.pages += log[d].pages || 0;
+      bucket.seconds += log[d].seconds || 0;
+    }
+  }
+
+  const dates = Object.keys(perDay).sort();
+  const totalPages = dates.reduce((s, d) => s + perDay[d].pages, 0);
+  const totalSeconds = dates.reduce((s, d) => s + perDay[d].seconds, 0);
+
+  // Streak counts back from today; if nothing's been read yet today, from yesterday, so
+  // a streak isn't reported as broken until a whole day has actually been missed.
+  const dayMs = 86400000;
+  const dateOf = (k) => { const [y, m, d] = k.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+  const has = (t) => {
+    const dt = new Date(t);
+    const k = dt.getUTCFullYear() + '-' + String(dt.getUTCMonth() + 1).padStart(2, '0') +
+              '-' + String(dt.getUTCDate()).padStart(2, '0');
+    return !!perDay[k];
+  };
+  let streak = 0;
+  if (dates.length) {
+    let cursor = dateOf(today);
+    if (!has(cursor)) cursor -= dayMs;   // today not read yet — start from yesterday
+    while (has(cursor)) { streak++; cursor -= dayMs; }
+  }
+
+  // Books with saved progress in the *current* library, which is the number that answers
+  // "how many am I part-way through" — distinct from how many have ever been logged.
+  let inProgress = 0, finished = 0;
+  for (const b of state.library) {
+    const total = totalPagesOf(b);
+    const at = absolutePageNumber(b, b.lastChapterIdx, b.lastPageIdx);
+    if (at >= total && total > 0) finished++;
+    else if (b.lastChapterIdx > 0 || b.lastPageIdx > 0) inProgress++;
+  }
+
+  return {
+    todayPages: (perDay[today] && perDay[today].pages) || 0,
+    todaySeconds: (perDay[today] && perDay[today].seconds) || 0,
+    totalPages,
+    totalSeconds,
+    daysLogged: dates.length,
+    avgPagesPerDay: dates.length ? totalPages / dates.length : 0,
+    streak,
+    booksTouched,
+    inProgress,
+    finished,
+    libraryCount: state.library.length,
+  };
+}
+
 // Loads (or re-activates, if already open) a book, restoring saved position/bookmarks
 // by title+author — used by both the file-upload and sample-book paths so there's one
 // place that handles "I already have this book open" instead of piling up duplicates.
@@ -1723,9 +1862,35 @@ function homeRows() {
     }
   }
   rows.push({ label: 'Library', action: () => pushScreen('library') });
+  rows.push({ label: 'Reading stats', action: () => pushScreen('allStats') });
   rows.push({ label: 'Games', action: () => pushScreen('games') });
   rows.push({ label: 'Settings', action: () => pushScreen('settings') });
   rows.push({ label: 'Wi-Fi', action: () => pushScreen('wifi') });
+  return rows;
+}
+
+// Whole-library stats, as opposed to the per-book screen reached from a book's own menu.
+// Display rows only — same convention as the Wi-Fi screen, where a row is a readout and
+// selecting it does nothing.
+function allStatsRows() {
+  const s = overallReadingStats();
+  const rows = [];
+  rows.push({ label: `Today: ${s.todayPages} pg · ${fmtDuration(s.todaySeconds)}`, action: () => {} });
+  if (s.daysLogged === 0) {
+    rows.push({ label: 'No reading logged yet', action: () => {} });
+    rows.push({ label: '(turn a few pages)', action: () => {} });
+    return rows;
+  }
+  rows.push({ label: `All time: ${s.totalPages} pg · ${fmtDuration(s.totalSeconds)}`, action: () => {} });
+  rows.push({ label: `Avg pace: ${s.avgPagesPerDay.toFixed(1)} pg/day`, action: () => {} });
+  rows.push({
+    label: s.streak > 0 ? `Streak: ${s.streak} day${s.streak === 1 ? '' : 's'}` : 'Streak: none today',
+    action: () => {},
+  });
+  rows.push({ label: `Days read: ${s.daysLogged}`, action: () => {} });
+  rows.push({ separator: true });
+  rows.push({ label: `Library: ${s.libraryCount} book${s.libraryCount === 1 ? '' : 's'}`, action: () => {} });
+  rows.push({ label: `In progress: ${s.inProgress} · finished: ${s.finished}`, action: () => {} });
   return rows;
 }
 
@@ -1917,6 +2082,7 @@ const LIST_SCREENS = {
   bookChapters: { title: () => (browseBook() ? browseBook().title : 'CHAPTERS'), rows: bookChaptersRows },
   bookmarks: { title: 'BOOKMARKS', rows: bookmarksRows },
   stats: { title: 'READING STATS', rows: statsRows },
+  allStats: { title: 'READING STATS', rows: allStatsRows },
   settings: { title: 'SETTINGS', rows: settingsRows },
   wifi: { title: 'WI-FI', rows: wifiRows },
   games: { title: 'GAMES', rows: gamesRows },
@@ -3425,26 +3591,55 @@ frame.addEventListener('keydown', (e) => {
   else if (e.key === 'Escape') handleInput('exit');
 });
 
-// Touch: swipe = rotary (content follows the finger, so swiping up feels like "next").
+// Touch: dragging the screen drives the wheel, and it's direct manipulation — the
+// selection follows your finger. Drag down, the cursor goes down.
+//
+// It used to be the other way round, on a content-scrolls-under-you model (drag up =
+// go forward, like scrolling a web page). That reads fine for a document but wrong for
+// a cursor: people reported "swipe up puts the cursor down". Since the thing being
+// moved on most screens is a selection rather than a page of text, the selection wins.
+//
+// Continuous, not one step per swipe: every DRAG_STEP_PX of travel emits one detent
+// while your finger is still down, so a long drag runs down a list the way rolling the
+// real wheel would, instead of moving exactly one row per gesture.
+//
 // Taps are NOT handled here — bindHoldGesture's pointer events already cover them for
 // mouse and touch alike, and doing it in both places is what used to fire MENU twice on
-// a single tap. This handler is only responsible for turning travel into scroll.
-//
-// The thresholds deliberately leave a gap: under TAP_SLOP_PX it's a tap, over
-// SWIPE_THRESHOLD_PX it's a swipe, and in between it's an ambiguous smudge that does
-// nothing rather than guessing wrong.
-let touchStartY = null;
-const SWIPE_THRESHOLD_PX = 28;
-frame.addEventListener('touchstart', (e) => {
-  touchStartY = e.touches[0].clientY;
-}, { passive: true });
-frame.addEventListener('touchend', (e) => {
-  if (touchStartY === null) return;
-  const dy = e.changedTouches[0].clientY - touchStartY;
-  touchStartY = null;
-  if (Math.abs(dy) < SWIPE_THRESHOLD_PX) return;  // tap or smudge — not ours to act on
-  if (dy < 0) handleInput('next'); else handleInput('prev');
-});
+// a single tap.
+const DRAG_STEP_PX = 26;
+function bindDragScroll(el, { allowMouse = false } = {}) {
+  let lastY = null;
+  let accum = 0;
+  el.addEventListener('pointerdown', (e) => {
+    // On the screen, a mouse press is MENU/EXIT and the wheel does the scrolling, so mouse
+    // drags are ignored there. On the wheel graphic itself, dragging with a mouse is the
+    // obvious thing to try, so it's allowed — bindHoldGesture cancels its click once the
+    // pointer travels, so the two don't fight.
+    if (e.pointerType === 'mouse' && !allowMouse) return;
+    lastY = e.clientY;
+    accum = 0;
+  });
+  el.addEventListener('pointermove', (e) => {
+    if (lastY === null) return;
+    accum += e.clientY - lastY;
+    lastY = e.clientY;
+    while (accum >= DRAG_STEP_PX) { accum -= DRAG_STEP_PX; handleInput('next'); }
+    while (accum <= -DRAG_STEP_PX) { accum += DRAG_STEP_PX; handleInput('prev'); }
+  });
+  const release = () => { lastY = null; accum = 0; };
+  el.addEventListener('pointerup', release);
+  el.addEventListener('pointercancel', release);
+  el.addEventListener('pointerleave', release);
+}
+bindDragScroll(frame);
+
+// The wheel graphic is draggable too, and on touch that's the whole point: it looks like
+// the thing you roll, so it has to actually roll. Previously it only answered to a mouse
+// wheel and a click, which is invisible on a phone.
+bindDragScroll(rotaryEl, { allowMouse: true });
+rotaryEl.addEventListener('pointerdown', () => rotaryEl.classList.add('is-rolling'));
+['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) =>
+  rotaryEl.addEventListener(ev, () => rotaryEl.classList.remove('is-rolling')));
 
 bindHoldGesture(document.getElementById('btnMenu'), { onShort: () => handleInput('menu'), onLong: () => handleInput('menu-hold') });
 bindHoldGesture(document.getElementById('btnExit'), { onShort: () => handleInput('exit'), onLong: () => handleInput('exit-hold') });
@@ -3733,6 +3928,28 @@ preloadWallpaper(selectedWallpaper().id, selectedWallpaper().dataUri); // fire-a
 renderWallpaperPanel();
 updateMemoryDisplay();
 resolveSiteLinks();
+
+// Theme toggle. Only repaints the page chrome — the device's own case/panel colours are
+// fixed in :root and deliberately don't follow it.
+(function () {
+  const btn = document.getElementById('btnTheme');
+  if (!btn) return;
+  const cur = () => document.documentElement.getAttribute('data-theme') ||
+    (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  const paint = (t) => {
+    document.documentElement.setAttribute('data-theme', t);
+    btn.textContent = t === 'light' ? 'Dark' : 'Light';
+    btn.setAttribute('aria-label', 'Switch to ' + (t === 'light' ? 'dark' : 'light') + ' theme');
+    // The panel is drawn, not styled, so it has to be repainted when the palette moves.
+    renderCurrentPage({ silent: true, noFlash: true });
+  };
+  paint(cur());
+  btn.addEventListener('click', () => {
+    const next = cur() === 'light' ? 'dark' : 'light';
+    try { localStorage.setItem('rotaryReaderTheme_v1', next); } catch (e) {}
+    paint(next);
+  });
+})();
 
 if (document.fonts && document.fonts.ready) {
   Promise.all([

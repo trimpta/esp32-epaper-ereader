@@ -25,7 +25,7 @@
     document.documentElement.setAttribute('data-theme', theme);
     document.querySelectorAll('[data-theme-toggle]').forEach(function (btn) {
       // The button shows where you'd be going, not where you are.
-      btn.textContent = theme === 'light' ? '◑ Dark' : '◐ Light';
+      btn.textContent = theme === 'light' ? 'Dark' : 'Light';
       btn.setAttribute('aria-label', 'Switch to ' + (theme === 'light' ? 'dark' : 'light') + ' theme');
     });
   }

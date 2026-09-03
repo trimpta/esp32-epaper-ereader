@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,15 +14,15 @@
 <meta property="og:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://trimpta.com/esp32-epaper-ereader/docs/screenshots/screen-library.png">
-<meta name="theme-color" content="#23261f" media="(prefers-color-scheme: dark)">
-<meta name="theme-color" content="#f2efe6" media="(prefers-color-scheme: light)">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<meta name="theme-color" content="#101010" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&display=swap">
 <link rel="stylesheet" href="site.css">
 <script>
   (function () {
     try {
       var t = localStorage.getItem('rotaryReaderTheme_v1');
-      if (!t) t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      if (!t) t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', t);
     } catch (e) {}
   })();
@@ -47,7 +47,7 @@
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.68rem;
     letter-spacing: 0.1em;
-    color: var(--text-faint);
+    color: var(--ink-3);
     text-transform: uppercase;
     margin: 0 0 0.6rem;
   }
@@ -62,23 +62,23 @@
   nav.index a {
     display: block;
     text-decoration: none;
-    color: var(--text-lo);
+    color: var(--ink-2);
     font-size: 0.85rem;
-    padding: 0.45rem 0.6rem;
-    border-radius: 6px;
+    padding: 0.42rem 0.6rem;
     border-left: 2px solid transparent;
   }
-  nav.index a:hover { color: var(--text-hi); background: var(--panel); }
+  nav.index a:hover { color: var(--ink); background: var(--paper-2); }
   nav.index a.active {
-    color: var(--copper-bright);
-    background: var(--panel);
-    border-left-color: var(--copper);
+    color: var(--ink);
+    background: var(--paper-2);
+    border-left-color: var(--ink);
+    font-weight: 600;
   }
   nav.index .desc {
     display: block;
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.66rem;
-    color: var(--text-faint);
+    color: var(--ink-3);
     margin-top: 0.1rem;
   }
 
@@ -93,23 +93,22 @@
 
   article h1, article h2, article h3, article h4 {
     font-family: 'IBM Plex Mono', monospace;
-    color: var(--text-hi);
+    color: var(--ink);
     scroll-margin-top: 75px;
   }
-  article h1 { font-size: 1.5rem; border-bottom: 1px solid var(--panel-border-lo); padding-bottom: 0.5rem; }
-  article h2 { font-size: 1.15rem; margin-top: 2.2rem; color: var(--copper-bright); }
+  article h1 { font-size: 1.5rem; border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; }
+  article h2 { font-size: 1.15rem; margin-top: 2.2rem; color: var(--ink); }
   article h3 { font-size: 1rem; margin-top: 1.6rem; }
   article h4 { font-size: 0.92rem; margin-top: 1.3rem; }
 
-  article p, article li { color: var(--text-hi); font-size: 0.93rem; }
+  article p, article li { color: var(--ink); font-size: 1rem; }
   article ul, article ol { padding-left: 1.4rem; }
   article li { margin: 0.35rem 0; }
-  article li > code, article p > code { color: var(--copper-bright); }
+  article li > code, article p > code { color: var(--ink); }
 
   article pre {
-    background: var(--bench-2);
-    border: 1px solid var(--panel-border-lo);
-    border-radius: 8px;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
     padding: 0.9rem 1rem;
     overflow-x: auto;
   }
@@ -118,23 +117,23 @@
     border: none;
     padding: 0;
     font-size: 0.82rem;
-    color: var(--text-hi);
+    color: var(--ink);
     white-space: pre;
   }
 
   article .table-wrap { overflow-x: auto; margin: 1rem 0; }
   article table { border-collapse: collapse; width: 100%; font-size: 0.85rem; }
   article th, article td {
-    border: 1px solid var(--panel-border-lo);
+    border: 1px solid var(--rule);
     padding: 0.45rem 0.7rem;
     text-align: left;
     vertical-align: top;
   }
   article th {
-    background: var(--panel);
+    background: var(--paper-2);
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.72rem;
-    color: var(--text-lo);
+    color: var(--ink-2);
     letter-spacing: 0.04em;
   }
   article td code, article th code { white-space: nowrap; }
@@ -142,7 +141,7 @@
   .doc-status {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 0.8rem;
-    color: var(--text-faint);
+    color: var(--ink-3);
     padding: 2rem 0;
   }
   .doc-status.err { color: var(--bad); }
@@ -165,7 +164,7 @@
     <a href="install.html">Install</a>
     <a href="docs.html" aria-current="page">Docs</a>
     <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">GitHub</a>
-    <button class="theme-toggle" data-theme-toggle type="button">◐ Light</button>
+    <button class="theme-toggle" data-theme-toggle type="button">Dark</button>
   </nav>
 </header>
 

@@ -99,6 +99,29 @@ together.
 See [docs/SIMULATOR.md](docs/SIMULATOR.md) for the full UI/UX reference (input mapping, screen
 hierarchy, every simulator-only affordance and how it maps — or doesn't — to real firmware).
 
+## The enclosure
+
+A two-part printable case in `enclosure/case.scad`, parametric and dimensioned from Elecrow's
+own CAD assembly rather than guessed — see
+[enclosure/reference/BOARD_GEOMETRY.md](enclosure/reference/BOARD_GEOMETRY.md) for the
+measurements and how they were extracted.
+
+| Printed parts | Controls | Assembled |
+|---|---|---|
+| ![The two halves of the case laid out flat as they would print](docs/images/enclosure/enclosure-parts.png) | ![The shell's end wall, with openings for MENU, the rotary wheel and EXIT](docs/images/enclosure/enclosure-controls.png) | ![The closed case with the board mocked up inside, e-paper visible through the aperture](docs/images/enclosure/enclosure-assembly.png) |
+| Both halves, print-side down, no supports needed | MENU · rotary · EXIT come through one end wall | Closed, 67.2 × 42.0 × 15.2 mm |
+
+Two things worth knowing before printing:
+
+- **The board has no mounting holes.** It's held by a 0.8 mm ledge and an opposing rib, both
+  interrupted where components reach the board edge — not screwed down. (An earlier revision of
+  the reference file mistook the outline's corner fillets for Ø2 mounting holes; they aren't.)
+- **No button extenders.** The rotary's rim ends up 0.75 mm proud of the wall; MENU and EXIT sit
+  1.2 mm behind a 6.4 × 4.6 mm opening, which a fingertip reaches into directly.
+
+These are renders, not photographs — nothing has been printed yet, and the case has never been
+test-fitted to a physical board.
+
 ## How the reader itself works
 
 ```
@@ -146,7 +169,9 @@ the reasoning behind the design choices (transport, refresh strategy, storage co
   book storage, e-paper renderer, button/rotary input, `partitions.csv`.
 - `tools/dump_font_metrics/` — one-time Arduino sketch that dumps the *actual* on-device glyph
   widths over Serial, so the browser converter paginates using real metrics instead of guesses.
-- `enclosure/` — parametric OpenSCAD case with button cutouts and a battery bay.
+- `enclosure/` — parametric OpenSCAD case, dimensioned from Elecrow's CAD assembly (`reference/`
+  holds the measurements and the extraction recipe). Clamps the board rather than screwing it
+  down, because the board has no mounting holes.
 
 ## Status / what needs real-hardware verification
 

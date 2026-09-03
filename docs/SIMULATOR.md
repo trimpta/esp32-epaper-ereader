@@ -2,7 +2,7 @@
 
 `simulator/sim.html` is a single, self-contained browser page that mimics the on-device reading
 experience: same pagination logic as `converter/`, the same three-input model as the real board
-(rotary + MENU + EXIT), and an approximation of e-ink's partial-refresh/ghosting behavior. This
+(thumbwheel + MENU + EXIT), and an approximation of e-ink's partial-refresh/ghosting behavior. This
 doc is the complete reference for how it behaves — what maps to real firmware and what's
 simulator-only scaffolding. See [Hardware divergences](HARDWARE_DIVERGENCES.md) for where the
 preview deliberately differs from the panel, and [docs/ARCHITECTURE.md](ARCHITECTURE.md) for the
@@ -10,30 +10,62 @@ underlying pipeline this UI sits on top of.
 
 ## Input model
 
-Real hardware has exactly three physical inputs: a rotary encoder (scroll + its own push-click)
+Real hardware has exactly three physical inputs: a thumbwheel (roll + its own push-click)
 and two buttons, MENU and EXIT. Each of the three supports a **short** and a **long** press/click,
 giving six distinct gestures — all six are wired up:
 
 | Input | Short | Long (hold) |
 |---|---|---|
-| Rotary scroll | move cursor / turn page (`doNext`/`doPrev`) | — (continuous, not a press) |
-| Rotary click (CONF) | context action (`doConf`) — Minesweeper flag, Sudoku cycle-down, otherwise same as MENU | enter scrub **edit mode** on the focused numeric field (`tryEnterEditMode`) |
+| Wheel roll | move cursor / turn page (`doNext`/`doPrev`) | — (continuous, not a press) |
+| Wheel click (CONF) | context action (`doConf`) — Minesweeper flag, Sudoku cycle-down, otherwise same as MENU | enter scrub **edit mode** on the focused numeric field (`tryEnterEditMode`) |
 | MENU | `doMenu()` — see [the two-layer menu](#the-two-layer-menu) below | force a full refresh right now, bypassing the refresh-cadence counter |
 | EXIT | `doExit()` — back out one screen (or open Home from the reading view) | put the device to sleep immediately |
 
-In the browser, MENU is left-click, EXIT is right-click, and the rotary dial is its own click
+In the browser, MENU is left-click, EXIT is right-click, and the wheel is its own click
 target; all three are wrapped by a generic `bindHoldGesture(el, {onShort, onLong, holdMs})` helper
 (Pointer Events, so mouse and touch share one code path) that fires `onShort` on release-before-the-hold-threshold
-and `onLong` once the hold threshold is crossed. Scroll on the device mockup (wheel or a
-touch drag) maps to rotary scroll. Every input funnels through `handleInput(kind)`, which resets
-the idle-sleep timer first, then — if the device is asleep — treats the input as *only* a wake
-signal, matching how a real e-reader doesn't act on the same button press that woke it.
+and `onLong` once the hold threshold is crossed. Every input funnels through `handleInput(kind)`,
+which resets the idle-sleep timer first, then — if the device is asleep — treats the input as
+*only* a wake signal, matching how a real e-reader doesn't act on the same button press that
+woke it.
 
-The rotary's click (`ROTARY_CONF`) is a genuine third input, and one of the few things here that
-is **confirmed on physical hardware** — the owner checked a real board and the dial does press in,
-on top of turning. It also shows up twice in Elecrow's own material: as `TM_2024A` on the schematic
-(pins `IO4_DOWN`/`IO6_UP`/`IO5_CONF`) and as part `XB-TM-2024A` in their CAD assembly. So the
-six-gesture model rests on three inputs that all definitely exist. It's a
+### Scrolling by touch
+
+Scroll comes from a mouse wheel, or from dragging either the screen or the wheel graphic
+(`bindDragScroll`). Three details, each of which was a bug report first:
+
+- **The selection follows your finger.** Drag down, the cursor moves down. An earlier version
+  used the content-scrolls-under-you model that web pages use (drag up to go forward), which
+  reads fine for a page of text and backwards for a cursor — people reported "swipe up puts the
+  cursor down". What's being moved on most screens is a selection, so the selection wins.
+- **It's continuous, not one step per swipe.** Every `DRAG_STEP_PX` of travel emits a detent
+  while the finger is still down, so a long drag runs down a list the way rolling the real wheel
+  would.
+- **Every control needs `user-select: none` and `touch-action: none`, not just the screen.**
+  Without them Android starts its own long-press gesture on the buttons: the text-selection
+  callout appears over the control, and the `pointercancel` that follows kills the hold timer —
+  so "hold MENU" silently did nothing some of the time. `touch-action` also stops the browser
+  claiming a drag as a page scroll before the handlers see it, which is what "swipe just scrolls
+  the page" was. It's set on `.device` too, because fingers miss a 250px-wide screen constantly.
+
+### It's a thumbwheel, not a knob
+
+Worth being precise about, because the mockup got it wrong for a long time and that misled
+people. The part (`XB-TM-2024A`) is a flat wheel lying in the board's own plane — 13.2 mm
+across, poking 2.75 mm past the board edge, with a toothed rim you roll with a thumb. It is
+**not** a rotary encoder shaft with a knob on top.
+
+The simulator used to draw it as a circle with a pointer tick, which is exactly what an encoder
+knob looks like: the wrong component, and it invited people to try turning something that
+doesn't turn that way. It's drawn edge-on now, ridged, emerging from a slot — so the only
+gesture the picture suggests is the one it actually has. It's also draggable, which it wasn't
+before; on a phone a wheel that looks rollable and does nothing is worse than no wheel at all.
+
+The wheel's click (`ROTARY_CONF`) is a genuine third input, and one of the few things here that
+is **confirmed on physical hardware** — the owner checked a real board and it does press in,
+on top of rolling. It also shows up twice in Elecrow's own material: as `TM_2024A` on the
+schematic (pins `IO4_DOWN`/`IO6_UP`/`IO5_CONF`) and as `XB-TM-2024A` in their CAD assembly. So
+the six-gesture model rests on three inputs that all definitely exist. It's a
 harmless alternate "select" on plain list/menu screens (same as MENU), and only diverges from
 MENU in Minesweeper (flag a cell) and Sudoku (cycle a digit downward instead of up).
 
@@ -41,7 +73,7 @@ MENU in Minesweeper (flag a cell) and Sudoku (cycle a digit downward instead of 
 
 Screens live on a stack (`state.screenStack`), pushed with `pushScreen(name)` and popped with
 `popScreen()` — EXIT is generically "pop the stack" except from the reading view, which is
-special-cased (see below). Eight of the screens are plain scrollable lists (`LIST_SCREENS`), each
+special-cased (see below). Nine of the screens are plain scrollable lists (`LIST_SCREENS`), each
 just a title and a row-generator function; a shared renderer (`screenBlocks`/`selectableBlocks`/
 `drawBlockList`) handles multi-line wrapped rows, separators, and scroll-into-view windowing so
 list screens don't each reimplement scrolling.
@@ -54,13 +86,14 @@ reading ──MENU──▶ bookMenu ──"Browse chapters"──▶ bookChapte
    │
    └──EXIT──▶ home ──▶ library ──(pick a book)──▶ bookMenu
                   │
+                  ├──▶ allStats   (whole library)
                   ├──▶ games ──▶ lightsout / minesweeper / sudoku / hangman / tictactoe
                   ├──▶ settings
                   └──▶ wifi
 ```
 
 - **home** — Continue-reading shortcut (if a book is open) + Bookmark-this-page, then Library,
-  Games, Settings, Wi-Fi.
+  Reading stats, Games, Settings, Wi-Fi.
 - **library** — one block per book (wrapped title + author/chapter-count line, dimmed), with a
   separator between books. Replaces an earlier flat "every chapter of every book" list. Picking a
   book always goes to **bookMenu** rather than straight into reading, since a book with existing
@@ -75,6 +108,7 @@ reading ──MENU──▶ bookMenu ──"Browse chapters"──▶ bookChapte
 - **bookmarks** — per-book bookmark list; picking one jumps to that saved position.
 - **stats** — read-only pace readout for the book in `state.browseBookIdx` (see
   [Reading stats](#reading-stats) below); every row is a display line, not a selectable action.
+- **allStats** — the same idea across the whole library rather than one book, reached from Home.
 - **settings** — layout sliders (font size, line height, heading height, margin, full-refresh
   cadence) plus the wallpaper switcher, all scrub-editable (see below).
 - **wifi** — a fake connection-state screen (`state.wifiMode`), illustrating AP-mode-vs-connected
@@ -164,6 +198,25 @@ capped at 14 days rather than 120 and written debounced instead of on every page
 LittleFS write cycles are a real constraint the browser's `localStorage` doesn't share. The device
 has no RTC either, so days are keyed off NTP time once WiFi connects and anything read before that
 lands in an explicit "unknown day" bucket rather than a guessed date.
+
+### Across the whole library
+
+Home → **Reading stats** (`allStats`) answers a different question from the per-book screen: not
+"how is this book going" but "how much am I reading". `overallReadingStats()` in the simulator and
+`library::overallStats()` on the device both merge every book's per-day buckets into one timeline
+first, then report today, all-time, average pace, streak, days read, and how many books are in
+progress versus finished.
+
+Two deliberate choices, matched on both sides:
+
+- It reads the **whole log**, not just the currently-loaded library, so a book you've since
+  removed still counts toward all-time totals — the reading happened either way. In-progress and
+  finished counts are the exception: those only mean anything for books actually present, so they
+  come from the library instead.
+- The **streak** counts back a day at a time from today, and if today has nothing logged yet it
+  starts from yesterday — a streak shouldn't read as broken until a whole day has actually been
+  missed. On device the "unknown day" bucket counts toward totals but is excluded from the streak,
+  which needs real dates to mean anything.
 
 ## Wallpapers
 
