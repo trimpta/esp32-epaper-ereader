@@ -22,6 +22,7 @@ enum class Screen {
   BookChapters,
   Bookmarks,
   Stats,
+  AllStats,
   Settings,
   WiFi,
   Games,
@@ -213,6 +214,7 @@ enum {
   ACT_START_BOOK,
   ACT_OPEN_CHAPTERS,
   ACT_OPEN_STATS,
+  ACT_OPEN_ALL_STATS,
   ACT_OPEN_HOME,
   ACT_JUMP_CHAPTER,
   ACT_JUMP_BOOKMARK,
@@ -233,6 +235,7 @@ std::vector<Row> homeRows() {
     }
   }
   rows.push_back({ListRow("Library"), ACT_OPEN_LIBRARY});
+  rows.push_back({ListRow("Reading stats"), ACT_OPEN_ALL_STATS});
   rows.push_back({ListRow("Games"), ACT_OPEN_GAMES});
   rows.push_back({ListRow("Settings"), ACT_OPEN_SETTINGS});
   rows.push_back({ListRow("Wi-Fi"), ACT_OPEN_WIFI});
@@ -358,6 +361,33 @@ std::vector<Row> statsRows() {
   return rows;
 }
 
+// Whole-library stats, as opposed to statsRows()'s single book. Display rows only.
+std::vector<Row> allStatsRows() {
+  std::vector<Row> rows;
+  library::OverallStats s = library::overallStats();
+  rows.push_back({ListRow("Today: " + String(s.pagesToday) + " pg - " + fmtDuration(s.secondsToday)), ACT_NONE});
+  if (s.daysLogged == 0) {
+    rows.push_back({ListRow("No reading logged yet"), ACT_NONE});
+    rows.push_back({ListRow("(turn a few pages)", false, true), ACT_NONE});
+    return rows;
+  }
+  rows.push_back({ListRow("All time: " + String(s.totalPages) + " pg - " + fmtDuration(s.totalSeconds)), ACT_NONE});
+  rows.push_back({ListRow("Avg pace: " + String(s.avgPagesPerDay, 1) + " pg/day"), ACT_NONE});
+  if (s.streakDays > 0) {
+    rows.push_back({ListRow("Streak: " + String(s.streakDays) + " day" + (s.streakDays == 1 ? "" : "s")), ACT_NONE});
+  } else {
+    rows.push_back({ListRow("Streak: none today"), ACT_NONE});
+  }
+  rows.push_back({ListRow("Days read: " + String(s.daysLogged)), ACT_NONE});
+  rows.push_back({ListRow::sep(), ACT_NONE});
+  rows.push_back({ListRow("Library: " + String(library::count()) + " book" + (library::count() == 1 ? "" : "s")), ACT_NONE});
+  rows.push_back({ListRow("In progress: " + String(s.inProgress) + " - done: " + String(s.finished)), ACT_NONE});
+  if (!library::timeIsSynced()) {
+    rows.push_back({ListRow("(clock not set - no Wi-Fi yet)", false, true), ACT_NONE});
+  }
+  return rows;
+}
+
 std::vector<Row> settingsRows() {
   std::vector<Row> rows;
   String refresh = "Full refresh every: " + String(settings::refreshEveryNPages()) + " pages";
@@ -410,6 +440,7 @@ std::vector<Row> buildRows() {
     case Screen::BookChapters: return chapterRows();
     case Screen::Bookmarks: return bookmarkRows();
     case Screen::Stats: return statsRows();
+    case Screen::AllStats: return allStatsRows();
     case Screen::Settings: return settingsRows();
     case Screen::WiFi: return wifiRows();
     case Screen::Games: return gamesRows();
@@ -479,6 +510,7 @@ void activateFocused() {
     case ACT_OPEN_HOME: pushScreen(Screen::Home); break;
     case ACT_OPEN_CHAPTERS: pushScreen(Screen::BookChapters); break;
     case ACT_OPEN_STATS: pushScreen(Screen::Stats); break;
+    case ACT_OPEN_ALL_STATS: pushScreen(Screen::AllStats); break;
     case ACT_PICK_BOOK:
       browseBook = row->param;
       pushScreen(Screen::BookMenu);

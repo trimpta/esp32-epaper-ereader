@@ -227,6 +227,63 @@ library::Stats library::statsFor(size_t idx) {
   return out;
 }
 
+library::OverallStats library::overallStats() {
+  OverallStats out;
+  uint32_t today = todayIndex();
+
+  // Merge every book's per-day buckets into one timeline. Day 0 is the "clock wasn't set"
+  // bucket (see todayIndex) — it counts toward totals, since the reading happened, but it
+  // can't take part in the streak, which needs real dates.
+  std::vector<DayStat> merged;
+  for (const auto& b : books) {
+    for (const auto& s : b.days) {
+      bool found = false;
+      for (auto& m : merged) {
+        if (m.day != s.day) continue;
+        m.pages += s.pages;
+        m.seconds += s.seconds;
+        found = true;
+        break;
+      }
+      if (!found) merged.push_back(s);
+    }
+  }
+
+  for (const auto& m : merged) {
+    out.totalPages += m.pages;
+    out.totalSeconds += m.seconds;
+    if (m.day == today && today != 0) {
+      out.pagesToday = m.pages;
+      out.secondsToday = m.seconds;
+    }
+  }
+  out.daysLogged = (uint16_t)merged.size();
+  if (out.daysLogged > 0) out.avgPagesPerDay = (float)out.totalPages / (float)out.daysLogged;
+
+  // Walk back a day at a time from today. If today has nothing yet, start from yesterday,
+  // so a streak isn't declared broken until a full day has actually been missed.
+  if (today != 0) {
+    auto hasDay = [&merged](uint32_t d) {
+      for (const auto& m : merged) {
+        if (m.day == d && m.pages > 0) return true;
+      }
+      return false;
+    };
+    uint32_t cursor = today;
+    if (!hasDay(cursor) && cursor > 0) cursor--;
+    while (cursor > 0 && hasDay(cursor)) {
+      out.streakDays++;
+      cursor--;
+    }
+  }
+
+  for (const auto& b : books) {
+    if (b.totalPages > 0 && b.absolutePage() >= b.totalPages) out.finished++;
+    else if (b.lastChapterIdx > 0 || b.lastPageIdx > 0) out.inProgress++;
+  }
+  return out;
+}
+
 void library::markDirty() {
   dirty = true;
 }

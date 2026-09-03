@@ -64,6 +64,22 @@ struct Stats {
 };
 Stats statsFor(size_t idx);
 
+// Everything across every book, for the Home > Reading stats screen. Distinct from
+// statsFor(), which answers "how is this one book going" — this answers "how much am I
+// reading", and so merges each book's per-day buckets into one timeline first.
+struct OverallStats {
+  uint16_t pagesToday = 0;
+  uint32_t secondsToday = 0;
+  uint32_t totalPages = 0;
+  uint32_t totalSeconds = 0;
+  uint16_t daysLogged = 0;
+  float avgPagesPerDay = 0;
+  uint16_t streakDays = 0;   // consecutive days ending today (or yesterday, if today is unread)
+  uint16_t inProgress = 0;
+  uint16_t finished = 0;
+};
+OverallStats overallStats();
+
 void markDirty();
 void flush();       // writes if dirty
 bool timeIsSynced();
