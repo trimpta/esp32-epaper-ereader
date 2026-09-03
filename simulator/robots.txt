@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# The firmware binaries are large and have no business in a search index.
+Disallow: /firmware/
+
+Sitemap: https://trimpta.com/esp32-epaper-ereader/sitemap.xml
