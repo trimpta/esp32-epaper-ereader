@@ -108,6 +108,24 @@ static-RAM figure counts only globals; it doesn't include what LittleFS, WiFi an
 async web server allocate on the heap at runtime. Both are close enough to settle the
 partition question, which is what this section exists for.
 
+### The table above is what actually gets flashed
+
+Worth confirming rather than assuming, because it's the kind of thing that fails silently:
+the CI build (`.github/workflows/pages.yml`) drops `partitions.csv` into the sketch folder
+and selects `PartitionScheme=custom`, and a stock Arduino table would have been substituted
+without complaint if that didn't take. Parsing the `partitions.bin` the workflow publishes
+gives:
+
+| Label | Type | Offset | Size |
+|---|---|---|---|
+| `nvs` | data | `0x9000` | 24,576 B |
+| `phy_init` | data | `0xf000` | 4,096 B |
+| `factory` | app | `0x10000` | 2,097,152 B |
+| `littlefs` | data | `0x210000` | 6,225,920 B |
+
+Byte-for-byte what `firmware/partitions.csv` specifies — so the ~5.94 MiB of book storage
+this document's arithmetic depends on is what a flashed board will really have.
+
 ## Wallpapers: cheap, by design
 
 A wallpaper is stored as a raw 1-bit bitmap at the panel's native 122×250 resolution —
