@@ -3377,22 +3377,39 @@ frame.addEventListener('contextmenu', (e) => e.preventDefault());
 // pattern instead of three near-identical copies. Pointer events (not 'click') so the
 // same logic covers mouse and touch uniformly — 'click' alone can't tell a hold from a
 // tap. `matchButton` filters frame's mousedown/up, which carries both MENU and EXIT.
+// A press that travels is a drag, not a press. Without this, a swipe across the screen
+// fired MENU on release (and menu-hold if the swipe was slow), on top of the swipe-to-
+// scroll handler below — so scrolling on a touchscreen also opened the menu.
+const TAP_SLOP_PX = 12;
 function bindHoldGesture(el, { onShort, onLong, holdMs = 550, matchButton } = {}) {
   let timer = null;
   let longFired = false;
+  let moved = false;
+  let originX = 0, originY = 0;
   const matches = (e) => matchButton === undefined || e.button === matchButton;
   function start(e) {
     if (!matches(e)) return;
     longFired = false;
+    moved = false;
+    originX = e.clientX;
+    originY = e.clientY;
     timer = setTimeout(() => { longFired = true; onLong && onLong(); }, holdMs);
+  }
+  function move(e) {
+    if (moved || timer === null) return;
+    if (Math.hypot(e.clientX - originX, e.clientY - originY) < TAP_SLOP_PX) return;
+    moved = true;       // past the slop radius: this gesture belongs to the swipe handler
+    cancel();
   }
   function end(e) {
     if (!matches(e)) return;
-    clearTimeout(timer);
-    if (!longFired && onShort) onShort();
+    const wasDrag = moved || timer === null;
+    cancel();
+    if (!wasDrag && !longFired && onShort) onShort();
   }
-  function cancel() { clearTimeout(timer); }
+  function cancel() { clearTimeout(timer); timer = null; }
   el.addEventListener('pointerdown', start);
+  el.addEventListener('pointermove', move);
   el.addEventListener('pointerup', end);
   el.addEventListener('pointerleave', cancel);
   el.addEventListener('pointercancel', cancel);
@@ -3408,9 +3425,14 @@ frame.addEventListener('keydown', (e) => {
   else if (e.key === 'Escape') handleInput('exit');
 });
 
-// Touch: swipe = rotary (content follows the finger, so swiping up feels like "next"),
-// tap = MENU. The physical MENU/EXIT buttons below the screen already receive touch
-// taps as ordinary click events — no separate touch-only wiring needed for those.
+// Touch: swipe = rotary (content follows the finger, so swiping up feels like "next").
+// Taps are NOT handled here — bindHoldGesture's pointer events already cover them for
+// mouse and touch alike, and doing it in both places is what used to fire MENU twice on
+// a single tap. This handler is only responsible for turning travel into scroll.
+//
+// The thresholds deliberately leave a gap: under TAP_SLOP_PX it's a tap, over
+// SWIPE_THRESHOLD_PX it's a swipe, and in between it's an ambiguous smudge that does
+// nothing rather than guessing wrong.
 let touchStartY = null;
 const SWIPE_THRESHOLD_PX = 28;
 frame.addEventListener('touchstart', (e) => {
@@ -3420,7 +3442,7 @@ frame.addEventListener('touchend', (e) => {
   if (touchStartY === null) return;
   const dy = e.changedTouches[0].clientY - touchStartY;
   touchStartY = null;
-  if (Math.abs(dy) < SWIPE_THRESHOLD_PX) { handleInput('menu'); return; } // tap, not a swipe
+  if (Math.abs(dy) < SWIPE_THRESHOLD_PX) return;  // tap or smudge — not ours to act on
   if (dy < 0) handleInput('next'); else handleInput('prev');
 });
 
