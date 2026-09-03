@@ -79,26 +79,91 @@ whatever panel covers the component side, not wall cutouts.
 spanning Z −3.87 … 5.07 (≈ 8.9 mm wide) and 4.2 mm deep in Y. Unlike the buttons it doesn't
 overhang the board outline, so the wall opening needs to clear the *plug*, not the socket.
 
-**The rotary needs rotational clearance, not just a hole.** Its body spans 13.16 mm across X
-and 9 mm along Z.
+**The rotary needs rotational clearance, not just a hole** — and it is a flat in-plane
+**thumbwheel**, not a shaft with a knob. Its X span *is* its full diameter (a circle
+reaches its X extremes at its centre's Z), so:
 
-## Mounting holes
+| | |
+|---|---|
+| diameter | 13.164 mm (radius 6.582) |
+| centre | X = 0, Z = **−27.767** (= −34.349 + 6.582) |
+| thickness | 2.80 mm (Y −3.80 … −1.00) |
 
-Found by walking the PCB solid's cylindrical faces (they're cut features in the board, not
-separate parts, so they don't appear in the parts dump):
+The STEP solid is only about a 223° arc of that circle, which is why its Z span (9.0 mm)
+is smaller than its diameter — the wheel is a C shape open towards the board interior.
+The product photo shows exactly that: a toothed wheel of about that size, its rim poking
+out of the left edge. A wall opening must clear the swept circle, which at 0.4 mm outside
+the board edge is 2 × 5.04 = 10.08 mm across.
 
-| Count | Diameter | Positions (X, Z) | Inset from edge |
+## Independent cross-check against the product photo
+
+Every position above was re-measured by pixel analysis of
+`docs/images/hardware-overview.webp`, using the detected board outline as the scale
+reference (13.85 px/mm). Independent of the STEP file:
+
+| Feature | Photo | STEP | Delta |
 |---|---|---|---|
-| 4 | **2.00 mm** | (±14.60, ±30.60) | 1.00 mm from both nearest edges |
-| 2 | **1.00 mm** | (±7.00, 30.30) | 1.30 mm from the right edge |
+| MENU centre, board X | −11.16 | −11.150 | 0.01 |
+| EXIT centre, board X | +11.16 | +11.150 | 0.01 |
+| Rotary width, board X | 13.29 | 13.164 | 0.13 |
+| Rotary protrusion past the edge | 2.1–2.7 | 2.749 | – |
+| MENU/EXIT protrusion past the edge | 0.83 | 0.80 | 0.03 |
+| BOOT centre, board Z | +15.23 | +15.200 | 0.03 |
+| RESET centre, board Z | +25.60 | +25.670 | 0.07 |
+| USB-C centre, board Z | +0.40 | +0.600 | 0.20 |
+| BOOT/RESET cap centre, board X | −12.24 / −12.28 | −11.900 | 0.35 |
 
-The four 2 mm holes are the mounting points. M2 hardware clears them directly; the previous
-enclosure guessed 2.2 mm at a 3 mm inset, which would have missed every one of them.
+The last row is the only one over 0.2 mm, and it compares the visible cap against the
+whole switch assembly's bbox centre, partly occluded by the photo's annotation dot. The
+enclosure's pinholes are oversized (Ø1.8) to absorb it.
+
+## Mounting holes — there are none. CORRECTED.
+
+> **Correction, made while building the enclosure.** An earlier revision of this file
+> read the PCB solid's cylindrical faces as mounting holes. They are not holes. The
+> board has **no mounting holes at all**. What follows is the corrected reading.
+
+Walking the PCB solid's cylindrical faces (they're cut features in the board, not
+separate parts, so they don't appear in the parts dump) turns up six, and only six:
+
+| Count | Radius | Positions (X, Z) | What they actually are |
+|---|---|---|---|
+| 4 | 1.00 mm | centred (±14.60, ±30.60) | the **outline's corner fillets** |
+| 2 | 0.50 mm | centred (±7.00, 30.30) | the rounded **ends of the FPC slot** |
+
+Why they are not holes:
+
+- A Ø2.00 hole whose centre sits exactly 1.00 mm from the edge is *tangent* to that edge —
+  it would break out of the board. Not manufacturable. R1.00 centred 1.00 mm in from both
+  edges, at all four corners, is instead the exact signature of a 1 mm corner round, and
+  the product photo shows corners rounded at about that radius.
+- Three of the four positions sit underneath a switch body. MENU spans X −15.000…−7.300
+  at Z −32.400…−28.900, which contains (−14.60, −30.60); EXIT likewise contains
+  (+14.60, −30.60). Nothing could be screwed there.
+- The two R0.50 faces at (±7.00, 30.30) are 14.0 mm apart on one line — the two ends of a
+  14.0 × 1.0 mm slot at Z = 30.30, 1.30 mm in from the right edge. That slot is plainly
+  visible in the product photo at exactly that spot, with the display's FPC passing
+  through it.
+- Elecrow's wiki lists no mounting holes, and none are visible anywhere on the
+  component-side photo.
+
+Consequence for an enclosure: the board cannot be screwed down. It has to be clamped —
+supported on a ledge around its perimeter and held by an opposing rib, both interrupted
+where the components above reach the board edge.
 
 ## Still not measured
 
 - Component *heights* above the component face beyond the bounding boxes above — enough for
-  clearance, not enough to model a snug fit.
-- Whether the 1 mm holes are alignment pins, test points, or unused.
+  clearance, not enough to model a snug fit. In particular, how much of a back cavity a
+  battery can really use is unknown until the board is in hand.
+- The e-paper **active area's offset within the glass**. Its size is derivable
+  (122 × 250 px at the panel's 0.1942 mm pitch = 23.71 × 48.55 mm) and the glass outline
+  is (29.2 × 59.2, board Z −29.60 … +29.60 — the module bbox's extra 0.85 mm to +30.448
+  is the FPC tail). Where the active rectangle sits inside that is not in the dump.
+- Where the MENU/EXIT **actuator nub** sits within its switch's 7.7 mm-wide body. The
+  photo puts the nub at about 2.9 mm tall and roughly centred, but the STEP solid is one
+  lump.
+- Whether the display's FPC bulges past the board's right-hand edge as it folds through
+  the slot. The STEP says no; the photo is ambiguous.
 - Anything about the acrylic shell Elecrow ships, which is in the same assembly but wasn't
   extracted here.
