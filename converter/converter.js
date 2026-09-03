@@ -107,7 +107,10 @@ function pickChapterTitle(doc, bookTitle, fallbackIndex) {
     // across nested elements (e.g. "Chapter II" and its name in separate <span>s on
     // separate lines) otherwise keeps a literal newline in the extracted title.
     const t = h.textContent.replace(/\s+/g, ' ').trim();
-    if (t) return t.slice(0, 255);
+    // Not truncated here: a 255-*character* cut can split a UTF-16 surrogate pair,
+    // and it's redundant anyway — BinaryWriter.utf8String does its own byte-safe
+    // truncation to the real 255-byte limit on write.
+    if (t) return t;
   }
 
   // Only h1s (or none deeper) — still worth using, unless it's just the book title
@@ -118,7 +121,7 @@ function pickChapterTitle(doc, bookTitle, fallbackIndex) {
     // across nested elements (e.g. "Chapter II" and its name in separate <span>s on
     // separate lines) otherwise keeps a literal newline in the extracted title.
     const t = h.textContent.replace(/\s+/g, ' ').trim();
-    if (t && t.toLowerCase() !== normalizedBookTitle) return t.slice(0, 255);
+    if (t && t.toLowerCase() !== normalizedBookTitle) return t;
   }
   return `Chapter ${fallbackIndex}`;
 }
@@ -179,7 +182,24 @@ function extractChapterContent(bodyEl) {
   }
 
   walk(bodyEl);
-  return { text: text.trim(), runs };
+
+  // runs[].offset was recorded against cpLength as text was built up — i.e. relative to
+  // the *untrimmed* string. A leading empty block (a page-break <div></div> before the
+  // real content is common) leaves a leading '\n' that trim() then drops, which would
+  // otherwise leave every run pointing further into the trimmed text than the styled
+  // span actually is, worse the further into the chapter a run is. Shift offsets back by
+  // whatever trim() removed from the front, and clamp against the trimmed length so a
+  // run touching either edge doesn't end up pointing past the text it's describing.
+  const trimmedText = text.trim();
+  const leadingTrimCp = Array.from(text).length - Array.from(text.trimStart()).length;
+  const trimmedCpLen = Array.from(trimmedText).length;
+  const adjustedRuns = [];
+  for (const r of runs) {
+    const start = Math.max(r.offset - leadingTrimCp, 0);
+    const end = Math.min(r.offset - leadingTrimCp + r.length, trimmedCpLen);
+    if (end > start) adjustedRuns.push({ offset: start, length: end - start, flags: r.flags });
+  }
+  return { text: trimmedText, runs: adjustedRuns };
 }
 
 // ---------------------------------------------------------------------------
@@ -298,6 +318,11 @@ class BinaryWriter {
     this.bytes.push(v & 0xff);
   }
   u16(v) {
+    // Silently wrapping (e.g. 65536 -> 0) would desync the reader: firmware/src/book_format.cpp
+    // trusts every u16 count/length it reads to seek past that many table entries or text
+    // bytes, so a wrapped count corrupts parsing of everything that follows it in the file,
+    // not just the value itself.
+    if (v > 0xffff) throw new Error(`.cebk field overflowed 16 bits (${v}) — chapter too long to convert`);
     this.u8(v);
     this.u8(v >> 8);
   }

@@ -73,6 +73,12 @@ inspecting output size without hardware.</p>
     } catch (err) {
       log(`ERROR: ${err.message}`);
       console.error(err);
+      // Without this, a failed re-conversion left the *previous* successful run's
+      // cebkBytes in place with Download/Upload still enabled — clicking Download
+      // after seeing an ERROR line silently produced the old file, not the new one.
+      cebkBytes = null;
+      downloadBtn.disabled = true;
+      uploadBtn.disabled = true;
     } finally {
       convertBtn.disabled = false;
     }
