@@ -64,7 +64,12 @@ jobs:
       # alongside them because a partitions.csv sitting in the sketch directory overrides the
       # selected partition scheme — that's how the build gets the repo's real table
       # (2MB app / 5.94MB LittleFS) instead of a stock Arduino one.
+      # continue-on-error: a firmware build failure must not take the website down with it.
+      # install.html already handles "no binaries published" by pointing at the build-from-source
+      # instructions, so the worst case degrades to exactly that rather than a failed deploy.
       - name: Build firmware
+        id: firmware
+        continue-on-error: true
         run: |
           mkdir -p build/rotary_reader
           cp firmware/src/*.cpp firmware/src/*.h build/rotary_reader/
@@ -80,6 +85,7 @@ jobs:
       # standard ESP32-S3 Arduino layout; the app at 0x10000 matches partitions.csv's factory
       # partition offset.
       - name: Assemble firmware manifest
+        if: steps.firmware.outcome == 'success'
         run: |
           mkdir -p _site/firmware
           cp build/out/rotary_reader.ino.bootloader.bin _site/firmware/bootloader.bin
