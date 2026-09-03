@@ -6,8 +6,9 @@
 
 namespace web_server {
 
-// onLibraryChanged fires after a book finishes uploading. main.cpp doesn't yet do
-// anything with it beyond the TODO noted there — no book-picker UI in this skeleton.
+// onLibraryChanged fires after a book finishes uploading or is deleted over the web API.
+// main.cpp wires it to ui::onLibraryChanged(), which rescans the library and, if the
+// Library screen is on-screen, redraws it.
 void begin(std::function<void()> onLibraryChanged);
 
 }  // namespace web_server
