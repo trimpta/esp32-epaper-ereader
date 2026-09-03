@@ -132,6 +132,10 @@ void BookReader::close() {
 }
 
 std::vector<Line> BookReader::getPageLines(size_t chapterIdx, uint16_t pageIdx) {
+  // A short read anywhere latches readOk_ false; without resetting it here, one transient
+  // failure (or one out-of-range page/chapter request) would silently blank every page
+  // this BookReader ever renders again, not just the request that hit it.
+  readOk_ = true;
   std::vector<Line> lines;
   if (chapterIdx >= chapters_.size()) return lines;
   const ChapterIndex& ch = chapters_[chapterIdx];
@@ -160,6 +164,7 @@ std::vector<Line> BookReader::getPageLines(size_t chapterIdx, uint16_t pageIdx) 
 }
 
 std::vector<StyleRun> BookReader::getChapterRuns(size_t chapterIdx) {
+  readOk_ = true;  // see getPageLines() — don't let a stale failure carry over
   std::vector<StyleRun> runs;
   if (chapterIdx >= chapters_.size()) return runs;
   const ChapterIndex& ch = chapters_[chapterIdx];
@@ -178,6 +183,7 @@ std::vector<StyleRun> BookReader::getChapterRuns(size_t chapterIdx) {
 }
 
 size_t BookReader::readTextInto(uint32_t offset, uint16_t length, uint8_t* out, size_t outCap) {
+  readOk_ = true;  // see getPageLines() — don't let a stale failure carry over
   if (length == 0 || out == nullptr || outCap == 0) return 0;
   // Offsets are absolute into the text blob; anything past its end is corrupt data, and
   // reading it would render whatever bytes happened to follow in the file.

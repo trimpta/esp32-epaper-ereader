@@ -38,10 +38,12 @@ void setup() {
     delay(2000);
   });
 
-  web_server::begin([]() { ui::onLibraryChanged(); });
-
+  // library:: and ui:: must be ready before the async server starts: an upload landing
+  // between web_server::begin() and ui::begin() used to call ui::onLibraryChanged() ->
+  // renderCurrent() while the renderer pointer was still null.
   library::begin();
   ui::begin(&renderer);
+  web_server::begin([]() { ui::onLibraryChanged(); });
 }
 
 void loop() {
