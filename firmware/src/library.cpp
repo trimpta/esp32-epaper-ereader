@@ -166,6 +166,13 @@ BookMeta& library::book(size_t idx) {
   return books[idx];
 }
 
+bool library::remove(size_t idx) {
+  if (idx >= books.size()) return false;
+  if (!LittleFS.remove(books[idx].path)) return false;
+  rescan();
+  return true;
+}
+
 void library::setPosition(size_t idx, uint16_t chapterIdx, uint16_t pageIdx) {
   if (idx >= books.size()) return;
   books[idx].lastChapterIdx = chapterIdx;

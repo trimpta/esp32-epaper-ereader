@@ -23,6 +23,7 @@ enum class Screen {
   Bookmarks,
   Stats,
   AllStats,
+  ConfirmDelete,
   Settings,
   WiFi,
   Games,
@@ -222,6 +223,8 @@ enum {
   ACT_CYCLE_WALLPAPER,
   ACT_WIFI_PORTAL,
   ACT_START_GAME,
+  ACT_DELETE_BOOK,
+  ACT_CONFIRM_DELETE,
 };
 
 std::vector<Row> homeRows() {
@@ -283,7 +286,27 @@ std::vector<Row> bookMenuRows() {
     rows.push_back({ListRow("Bookmarks (" + String(b.bookmarks.size()) + ")"), ACT_OPEN_BOOKMARKS});
   }
   rows.push_back({ListRow("Reading stats"), ACT_OPEN_STATS});
+  // Can't delete the book you're currently reading from here — closing it out from under
+  // an active BookReader isn't handled, and there's no scenario where you'd want to.
+  if (browseBook != activeBook) {
+    rows.push_back({ListRow::sep(), ACT_NONE});
+    rows.push_back({ListRow("Delete book"), ACT_DELETE_BOOK});
+  }
   rows.push_back({ListRow("More... (Library, Settings)"), ACT_OPEN_HOME});
+  return rows;
+}
+
+std::vector<Row> confirmDeleteRows() {
+  std::vector<Row> rows;
+  if (browseBook < 0 || browseBook >= (int)library::count()) {
+    rows.push_back({ListRow("(no book selected)"), ACT_NONE});
+    return rows;
+  }
+  BookMeta& b = library::book(browseBook);
+  rows.push_back({ListRow("Delete \"" + bookLabel(b) + "\"?", false, true), ACT_NONE});
+  rows.push_back({ListRow("This can't be undone.", false, true), ACT_NONE});
+  rows.push_back({ListRow::sep(), ACT_NONE});
+  rows.push_back({ListRow("Yes, delete"), ACT_CONFIRM_DELETE});
   return rows;
 }
 
@@ -441,6 +464,7 @@ std::vector<Row> buildRows() {
     case Screen::Bookmarks: return bookmarkRows();
     case Screen::Stats: return statsRows();
     case Screen::AllStats: return allStatsRows();
+    case Screen::ConfirmDelete: return confirmDeleteRows();
     case Screen::Settings: return settingsRows();
     case Screen::WiFi: return wifiRows();
     case Screen::Games: return gamesRows();
@@ -511,6 +535,13 @@ void activateFocused() {
     case ACT_OPEN_CHAPTERS: pushScreen(Screen::BookChapters); break;
     case ACT_OPEN_STATS: pushScreen(Screen::Stats); break;
     case ACT_OPEN_ALL_STATS: pushScreen(Screen::AllStats); break;
+    case ACT_DELETE_BOOK: pushScreen(Screen::ConfirmDelete); break;
+    case ACT_CONFIRM_DELETE:
+      if (browseBook >= 0 && browseBook != activeBook) library::remove((size_t)browseBook);
+      browseBook = -1;
+      popScreen();  // ConfirmDelete -> BookMenu
+      popScreen();  // BookMenu -> Library (the book it was about no longer exists)
+      break;
     case ACT_PICK_BOOK:
       browseBook = row->param;
       pushScreen(Screen::BookMenu);

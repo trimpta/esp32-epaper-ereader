@@ -47,6 +47,7 @@ void rescan();  // after an upload — keeps state for books that are still pres
 
 size_t count();
 BookMeta& book(size_t idx);
+bool remove(size_t idx);  // deletes the .cebk from LittleFS and rescans; false if idx is invalid
 
 void setPosition(size_t idx, uint16_t chapterIdx, uint16_t pageIdx);
 bool toggleBookmark(size_t idx, uint16_t chapterIdx, uint16_t pageIdx);  // true if added
