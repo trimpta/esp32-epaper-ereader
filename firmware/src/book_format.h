@@ -63,16 +63,25 @@ class BookReader {
   // Reads [offset, offset+length) of the UTF-8 text blob.
   String readText(uint32_t offset, uint16_t length);
 
+  // Reads [offset, offset+length) of the text blob into `out` (no String allocation).
+  // Returns the number of bytes actually read. Used by the renderer to pull a whole
+  // page's text in one seek+read instead of one per styled span.
+  size_t readTextInto(uint32_t offset, uint16_t length, uint8_t* out, size_t outCap);
+
  private:
   File file_;
   String title_;
   String author_;
   std::vector<ChapterIndex> chapters_;
   uint32_t textBlobFileOffset_ = 0;
+  uint32_t textBlobLength_ = 0;
+  uint32_t fileSize_ = 0;
+  bool readOk_ = true;  // cleared by any short read; open() treats it as "file is corrupt"
 
   uint8_t readU8();
   uint16_t readU16();
   uint32_t readU32();
   String readLenPrefixedString();
   uint16_t peekU16At(uint32_t filePos);
+  bool seekTo(uint32_t pos);
 };

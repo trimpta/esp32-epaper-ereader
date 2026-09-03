@@ -310,9 +310,17 @@ class BinaryWriter {
   rawBytes(u8arr) {
     for (const b of u8arr) this.bytes.push(b);
   }
+  // The length prefix is one byte, so this truncates on a UTF-8 *byte* boundary rather
+  // than throwing. Callers used to slice by character count, which isn't the same limit at
+  // all: a 200-character title in any non-Latin script is well over 255 bytes, and threw.
   utf8String(str) {
-    const enc = new TextEncoder().encode(str);
-    if (enc.length > 255) throw new Error(`String too long to encode (>255 bytes): "${str}"`);
+    let enc = new TextEncoder().encode(str);
+    if (enc.length > 255) {
+      let end = 255;
+      // Don't cut a multi-byte character in half — back up off any continuation byte.
+      while (end > 0 && (enc[end] & 0xc0) === 0x80) end--;
+      enc = enc.slice(0, end);
+    }
     this.u8(enc.length);
     this.rawBytes(enc);
   }
@@ -370,8 +378,8 @@ async function convertEpub(arrayBuffer, fontMetrics, layout = LAYOUT, onProgress
   const w = new BinaryWriter();
   w.rawBytes(new TextEncoder().encode('CEBK'));
   w.u8(1); // version
-  w.utf8String(book.title.slice(0, 255));
-  w.utf8String(book.author.slice(0, 255));
+  w.utf8String(book.title);   // truncated to 255 *bytes* by the writer, not 255 chars
+  w.utf8String(book.author);
   w.u16(chapterResults.length);
 
   for (const ch of chapterResults) {

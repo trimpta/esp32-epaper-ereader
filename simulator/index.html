@@ -572,13 +572,8 @@
   }
   .wp-card.active .wp-name { color: var(--copper-bright); }
 
-  .caveats {
-    font-size: 0.82rem;
-    color: var(--text-lo);
-    line-height: 1.65;
-  }
-  .caveats ul { margin: 0.4rem 0 0; padding-left: 1.1rem; }
-  .caveats li { margin-bottom: 0.35rem; }
+  /* Link styled as a button — <a> is inline by default, unlike <button>. */
+  a.btn { display: inline-block; text-decoration: none; }
 </style>
 
 <div class="wrap">
@@ -591,6 +586,7 @@
     <div class="file-row" style="flex-shrink:0;">
       <button class="btn" id="btnCalibrate" aria-pressed="false">📏 True size</button>
       <button class="btn" id="btnFullscreen" aria-pressed="false">⤢ Fullscreen</button>
+      <a class="btn" data-site-link href="docs.html">📄 Docs</a>
     </div>
   </header>
 
@@ -748,44 +744,15 @@
         <p class="legend" style="margin-top:0.9rem;">Values are device pixels — same units as <code>firmware/src/config.h</code>. Changing one re-paginates instantly so you can feel the tradeoff before it's baked into flash.</p>
       </div>
 
-      <div class="panel caveats">
-        <h2>Where this diverges from real hardware</h2>
-        <ul>
-          <li><b>Font.</b> The screen uses a pixel web font (Silkscreen) measured live via Canvas — not the actual u8g2 glyph metrics the firmware will use, so exact line breaks will shift slightly once <code>tools/dump_font_metrics</code> runs on real hardware.</li>
-          <li><b>Italic.</b> Shown here as a synthetic slant for preview purposes. u8g2 has no real italic face at this size, so firmware currently falls back to regular — see <code>docs/ARCHITECTURE.md</code>.</li>
-          <li><b>Refresh flash.</b> Modeled on real SSD1680/EPD behavior — full refresh flickers through a couple of black/white cycles (the datasheet-level description is "flickers multiple times," vs. once for fast-refresh and never for partial), and partial refresh accumulates faint ghosting that only a full refresh clears. But it's a stylized per-pixel approximation, not the SSD1680's actual waveform LUTs — real timing and exact ghosting patterns will differ. Real full refresh also takes ~2-3s; this is sped up to stay pleasant to use.</li>
-          <li><b>Always landscape.</b> The panel is a 122×250 portrait sensor natively, but that's ~19 characters/line — bad enough that portrait was never worth shipping as an option. Rendered rotated (250×122) unconditionally, matching <code>display.setRotation(1)</code> in <code>firmware/src/renderer.cpp</code>.</li>
-          <li><b>No battery indicator.</b> The stock schematic has no battery-voltage sense line at all, so this simulator doesn't show one — real hardware reads <code>-1</code> (unavailable) until a resistor divider is added. See <code>firmware/src/config.h</code> / <code>battery.cpp</code> for the two-resistor fix; the UI can show a real percentage once that's wired up.</li>
-          <li><b>Resume position / bookmarks.</b> Saved in this browser's <code>localStorage</code>, keyed by title+author — not the book file itself. Re-loading the <em>same</em> EPUB (or the sample) restores where you left off; on real hardware this is trivial by comparison, since the book is already sitting in flash — just a small per-book position/bookmark record next to it.</li>
-          <li><b>Layout parameters aren't a runtime setting.</b> Changing margin/line-height/font-size here re-paginates instantly because this is a design-time tool — the real device can't do that. Page breaks are precomputed once, at conversion time, and baked into each <code>.cebk</code> file (<code>docs/FORMAT.md</code>); the whole point was zero text-layout work on the ESP32. Change a constant in <code>firmware/src/config.h</code> after books are already on the device and their saved page/line tables no longer match what gets rendered — every book has to be re-converted and re-uploaded. Use these sliders to pick final values, then hardcode them and reflash; they're not something a reader adjusts after the fact.</li>
-          <li><b>Sleep wallpaper.</b> An image embedded directly in this page, dithered to the panel's actual 1-bit palette (a real EPD can't show grayscale, so drawing it as a photo would be dishonest to what this simulates) — not fetched, so it shows the same way here and in the published Artifact. Falls back to a small drawn lighthouse scene only if decoding ever fails.</li>
-        </ul>
-      </div>
-
-      <div class="panel caveats">
-        <h2>About this project</h2>
-        <p class="legend" style="margin-bottom:0.7rem;">
-          🤖 <b>Disclosure: this is "vibe coded."</b> The firmware, converter, this simulator, and
-          its docs were written collaboratively with <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude</a>
-          (Anthropic), directed and reviewed by a human, without physical access to the target
-          hardware yet — see the panel above for what's reasoned-through rather than measured.
-        </p>
-        <p class="legend" style="margin-bottom:0.4rem;"><b>Sources &amp; inspirations:</b></p>
-        <ul>
-          <li><b>Hardware.</b> <a href="https://www.elecrow.com/crowpanel-esp32-2-13-e-paper-hmi-display-with-122-250-resolution-black-white-color-driven-by-spi-interface.html" target="_blank" rel="noopener">Elecrow CrowPanel ESP32 2.13" E-Paper HMI Display</a>.</li>
-          <li><b>Precedent projects</b> (see <code>docs/ARCHITECTURE.md</code> for how this one differs): <a href="https://github.com/atomic14/diy-esp32-epub-reader" target="_blank" rel="noopener">atomic14/diy-esp32-epub-reader</a> (equivalent tag-stripping, done on-device) and Soldered's Inkplate 6FLICK (host-side Python EPUB pre-conversion) — this project follows the second pattern, in the browser, with pagination also moved off-device.</li>
-          <li><b>Firmware libraries.</b> GxEPD2, U8g2_for_Adafruit_GFX, Adafruit GFX Library, WiFiManager, ESPAsyncWebServer/AsyncTCP (esphome forks), ArduinoJson.</li>
-          <li><b>Converter.</b> JSZip, for standalone EPUB unzipping outside this simulator.</li>
-          <li><b>Fonts.</b> Silkscreen, IBM Plex Mono, and IBM Plex Sans (Google Fonts).</li>
-          <li><b>Sample books.</b> <em>Alice's Adventures in Wonderland</em>, <em>The Strange Case of Dr. Jekyll and Mr. Hyde</em>, and <em>The Wonderful Wizard of Oz</em> — genuinely US-public-domain texts via <a href="https://www.gutenberg.org/" target="_blank" rel="noopener">Project Gutenberg</a>.</li>
-        </ul>
-        <p class="legend" style="margin-top:0.6rem;">Full source, issues, and the README live at <a href="https://github.com/trimpta/esp32-epaper-ereader" target="_blank" rel="noopener">github.com/trimpta/esp32-epaper-ereader</a>.</p>
-      </div>
-
       <div class="panel">
-        <h2>Project docs</h2>
-        <p class="legend" style="margin-bottom:0.7rem;">Architecture, the <code>.cebk</code> file format, the flash/RAM budget, and this simulator's own UI/UX reference — full text, rendered on this site, not just a summary linking out to GitHub. Only ships with the simulator; the ESP32's own hosted page (<code>firmware/data/index.html</code>, the book-upload loader) doesn't carry it.</p>
-        <a class="btn primary" href="docs.html" target="_blank" rel="noopener">Read the docs →</a>
+        <p class="legend" style="margin:0 0 0.7rem;">
+          🤖 <b>Disclosure: this is "vibe coded"</b> — built with <a href="https://claude.com/claude-code" target="_blank" rel="noopener">Claude</a>, directed and reviewed by a human, with no physical access to the hardware yet.
+          The docs cover what that means in practice: where this preview diverges from the real panel, the firmware review, the architecture and the file format.
+        </p>
+        <div class="file-row">
+          <a class="btn primary" data-site-link href="docs.html#about">About this project</a>
+          <a class="btn" data-site-link href="docs.html">Docs</a>
+        </div>
       </div>
     </div>
   </main>
@@ -1358,6 +1325,29 @@ function addBookmark() {
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+/* ---------------- links to the rest of the site (docs.html) ------------------------
+   This page is also published as a standalone Claude Artifact — one self-contained file,
+   with no docs.html sitting next to it — so a relative link there would 404. Probe for the
+   real page once and, if it isn't reachable, repoint these links at the deployed site
+   rather than leaving dead ends. Relative stays the default so local dev and the Pages
+   deploy both keep working offline. */
+const SITE_BASE = 'https://trimpta.com/esp32-epaper-ereader/';
+async function resolveSiteLinks() {
+  const links = document.querySelectorAll('[data-site-link]');
+  if (!links.length) return;
+  let reachable = false;
+  try {
+    const res = await fetch('docs.html', { method: 'HEAD' });
+    reachable = res.ok;
+  } catch { /* file://, Artifact sandbox, offline — fall through to the absolute URL */ }
+  if (reachable) return;
+  links.forEach((a) => {
+    a.href = SITE_BASE + a.getAttribute('href');
+    a.target = '_blank';
+    a.rel = 'noopener';
+  });
 }
 
 function renderLibraryPanel() {
@@ -3471,6 +3461,7 @@ function bootSequence() {
 preloadWallpaper(selectedWallpaper().id, selectedWallpaper().dataUri); // fire-and-forget prewarm; falls back cleanly if it's somehow not ready by the first sleep
 renderWallpaperPanel();
 updateMemoryDisplay();
+resolveSiteLinks();
 
 if (document.fonts && document.fonts.ready) {
   Promise.all([

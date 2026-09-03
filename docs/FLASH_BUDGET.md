@@ -26,6 +26,10 @@ simulation — measures in the tens of KB at most:
 None of this requires PSRAM at all — internal SRAM alone covers it with enormous
 headroom. **RAM was never the risk on this board; flash is, because there's no SD slot.**
 
+Since confirmed by a real build: the full firmware — menus, all five games, the library
+model, reading stats — reports **60,176 bytes of static RAM, 18% of internal SRAM**, with
+267,504 bytes left for stack and heap (see the measured figures below).
+
 ## What doesn't need to be ported at all
 
 Several things built for the simulator exist *because* it's a browser standing in for
@@ -69,11 +73,22 @@ but by adding it up in `node` and checking — see the arithmetic isn't just eye
 No `otadata`/dual-app partitions: there's no OTA-over-WiFi flow implemented, so that
 space goes to LittleFS instead, which matters more on a board with no SD slot.
 
-### The 2MB app partition is an estimate, not a measurement
+### The 2MB app partition: now measured, not estimated
 
-Nothing here has actually been compiled — no ESP32 toolchain is available in this
-environment. The 2MB figure is reasoned from typical, commonly-reported sizes for
-comparable Arduino-ESP32 sketches, not a real build's size report:
+This has since been **compiled for real** — `arduino-cli` with `esp32:esp32` core 3.3.10,
+targeting `esp32:esp32:esp32s3`, against the same libraries `platformio.ini` pins. The
+size report:
+
+| Measure | Bytes | Against |
+|---|---|---|
+| Firmware binary | **1,356,955 B** (1.29 MiB) | 65% of the 2 MiB `factory` partition — **~740 KB headroom** |
+| Static RAM (globals) | **60,176 B** (58.8 KiB) | 18% of internal SRAM, leaving 267,504 B for the stack/heap |
+
+The earlier estimate below predicted ~1.2–1.5MB. The real number landed inside that range,
+so the 2MB partition stands as-is — no `partitions.csv` change needed.
+
+<details>
+<summary>The original estimate, kept for reference</summary>
 
 | Component | Typical contribution |
 |---|---|
@@ -85,11 +100,13 @@ comparable Arduino-ESP32 sketches, not a real build's size report:
 | + ArduinoJson, our own application code | +~30–50KB |
 | **Estimated total** | **~1.2–1.5MB** |
 
-2MB leaves ~500KB–800KB of headroom above that estimate — enough margin to not worry
-about it, without reserving so much that it eats into book storage for no reason.
-**This needs confirming against a real `pio run` size report** once real hardware (or
-at least a working toolchain) is available; if it comes in meaningfully over 2MB,
-`partitions.csv` is a one-line edit, not a redesign.
+</details>
+
+Two caveats on the measurement. It's an `arduino-cli` build, not `pio run` — PlatformIO
+pins its own core version, so the exact byte count will shift a little. And the 58.8 KiB
+static-RAM figure counts only globals; it doesn't include what LittleFS, WiFi and the
+async web server allocate on the heap at runtime. Both are close enough to settle the
+partition question, which is what this section exists for.
 
 ## Wallpapers: cheap, by design
 

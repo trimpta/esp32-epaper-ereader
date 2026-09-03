@@ -122,6 +122,7 @@
     text-transform: uppercase;
     margin: 0 0 0.6rem;
   }
+  nav.index ul + .index-label { margin-top: 1.4rem; }
 
   nav.index ul {
     list-style: none;
@@ -248,10 +249,13 @@
    it; keeping this split means the simulator's own reference material never has to be
    thought about while working on that page. */
 const DOCS = [
-  { slug: 'architecture', file: 'ARCHITECTURE.md', label: 'Architecture', desc: 'Converter → device pipeline' },
-  { slug: 'format', file: 'FORMAT.md', label: '.cebk format', desc: 'Binary book format (v1)' },
-  { slug: 'flash-budget', file: 'FLASH_BUDGET.md', label: 'Flash & RAM budget', desc: 'What fits, what doesn’t need porting' },
-  { slug: 'simulator', file: 'SIMULATOR.md', label: 'Simulator UI/UX', desc: 'Input model, screens, persistence' },
+  { slug: 'about', file: 'ABOUT.md', label: 'About', desc: 'What this is, and who built it', group: 'The project' },
+  { slug: 'divergences', file: 'HARDWARE_DIVERGENCES.md', label: 'Hardware divergences', desc: 'Where the simulator differs', group: 'The project' },
+  { slug: 'firmware-review', file: 'FIRMWARE_REVIEW.md', label: 'Firmware review', desc: 'Bugs found, parity with this page', group: 'The project' },
+  { slug: 'architecture', file: 'ARCHITECTURE.md', label: 'Architecture', desc: 'Converter → device pipeline', group: 'Reference' },
+  { slug: 'format', file: 'FORMAT.md', label: '.cebk format', desc: 'Binary book format (v1)', group: 'Reference' },
+  { slug: 'flash-budget', file: 'FLASH_BUDGET.md', label: 'Flash & RAM budget', desc: 'What fits, what needs porting', group: 'Reference' },
+  { slug: 'simulator', file: 'SIMULATOR.md', label: 'Simulator UI/UX', desc: 'Input model, screens, persistence', group: 'Reference' },
 ];
 const DEFAULT_SLUG = DOCS[0].slug;
 
@@ -382,9 +386,18 @@ function renderMarkdown(md) {
 
 function renderIndex(activeSlug) {
   const nav = document.getElementById('docIndex');
-  nav.innerHTML = `<p class="index-label">Contents</p><ul>${DOCS.map((d) => `
-    <li><a href="#${d.slug}" class="${d.slug === activeSlug ? 'active' : ''}">${escapeHtml(d.label)}<span class="desc">${escapeHtml(d.desc)}</span></a></li>
-  `).join('')}</ul>`;
+  const groups = [];
+  for (const d of DOCS) {
+    let g = groups.find((x) => x.name === d.group);
+    if (!g) groups.push((g = { name: d.group, items: [] }));
+    g.items.push(d);
+  }
+  nav.innerHTML = groups.map((g) => `
+    <p class="index-label">${escapeHtml(g.name)}</p>
+    <ul>${g.items.map((d) => `
+      <li><a href="#${d.slug}" class="${d.slug === activeSlug ? 'active' : ''}">${escapeHtml(d.label)}<span class="desc">${escapeHtml(d.desc)}</span></a></li>
+    `).join('')}</ul>
+  `).join('');
 }
 
 const docCache = new Map();

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstddef>  // size_t, for WALLPAPER_BYTES below
+
 // Button/rotary GPIOs — from Elecrow's published pin table for the 2.13" HMI display.
 // https://www.elecrow.com/wiki/CrowPanel_ESP32_E-Paper_2.13-inch_Arduino_Tutorial.html
 static const int PIN_MENU_BUTTON = 2;
@@ -43,10 +45,33 @@ static const int HEADING_LINE_HEIGHT_PX = 14;
 
 // Full refresh every N partial-refresh page turns, to clear e-ink ghosting.
 // Tied to page turns (a counter), not a timer — see docs/ARCHITECTURE.md.
+// Runtime-adjustable from the on-device Settings screen (unlike the layout constants
+// above, which are baked into every .cebk at conversion time) — this default is just
+// the starting value; settings::refreshEveryNPages() is what the renderer reads.
 static const int FULL_REFRESH_EVERY_N_PAGES = 8;
 
+// Menu/list screens. Mirrors simulator/index.html's LIST_TOP_MARGIN / LIST_LINE_H /
+// LIST_FONT_PX so the on-device menus lay out the same way the simulator previews them.
+static const int LIST_TOP_MARGIN_PX = 4;
+static const int LIST_LINE_HEIGHT_PX = 12;
+static const int LIST_FIRST_BASELINE_PX = LIST_TOP_MARGIN_PX + 8;
+
+// Input gesture timing — matches bindHoldGesture()'s holdMs default in the simulator.
+static const unsigned long HOLD_GESTURE_MS = 550;
+
+// Idle sleep. 5 minutes while reading a page, 1 minute anywhere else — a menu sitting
+// open is a much stronger idle signal than a page you may still be reading.
+static const unsigned long IDLE_SLEEP_READING_MS = 5UL * 60UL * 1000UL;
+static const unsigned long IDLE_SLEEP_MENU_MS = 60UL * 1000UL;
+
 static const char* BOOKS_DIR = "/books";
+static const char* WALLPAPER_DIR = "/wallpapers";
+static const char* STATE_FILE = "/state.json";
 static const char* WIFI_AP_NAME = "CrowPanel-Reader-Setup";
+
+// A wallpaper is a raw 1-bit bitmap at the panel's native resolution, nothing else —
+// see docs/FLASH_BUDGET.md "Wallpapers: cheap, by design".
+static const size_t WALLPAPER_BYTES = (122 * 250) / 8;  // 3,813 B
 
 // Battery percentage — NOT available out of the box. The schematic's charger circuit
 // (DFN8_4054A linear charger + a directly-wired LED) has no net name anywhere in the

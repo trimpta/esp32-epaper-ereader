@@ -126,6 +126,11 @@ the reasoning behind the design choices (transport, refresh strategy, storage co
   and roughly how many books fit once firmware and wallpapers are accounted for.
 - `docs/SIMULATOR.md` — full UI/UX reference for the simulator (input mapping, screen hierarchy,
   every feature and how it relates to real hardware).
+- `docs/FIRMWARE_REVIEW.md` — what a full firmware review + real compile found, and where the
+  device and the simulator now match feature for feature.
+- `docs/HARDWARE_DIVERGENCES.md` — everywhere the browser preview deliberately differs from the
+  physical panel, and what each difference costs.
+- `docs/ABOUT.md` — what this project is, the AI-assistance disclosure, sources and inspirations.
 - `firmware/` — PlatformIO/Arduino project for the ESP32-S3: WiFi provisioning, upload server,
   book storage, e-paper renderer, button/rotary input, `partitions.csv`.
 - `tools/dump_font_metrics/` — one-time Arduino sketch that dumps the *actual* on-device glyph
@@ -140,12 +145,17 @@ code and need confirming against the actual PCB before they'll work:
 - Exact SPI pin mapping for the display (CS/DC/RST/BUSY) — not published in Elecrow's docs, only
   the button/rotary GPIOs were (`firmware/src/config.h` has those).
 - Whether [GxEPD2](https://github.com/ZinggJM/GxEPD2) supports the JD79661 driver variant, or
-  whether Elecrow's own EPD library has to be used instead — the renderer is written behind a
-  small interface (`IEinkDisplay`) so swapping the backend is contained to one file.
+  whether Elecrow's own EPD library has to be used instead. Every GxEPD2 call is confined to
+  `firmware/src/renderer.cpp` — menus and games draw through `Renderer`, never the display object
+  — so swapping the backend stays a one-file change.
 - Real glyph widths from `tools/dump_font_metrics` — `converter/font-metrics.example.json` is a
   placeholder and pagination will drift from what's actually rendered until replaced.
-- Compiled firmware binary size (see [docs/FLASH_BUDGET.md](docs/FLASH_BUDGET.md)) — reasoned from
-  typical library sizes, not yet confirmed with a real `pio run` build.
+- Whether the `ext1` wake pin set is valid on this board, which is what gates real power saving
+  between page turns (`firmware/src/input.h`).
+
+The firmware itself now **compiles** against ESP32 Arduino core 3.3.10 — that build is what
+caught the display-init bug and several others; see
+[docs/FIRMWARE_REVIEW.md](docs/FIRMWARE_REVIEW.md). It still hasn't run on a board.
 
 ## Sources & inspirations
 

@@ -1,76 +1,28 @@
 #include <Arduino.h>
 #include <LittleFS.h>
+#include <esp_random.h>
 
 #include "battery.h"
-#include "book_format.h"
 #include "config.h"
 #include "input.h"
+#include "library.h"
 #include "renderer.h"
+#include "settings.h"
+#include "ui.h"
 #include "web_server.h"
 #include "wifi_setup.h"
 
 namespace {
 Renderer renderer;
-BookReader currentBook;
-std::vector<StyleRun> currentChapterRuns;
-size_t currentChapterIdx = 0;
-uint16_t currentPageIdx = 0;
-
-// Auto-loads whatever's first in /books. No book-picker UI in this skeleton — MENU/EXIT
-// are wired up (input.h) but a library list / TOC screen isn't implemented yet.
-void openFirstBook() {
-  File dir = LittleFS.open(BOOKS_DIR);
-  if (!dir) return;
-  File f = dir.openNextFile();
-  if (!f) return;
-  String path = String(BOOKS_DIR) + "/" + f.name();
-  if (currentBook.open(LittleFS, path.c_str())) {
-    currentChapterIdx = 0;
-    currentPageIdx = 0;
-    currentChapterRuns = currentBook.getChapterRuns(0);
-  }
-}
-
-void showCurrentPage() {
-  if (!currentBook.isOpen()) return;
-  renderer.renderPage(currentBook, currentChapterIdx, currentPageIdx, currentChapterRuns);
-}
-
-void goNextPage() {
-  if (!currentBook.isOpen()) return;
-  const ChapterIndex& ch = currentBook.chapter(currentChapterIdx);
-  if (currentPageIdx + 1 < ch.pageCount) {
-    currentPageIdx++;
-  } else if (currentChapterIdx + 1 < currentBook.chapterCount()) {
-    currentChapterIdx++;
-    currentPageIdx = 0;
-    currentChapterRuns = currentBook.getChapterRuns(currentChapterIdx);
-  } else {
-    return;  // already at the last page of the last chapter
-  }
-  showCurrentPage();
-}
-
-void goPrevPage() {
-  if (!currentBook.isOpen()) return;
-  if (currentPageIdx > 0) {
-    currentPageIdx--;
-  } else if (currentChapterIdx > 0) {
-    currentChapterIdx--;
-    currentChapterRuns = currentBook.getChapterRuns(currentChapterIdx);
-    currentPageIdx = currentBook.chapter(currentChapterIdx).pageCount - 1;
-  } else {
-    return;  // already at the first page
-  }
-  showCurrentPage();
-}
 }  // namespace
 
 void setup() {
   Serial.begin(115200);
   input::begin();
   LittleFS.begin(true);
+  settings::begin();
   renderer.begin();
+  randomSeed(esp_random());  // games otherwise deal the same "random" board every boot
 
   // Hold MENU while powering on to re-enter WiFi setup.
   bool forcePortal = (digitalRead(PIN_MENU_BUTTON) == LOW);
@@ -86,40 +38,25 @@ void setup() {
     delay(2000);
   });
 
-  web_server::begin([]() {
-    // TODO: a book finished uploading. This skeleton doesn't have a library/picker
-    // screen yet, so newly uploaded books just wait in /books until openFirstBook()
-    // runs again (i.e. next boot). Wire this callback up to a book-list screen once
-    // one exists.
-  });
+  web_server::begin([]() { ui::onLibraryChanged(); });
 
-  openFirstBook();
-  showCurrentPage();
+  library::begin();
+  ui::begin(&renderer);
 }
 
 void loop() {
   wifi_setup::poll();
 
-  switch (input::poll()) {
-    case InputEvent::PageNext:
-      goNextPage();
-      break;
-    case InputEvent::PagePrev:
-      goPrevPage();
-      break;
-    case InputEvent::Menu:
-    case InputEvent::Exit:
-    case InputEvent::Confirm:
-      // Reserved for book list / TOC / settings screens — not implemented in this
-      // skeleton.
-      break;
-    case InputEvent::None:
-    default:
-      break;
+  // Drain the input queue rather than handling one event per iteration, so a fast
+  // double-press isn't paced by the loop delay below.
+  for (InputEvent e = input::poll(); e != InputEvent::None; e = input::poll()) {
+    ui::handle(e);
   }
 
-  // Simple poll-and-delay loop for now. Once the ext1-wakeup pin set is confirmed on
-  // real hardware (see input.h TODO), swap this for input::enterLightSleepUntilInput()
-  // to actually save power between button presses.
+  ui::tick();
+
+  // TODO(verify): once the ext1 wakeup pin set is confirmed on real hardware (input.h),
+  // ui::tick()'s sleep path can hand off to input::enterLightSleepUntilInput() instead of
+  // this poll-and-delay loop, which is what actually saves power between page turns.
   delay(20);
 }

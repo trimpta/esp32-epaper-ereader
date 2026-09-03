@@ -19,8 +19,27 @@ bool wifi_setup::begin(bool forcePortal, std::function<void(const String&)> onIp
 
   bool ok = forcePortal ? wm.startConfigPortal(WIFI_AP_NAME) : wm.autoConnect(WIFI_AP_NAME);
 
-  if (ok && onIpKnown) onIpKnown(WiFi.localIP().toString());
+  if (ok) {
+    // There's no RTC on this board, so reading stats have no calendar day to attribute
+    // pages to until this lands. Anything read before it goes into library.cpp's day-0
+    // bucket rather than being filed under a made-up date.
+    configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+    if (onIpKnown) onIpKnown(WiFi.localIP().toString());
+  }
   return ok;
+}
+
+bool wifi_setup::isConnected() {
+  return WiFi.status() == WL_CONNECTED;
+}
+
+String wifi_setup::ipAddress() {
+  return WiFi.localIP().toString();
+}
+
+void wifi_setup::startPortal() {
+  wm.setConfigPortalTimeout(180);
+  wm.startConfigPortal(WIFI_AP_NAME);
 }
 
 void wifi_setup::poll() {

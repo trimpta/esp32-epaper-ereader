@@ -19,4 +19,11 @@ bool begin(bool forcePortal, std::function<void(const String&)> onIpKnown);
 // re-enters the captive portal on its own.
 void poll();
 
+bool isConnected();
+String ipAddress();
+
+// Re-enters the captive portal on demand (the Wi-Fi screen's "Re-enter setup" row),
+// rather than only via the hold-MENU-at-boot path.
+void startPortal();
+
 }  // namespace wifi_setup

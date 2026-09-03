@@ -4,9 +4,9 @@
 experience: same pagination logic as `converter/`, the same three-input model as the real board
 (rotary + MENU + EXIT), and an approximation of e-ink's partial-refresh/ghosting behavior. This
 doc is the complete reference for how it behaves — what maps to real firmware and what's
-simulator-only scaffolding. See also the in-app "Where this diverges from real hardware" panel,
-which covers the same divergences in shorter form, and [docs/ARCHITECTURE.md](ARCHITECTURE.md) for
-the underlying pipeline this UI sits on top of.
+simulator-only scaffolding. See [Hardware divergences](HARDWARE_DIVERGENCES.md) for where the
+preview deliberately differs from the panel, and [docs/ARCHITECTURE.md](ARCHITECTURE.md) for the
+underlying pipeline this UI sits on top of.
 
 ## Input model
 
@@ -156,11 +156,11 @@ calendar day per book, in its own `localStorage` key (see [Persistence](#persist
 - The log is pruned to the most recent 120 days per book on write, so it can't grow unbounded in
   `localStorage`.
 
-Like the rest of the menu system, this exists only in the simulator for now — see
-[What's simulator-only](#whats-simulator-only-nothing-to-port-to-firmware). Porting it to firmware
-would mean a tiny fixed-size per-book record (today's date, running page/second totals for a
-handful of recent days) rather than firmware growing an unbounded log — LittleFS write cycles are
-a real constraint the browser's `localStorage` doesn't share.
+This is now ported: `firmware/src/library.cpp` keeps the same per-day `{pages, seconds}` buckets,
+capped at 14 days rather than 120 and written debounced instead of on every page turn, because
+LittleFS write cycles are a real constraint the browser's `localStorage` doesn't share. The device
+has no RTC either, so days are keyed off NTP time once WiFi connects and anything read before that
+lands in an explicit "unknown day" bucket rather than a guessed date.
 
 ## Wallpapers
 
@@ -310,39 +310,43 @@ simulator renders unconditionally rotated (250×122 landscape), matching a hardc
 `display.setRotation(1)` in `firmware/src/renderer.cpp`. There is no orientation toggle anywhere
 in the UI; this is a deliberate simplification, not an oversight or an unfinished feature.
 
-## In-app disclosure panel
+## The sidebar, and what isn't in it
 
-The sidebar's "About this project" panel carries the same AI-assistance disclosure and the same
-Sources & inspirations list as the root README, so anyone who lands on the deployed simulator
-without going through GitHub still sees both. Keep the two in sync when either changes.
+The sidebar is deliberately limited to things that act on the simulated device: loading a
+book, the memory readout, the library, wallpapers, and the layout parameters. Everything
+below that — the AI-assistance disclosure, sources and inspirations, the list of hardware
+divergences — used to be panels on this page and now lives on the [docs page](#docs-page)
+instead. The reading UI is supposed to preview what the device feels like; a wall of project
+prose underneath it was working against that, and none of it has an on-device counterpart.
 
-Below it, a "Read the docs →" button opens `simulator/docs.html` — a separate page, not another
-panel on this one. See [Docs page](#docs-page) below for what that page does and why it's split
-out.
+What stays on `index.html` is a one-line disclosure with links into the docs, so the
+"vibe coded" statement is never more than a sentence away from the thing it's about — that
+matters most in the published Artifact, which is a single file with no docs page next to it.
+Those links (`[data-site-link]`) are relative by default and get repointed at the deployed
+site by `resolveSiteLinks()` if `docs.html` turns out not to be reachable, which is exactly
+the Artifact case.
 
 ## Docs page
 
-`simulator/docs.html` is a standalone page — reached from `index.html`'s "About this project"
-panel, never embedded inside it — that renders the full text of `docs/ARCHITECTURE.md`,
-`docs/FORMAT.md`, `docs/FLASH_BUDGET.md`, and this file, in-site, with a left-hand index to switch
-between them (`#architecture`, `#format`, `#flash-budget`, `#simulator` — hash-routed, so a link to
-a specific doc is shareable). It exists only because this simulator does, and is deliberately kept
-out of the main page:
+`simulator/docs.html` is a standalone page — reached from `index.html`'s footer links, never
+embedded inside it — that renders the full text of every doc in `docs/`, in-site, with a
+grouped left-hand index to switch between them. Hash-routed (`#about`, `#divergences`,
+`#firmware-review`, `#architecture`, `#format`, `#flash-budget`, `#simulator`), so a link to a
+specific doc is shareable. It exists only because this simulator does, and is deliberately
+kept out of the main page:
 
 - **It's a design/dev-reference tool, not part of the on-device experience.** The reading UI
   (`index.html`'s canvas + sidebar) is meant to preview what the actual reader will feel like;
-  a documentation browser doesn't belong inside that illusion, so it's not a panel bolted onto the
-  same page.
+  a documentation browser doesn't belong inside that illusion.
 - **The real device doesn't get any of this.** `firmware/data/index.html` — the small loader page
   the ESP32's own `web_server.cpp` actually serves for uploading books — is a separate, much
   simpler file with nothing docs-related anywhere near it. Keeping the docs browser as its own
-  file in `simulator/` (rather than a section of `index.html`) means there's no risk of "does this
-  belong on the device's page" ever being a question worth asking.
+  file in `simulator/` means "does this belong on the device's page" never has to be asked.
 
 Content is fetched at page load (`fetch('docs/' + file)`) and rendered by a small hand-rolled
 markdown-to-HTML converter (`renderMarkdown` in `docs.html`) — headings (with slug `id`s for
 anchor links), paragraphs and list items with lazy line-wrap continuation, fenced code blocks, and
-GFM-style pipe tables; checked against exactly what these four docs actually use, not a general
+GFM-style pipe tables; checked against exactly what these docs actually use, not a general
 CommonMark implementation. Same reasoning as the hand-rolled ZIP reader in `index.html`: no bundled
 library, so it behaves identically wherever it's served from. If a doc fails to load (`docs/` not
 reachable next to `docs.html` — a bare `file://` open, or a server started somewhere that doesn't
@@ -363,7 +367,15 @@ reasoning:
 - Ghosting/flash-sequence simulation (a real panel ghosts physically; firmware just calls
   GxEPD2's partial/full refresh).
 - Fullscreen API, rotate prompt, haptics — stand-ins for not holding the physical device.
-- `localStorage` for resume/bookmarks — a storage-backend choice (LittleFS/NVS) needs picking for
-  firmware, not this exact behavior needing porting.
+- `localStorage` for resume/bookmarks/stats — the *behavior* is ported; the storage backend isn't
+  the same thing. Firmware keeps the equivalent record in `/state.json` on LittleFS
+  (`firmware/src/library.cpp`).
 - Local-EPUB auto-load via directory listing — a dev-server convenience; firmware just lists
   whatever's already in `/books`.
+- The layout-parameter sliders — a design-time tool for choosing the constants to compile into
+  `firmware/src/config.h`, not a setting the device can offer (see
+  [Hardware divergences](HARDWARE_DIVERGENCES.md)).
+
+Everything else in this document *is* now on the device: the screen stack, the two-layer menu, all
+six gestures, library/chapters/bookmarks/stats, the five games, idle sleep with a wallpaper, and
+resume position. [Firmware review](FIRMWARE_REVIEW.md) has the feature-by-feature table.
