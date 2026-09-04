@@ -27,10 +27,13 @@ static const int PIN_EPD_BUSY = 9;   // IO9_BUSY
 // will respond on the SPI lines above.
 static const int PIN_EPD_POWER_CTL = 7;
 
-// Driver chip is SSD1680Z or JD79661 depending on panel batch (Elecrow dual-sources); the
-// schematic's U3 pinout (RES/BUSY/D-C/CS/SCL/SDA + VSH/VSL/VGH/VGL/VCOM analog rails) matches
-// the SSD1680 family either way, so GxEPD2's SSD1680 class (renderer.cpp) should cover both —
-// unconfirmed until first boot.
+// Driver chip: confirmed JD79661 on real hardware (2026-09-04) — GxEPD2's generic SSD1680
+// class (GxEPD2_213_BN) hit a busy-wait timeout and never actually refreshed the panel.
+// renderer.cpp uses GxEPD2_213c_GDEY0213F51 instead, GxEPD2's JD79661-specific driver.
+
+// Power/status LED — schematic "IO19_LED", other terminal to ground, so this pin sources
+// current through it: drive HIGH to light it, LOW to turn it off.
+static const int PIN_STATUS_LED = 19;
 
 // Panel geometry. Native resolution is 122x250 portrait, but that's only ~19
 // characters/line — tedious to read. Rendered landscape instead (setRotation(1) in

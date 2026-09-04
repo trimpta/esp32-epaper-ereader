@@ -1,6 +1,10 @@
 # Test books dropped in for local testing — not part of the project
 *.epub
 
+# Local session notes / hardware-debugging drops — not part of the project
+context.md
+trimpta_drops/
+
 # PlatformIO
 firmware/.pio/
 firmware/.vscode/

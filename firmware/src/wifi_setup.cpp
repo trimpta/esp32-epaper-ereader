@@ -17,6 +17,16 @@ bool wifi_setup::begin(bool forcePortal, std::function<void(const String&)> onIp
   // AP mode indefinitely — it just falls through and retries the saved network.
   wm.setConfigPortalTimeout(180);
 
+  // Without an explicit connect timeout, autoConnect()'s attempt at a saved network
+  // that's out of range or gone (confirmed on real hardware: a stale credential left
+  // over from before this board reached its owner, since flashing app/bootloader/
+  // partitions never touches the separate NVS partition WiFiManager's saved
+  // credentials live in) hung long enough to trip the watchdog and reboot the device,
+  // in a loop, before it ever reached the AP-mode fallback below. 15s is enough for a
+  // real network to associate; past that, fall through to the portal instead of
+  // hanging.
+  wm.setConnectTimeout(15);
+
   bool ok = forcePortal ? wm.startConfigPortal(WIFI_AP_NAME) : wm.autoConnect(WIFI_AP_NAME);
 
   if (ok) {

@@ -18,8 +18,20 @@ Renderer renderer;
 
 void setup() {
   Serial.begin(115200);
+
+  // Nothing drives this pin unless firmware does — the board doesn't light it on its
+  // own just from having power. On solid for as long as the device is running.
+  pinMode(PIN_STATUS_LED, OUTPUT);
+  digitalWrite(PIN_STATUS_LED, HIGH);
+
   input::begin();
-  LittleFS.begin(true);
+  // LittleFS::begin()'s partitionLabel defaults to "spiffs" — a holdover from when the
+  // library shared code with SPIFFS. firmware/partitions.csv labels the data partition
+  // "littlefs" (see its own header comment), so the default silently mounted nothing:
+  // LittleFS.begin() would find no matching partition and every file operation failed,
+  // undetectable by a compile and invisible in the simulator, which never touches real
+  // flash — this only ever showed up running on actual hardware.
+  LittleFS.begin(true, "/littlefs", 10, "littlefs");
   settings::begin();
   renderer.begin();
   randomSeed(esp_random());  // games otherwise deal the same "random" board every boot
