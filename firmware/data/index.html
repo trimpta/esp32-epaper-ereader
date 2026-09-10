@@ -6,50 +6,93 @@
 <title>E-Reader</title>
 <style>
   body { font-family: system-ui, sans-serif; max-width: 480px; margin: 1.5rem auto; padding: 0 1rem; }
-  #status { white-space: pre-line; font-family: monospace; background: #f2f2f2; padding: 0.75rem; border-radius: 4px; min-height: 2em; }
+  nav { display: flex; gap: 1rem; margin-bottom: 1.25rem; }
+  #status, #wpStatus, #noteStatus { white-space: pre-line; font-family: monospace; background: #f2f2f2; padding: 0.75rem; border-radius: 4px; min-height: 2em; }
   button { padding: 0.6rem 1.2rem; font-size: 1rem; margin-top: 0.5rem; }
   ul { padding-left: 1.2rem; }
+  canvas { image-rendering: pixelated; width: 100%; max-width: 250px; border: 1px solid #ccc; background: #fff; }
+  label.row { display: block; margin: 0.4rem 0; }
 </style>
 </head>
 <body>
+<nav>
+  <a href="#books">Books</a>
+  <a href="#wallpapers">Wallpapers</a>
+  <a href="#wifi">Wi-Fi</a>
+</nav>
+
+<section id="books">
 <h1>Upload a book</h1>
 <p><input type="file" id="fileInput" accept=".epub" /></p>
 <button id="uploadBtn" disabled>Convert &amp; upload</button>
 <div id="status">Pick an EPUB file.</div>
-
+<h2>Quick note</h2>
+<p><input id="noteTitle" type="text" placeholder="Title" style="width:100%;box-sizing:border-box" /></p>
+<p><input id="noteAuthor" type="text" placeholder="Author" style="width:100%;box-sizing:border-box" /></p>
+<p><textarea id="noteBody" placeholder="Text" rows="8" maxlength="12000" style="width:100%;box-sizing:border-box"></textarea></p>
+<button id="noteBtn">Add to library</button>
+<div id="noteStatus"></div>
 <h2>Library</h2>
 <ul id="bookList"></ul>
+</section>
+
+<section id="wallpapers">
+<h1>Wallpapers</h1>
+<p>Dithered in the browser to the panel’s 250×122 1-bit buffer (~4 KB). Shown on sleep (hold EXIT).</p>
+<p><input type="file" id="wpInput" accept="image/*" /></p>
+<p>
+  <label class="row">Brightness <input type="range" id="wpBright" min="-80" max="80" value="0" /></label>
+  <label class="row">Contrast <input type="range" id="wpContrast" min="-80" max="80" value="0" /></label>
+  <label class="row"><input type="checkbox" id="wpInvert" /> Invert</label>
+</p>
+<canvas id="wpPreview" width="250" height="122" hidden></canvas>
+<p><button id="wpUploadBtn" disabled>Upload wallpaper</button></p>
+<div id="wpStatus">Pick an image.</div>
+<h2>On device</h2>
+<ul id="wpList"></ul>
+</section>
+
+<section id="wifi">
+<h1>Wi-Fi</h1>
+<p id="wifiIntro">Enter your home network below to have the reader join it. Switching
+networks will drop this page's connection to the reader, so check the reader's own Wi-Fi
+screen afterward to confirm it joined.</p>
+<p><input id="wifiSsid" type="text" placeholder="Network name (SSID)" style="width:100%;box-sizing:border-box" /></p>
+<p><input id="wifiPass" type="password" placeholder="Password" style="width:100%;box-sizing:border-box" /></p>
+<button id="wifiJoinBtn">Join network</button>
+<div id="wifiStatus"></div>
+</section>
 
 <!--
-  Deliberately tiny: this page ships in device flash (8MB total, shared with firmware +
-  book storage — see README.md), so the actual conversion logic (JSZip + converter.js,
-  which together are a few hundred KB) is loaded from external URLs instead of being
-  vendored here. Point these at wherever you're hosting the files in ../../converter/
-  (GitHub Pages, your own server, a CDN — anywhere reachable from whatever device you're
-  uploading from). They're loaded fresh over the network every time this page opens.
+  Conversion runs in this browser tab. JSZip, converter.js, and font-metrics.json are
+  served from the same LittleFS tree as this page (~120 KB).
 -->
 <script>
-  const CONVERTER_BASE_URL = "https://example.com/e-reader-converter"; // TODO: point at your host
+  const WP_W = 250, WP_H = 122, WP_COL = 16, WP_BYTES = WP_W * WP_COL;
+  const BAYER = [[0,8,2,10],[12,4,14,6],[3,11,1,9],[15,7,13,5]];
 </script>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<script id="converterScript"></script>
-<script>
-  document.getElementById('converterScript').src = CONVERTER_BASE_URL + '/converter.js';
-</script>
+<script src="/jszip.min.js"></script>
+<script src="/converter.js"></script>
 <script>
   const fileInput = document.getElementById('fileInput');
   const uploadBtn = document.getElementById('uploadBtn');
   const statusEl = document.getElementById('status');
   const bookList = document.getElementById('bookList');
+  const wpInput = document.getElementById('wpInput');
+  const wpUploadBtn = document.getElementById('wpUploadBtn');
+  const wpStatus = document.getElementById('wpStatus');
+  const wpList = document.getElementById('wpList');
+  const wpPreview = document.getElementById('wpPreview');
+  let wpImg = null;
+  let wpBytes = null;
 
-  function log(msg) {
-    statusEl.textContent += (statusEl.textContent ? '\n' : '') + msg;
+  function log(el, msg) {
+    el.textContent += (el.textContent ? '\n' : '') + msg;
   }
 
   async function refreshLibrary() {
     try {
-      const resp = await fetch('/books');
-      const books = await resp.json();
+      const books = await (await fetch('/books')).json();
       bookList.innerHTML = '';
       for (const b of books) {
         const li = document.createElement('li');
@@ -57,20 +100,161 @@
         const del = document.createElement('button');
         del.textContent = 'delete';
         del.onclick = async () => {
-          const form = new URLSearchParams({ name: b.name });
-          await fetch('/books/delete', { method: 'POST', body: form });
+          await fetch('/books/delete', { method: 'POST', body: new URLSearchParams({ name: b.name }) });
           refreshLibrary();
         };
         li.appendChild(del);
         bookList.appendChild(li);
       }
     } catch (e) {
-      log(`Could not load library: ${e.message}`);
+      log(statusEl, `Could not load library: ${e.message}`);
     }
   }
 
+  async function refreshWallpapers() {
+    try {
+      const items = await (await fetch('/wallpapers')).json();
+      wpList.innerHTML = '';
+      if (!items.length) {
+        wpList.innerHTML = '<li>(none)</li>';
+        return;
+      }
+      for (const w of items) {
+        const li = document.createElement('li');
+        li.textContent = `${w.name} (${w.size} B) `;
+        const del = document.createElement('button');
+        del.textContent = 'delete';
+        del.onclick = async () => {
+          await fetch('/wallpapers/delete', { method: 'POST', body: new URLSearchParams({ name: w.name }) });
+          refreshWallpapers();
+        };
+        li.appendChild(del);
+        wpList.appendChild(li);
+      }
+    } catch (e) {
+      log(wpStatus, `Could not load wallpapers: ${e.message}`);
+    }
+  }
+
+  function tone(v, brightness, contrast) {
+    v = v + brightness * 2.55;
+    const c = (259 * (contrast + 100)) / (100 * (259 - contrast));
+    v = c * (v - 128) + 128;
+    return Math.max(0, Math.min(255, v));
+  }
+
+  function ditherWallpaper() {
+    if (!wpImg) return;
+    const brightness = Number(document.getElementById('wpBright').value);
+    const contrast = Number(document.getElementById('wpContrast').value);
+    const invert = document.getElementById('wpInvert').checked;
+    const c = document.createElement('canvas');
+    c.width = WP_W;
+    c.height = WP_H;
+    const ctx = c.getContext('2d');
+    const s = Math.max(WP_W / wpImg.width, WP_H / wpImg.height);
+    const dw = wpImg.width * s, dh = wpImg.height * s;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, WP_W, WP_H);
+    ctx.drawImage(wpImg, (WP_W - dw) / 2, (WP_H - dh) / 2, dw, dh);
+    const data = ctx.getImageData(0, 0, WP_W, WP_H);
+    const px = data.data;
+    const out = new Uint8Array(WP_BYTES);
+    out.fill(0xFF);
+    for (let y = 0; y < WP_H; y++) {
+      for (let x = 0; x < WP_W; x++) {
+        const i = (y * WP_W + x) * 4;
+        let lum = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+        lum = tone(lum, brightness, contrast);
+        if (invert) lum = 255 - lum;
+        const t = ((BAYER[y & 3][x & 3] + 0.5) / 16) * 255;
+        const ink = lum < t;
+        const vis = ink ? 0 : 255;
+        px[i] = px[i + 1] = px[i + 2] = vis;
+        if (ink) out[(y >> 3) + x * WP_COL] &= ~(0x80 >> (y & 7));
+      }
+    }
+    ctx.putImageData(data, 0, 0);
+    const pctx = wpPreview.getContext('2d');
+    pctx.imageSmoothingEnabled = false;
+    pctx.drawImage(c, 0, 0);
+    wpPreview.hidden = false;
+    wpBytes = out;
+    wpUploadBtn.disabled = false;
+  }
+
+  wpInput.addEventListener('change', () => {
+    const file = wpInput.files[0];
+    wpBytes = null;
+    wpUploadBtn.disabled = true;
+    if (!file) return;
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      wpImg = img;
+      wpStatus.textContent = `${file.name} — adjust, then upload.`;
+      ditherWallpaper();
+    };
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      wpStatus.textContent = 'Could not load that image.';
+    };
+    img.src = url;
+  });
+  ['wpBright', 'wpContrast', 'wpInvert'].forEach((id) => {
+    document.getElementById(id).addEventListener('input', ditherWallpaper);
+    document.getElementById(id).addEventListener('change', ditherWallpaper);
+  });
+
+  wpUploadBtn.addEventListener('click', async () => {
+    if (!wpBytes) return;
+    wpUploadBtn.disabled = true;
+    wpStatus.textContent = 'Uploading…';
+    try {
+      const raw = (wpInput.files[0] && wpInput.files[0].name) || 'wallpaper.png';
+      const name = raw.replace(/\.[^.]+$/, '') + '.bin';
+      const resp = await fetch('/wallpapers/upload?name=' + encodeURIComponent(name), {
+        method: 'POST',
+        body: wpBytes,
+      });
+      if (!resp.ok) throw new Error('Device responded ' + resp.status);
+      wpStatus.textContent = 'Uploaded. Hold EXIT on the device to see it on sleep.';
+      refreshWallpapers();
+    } catch (err) {
+      wpStatus.textContent = 'ERROR: ' + err.message;
+    } finally {
+      wpUploadBtn.disabled = false;
+    }
+  });
+
   fileInput.addEventListener('change', () => {
     uploadBtn.disabled = !fileInput.files[0];
+  });
+
+  document.getElementById('noteBtn').addEventListener('click', async () => {
+    const title = document.getElementById('noteTitle').value;
+    const author = document.getElementById('noteAuthor').value;
+    const body = document.getElementById('noteBody').value;
+    const noteStatus = document.getElementById('noteStatus');
+    if (!title.trim() && !body.trim()) {
+      noteStatus.textContent = 'Need a title or some text.';
+      return;
+    }
+    noteStatus.textContent = 'Saving…';
+    try {
+      const resp = await fetch('/notes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ title, author, body }),
+      });
+      if (!resp.ok) throw new Error('Device responded ' + resp.status);
+      noteStatus.textContent = 'Added to the library.';
+      document.getElementById('noteBody').value = '';
+      refreshLibrary();
+    } catch (err) {
+      noteStatus.textContent = 'ERROR: ' + err.message;
+    }
   });
 
   uploadBtn.addEventListener('click', async () => {
@@ -80,34 +264,72 @@
     statusEl.textContent = '';
     try {
       if (!window.EpubConverter) {
-        throw new Error(
-          `converter.js didn't load from ${CONVERTER_BASE_URL} — check the URL and that the ` +
-          `device has a route to it (it's a normal internet fetch from whatever browser is ` +
-          `open, not from the ESP32 itself).`
-        );
+        throw new Error('converter.js did not load from the device. Reflash LittleFS (firmware/data).');
       }
       const arrayBuffer = await file.arrayBuffer();
-      const metrics = await fetch(CONVERTER_BASE_URL + '/font-metrics.json').then((r) => r.json());
-      const bytes = await window.EpubConverter.convertEpub(arrayBuffer, metrics, undefined, log);
-      log(`Converted: ${(bytes.length / 1024).toFixed(1)} KB. Uploading...`);
-
-      const name = file.name.replace(/\.epub$/i, '') + '.cebk';
-      const resp = await fetch(`/upload?name=${encodeURIComponent(name)}`, {
-        method: 'POST',
-        body: bytes,
+      const metrics = await fetch('/font-metrics.json').then((r) => {
+        if (!r.ok) throw new Error('font-metrics.json missing on device');
+        return r.json();
       });
+      const bytes = await window.EpubConverter.convertEpub(arrayBuffer, metrics, undefined, (m) => log(statusEl, m));
+      log(statusEl, `Converted: ${(bytes.length / 1024).toFixed(1)} KB. Uploading...`);
+      const name = file.name.replace(/\.epub$/i, '') + '.cebk';
+      const resp = await fetch(`/upload?name=${encodeURIComponent(name)}`, { method: 'POST', body: bytes });
       if (!resp.ok) throw new Error(`Device responded ${resp.status}`);
-      log('Done.');
+      log(statusEl, 'Done.');
       refreshLibrary();
     } catch (err) {
-      log(`ERROR: ${err.message}`);
+      log(statusEl, `ERROR: ${err.message}`);
       console.error(err);
     } finally {
       uploadBtn.disabled = false;
     }
   });
 
+  const wifiJoinBtn = document.getElementById('wifiJoinBtn');
+  const wifiStatus = document.getElementById('wifiStatus');
+  wifiJoinBtn.addEventListener('click', async () => {
+    const ssid = document.getElementById('wifiSsid').value.trim();
+    const password = document.getElementById('wifiPass').value;
+    if (!ssid) {
+      wifiStatus.textContent = 'Enter a network name.';
+      return;
+    }
+    wifiJoinBtn.disabled = true;
+    wifiStatus.textContent = 'Joining ' + ssid + '...';
+    try {
+      await fetch('/wifi/join', { method: 'POST', body: new URLSearchParams({ ssid, password }) });
+    } catch (err) {
+      // Expected once the reader actually switches networks mid-request — this page's
+      // own connection is what just got dropped, not a real failure.
+    }
+    // The reader is off our AP by now (or trying to be) — this page can't reach /wifi/status
+    // any more to confirm it. Say so plainly rather than spinning on a request that can't
+    // complete.
+    wifiStatus.textContent =
+      'Sent. This page is on the reader\'s own network, so it can\'t confirm the join — ' +
+      'check the reader\'s Wi-Fi screen.';
+  });
+
+  (async () => {
+    try {
+      const s = await (await fetch('/wifi/status')).json();
+      if (s.connected) {
+        document.getElementById('wifiIntro').textContent =
+          'Already on your home network at ' + s.ip + '. Joining a different one below will switch over.';
+      } else {
+        document.getElementById('wifiIntro').textContent =
+          "You're connected to the reader's own network right now. Enter your home network " +
+          'below to have the reader join it instead — this page will stop responding once it ' +
+          "switches, so check the reader's own Wi-Fi screen to confirm it joined.";
+      }
+    } catch (err) {
+      // /wifi/status not reachable for some reason — leave the generic intro text as-is.
+    }
+  })();
+
   refreshLibrary();
+  refreshWallpapers();
 </script>
 </body>
 </html>

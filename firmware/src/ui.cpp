@@ -4,6 +4,7 @@
 #include "config.h"
 #include "games.h"
 #include "library.h"
+#include "qr_screen.h"
 #include "renderer.h"
 #include "settings.h"
 #include "wifi_setup.h"
@@ -26,6 +27,7 @@ enum class Screen {
   ConfirmDelete,
   Settings,
   WiFi,
+  WifiQr,  // full-screen QR (AP-join or STA URL) pushed on top of WiFi
   Games,
   GameScreen,
 };
@@ -48,12 +50,18 @@ uint16_t chapterIdx = 0, pageIdx = 0;
 bool asleep = false;
 bool editingRefresh = false;  // rotary-hold scrub session on the refresh-cadence setting
 int editOriginal = 0;
+bool lastWifiConnected = false;
+bool lastApOpen = false;
 
 unsigned long lastInputMs = 0;
 unsigned long lastReadingTickMs = 0;
 unsigned long lastFlushMs = 0;
 const unsigned long READING_TICK_MS = 15000;  // stats granularity; also bounds flash writes
-const unsigned long FLUSH_IDLE_MS = 30000;
+// How long the state file may lag behind the screen. Pulling the battery is how this
+// device gets switched off, so this is the window in which a page turn can be lost — the
+// old 30s meant the last few pages of a session routinely were. Short enough to survive an
+// unplug, long enough that holding the wheel down is still one write, not one per page.
+const unsigned long FLUSH_DEBOUNCE_MS = 1000;
 
 std::vector<String> wallpaperFiles;
 uint8_t wallpaperBuf[WALLPAPER_BYTES];
@@ -67,12 +75,19 @@ void scanWallpapers() {
   File dir = LittleFS.open(WALLPAPER_DIR);
   if (!dir || !dir.isDirectory()) return;
   for (File f = dir.openNextFile(); f; f = dir.openNextFile()) {
+    if (f.isDirectory()) {
+      f.close();
+      continue;
+    }
     String name = f.name();
     int slash = name.lastIndexOf('/');
     if (slash >= 0) name = name.substring(slash + 1);
-    bool sized = f.size() == WALLPAPER_BYTES;  // raw 1-bit panel-native bitmap, nothing else
     f.close();
-    if (sized) wallpaperFiles.push_back(name);
+    // Dirent size is 0 on some ESP32 LittleFS builds — open the file to measure it.
+    File body = LittleFS.open(String(WALLPAPER_DIR) + "/" + name, "r");
+    size_t sz = body ? body.size() : 0;
+    if (body) body.close();
+    if (sz == WALLPAPER_BYTES) wallpaperFiles.push_back(name);
   }
   dir.close();
   std::sort(wallpaperFiles.begin(), wallpaperFiles.end());
@@ -131,6 +146,7 @@ bool openBook(int idx, uint16_t chapter, uint16_t page) {
     return false;
   }
   activeBook = idx;
+  library::setActiveBook(idx);
   chapterIdx = (uint16_t)std::min<size_t>(chapter, currentBook.chapterCount() ? currentBook.chapterCount() - 1 : 0);
   uint16_t maxPage = currentBook.chapterCount() ? currentBook.chapter(chapterIdx).pageCount : 0;
   pageIdx = maxPage ? (uint16_t)std::min<uint16_t>(page, maxPage - 1) : 0;
@@ -142,6 +158,7 @@ void goToReading() {
   stack.clear();
   stack.push_back(Screen::Reading);
   focus = 0;
+  if (rend) rend->forceFullRefreshNext();
 }
 
 void nextPage() {
@@ -153,11 +170,40 @@ void nextPage() {
     chapterIdx++;
     pageIdx = 0;
   } else {
-    return;  // already at the last page of the last chapter
+    return;
   }
   library::setPosition(activeBook, chapterIdx, pageIdx);
-  library::logPageTurn(activeBook);  // forward turns only — re-reading isn't progress
+  library::logPageTurn(activeBook);
   renderReading();
+}
+
+bool skipReading(int dir) {
+  if (!currentBook.isOpen() || activeBook < 0) return false;
+  if (dir > 0) {
+    const ChapterIndex& ch = currentBook.chapter(chapterIdx);
+    if (pageIdx + 1 < ch.pageCount) {
+      pageIdx++;
+    } else if (chapterIdx + 1 < currentBook.chapterCount()) {
+      chapterIdx++;
+      pageIdx = 0;
+    } else {
+      return false;
+    }
+    library::setPosition(activeBook, chapterIdx, pageIdx);
+    library::logPageTurn(activeBook);
+    return true;
+  }
+  if (pageIdx > 0) {
+    pageIdx--;
+  } else if (chapterIdx > 0) {
+    chapterIdx--;
+    uint16_t pc = currentBook.chapter(chapterIdx).pageCount;
+    pageIdx = pc ? (uint16_t)(pc - 1) : 0;
+  } else {
+    return false;
+  }
+  library::setPosition(activeBook, chapterIdx, pageIdx);
+  return true;
 }
 
 void prevPage() {
@@ -190,12 +236,14 @@ std::vector<Row> buildRows();
 void pushScreen(Screen s) {
   stack.push_back(s);
   focus = 0;
+  if (rend) rend->forceFullRefreshNext();
 }
 
 void popScreen() {
   if (stack.size() > 1) {
     stack.pop_back();
     focus = 0;
+    if (rend) rend->forceFullRefreshNext();
   } else if (activeBook >= 0) {
     goToReading();
   }
@@ -221,7 +269,11 @@ enum {
   ACT_JUMP_BOOKMARK,
   ACT_CYCLE_REFRESH,
   ACT_CYCLE_WALLPAPER,
-  ACT_WIFI_PORTAL,
+  ACT_WIFI_TRANSFER,  // start the AP and jump straight to its QR — the normal transfer path
+  ACT_WIFI_CLOSE_AP,
+  ACT_WIFI_SHOW_QR,
+  ACT_WIFI_ON,
+  ACT_WIFI_OFF,
   ACT_START_GAME,
   ACT_DELETE_BOOK,
   ACT_CONFIRM_DELETE,
@@ -238,6 +290,13 @@ std::vector<Row> homeRows() {
     }
   }
   rows.push_back({ListRow("Library"), ACT_OPEN_LIBRARY});
+  // One press, no prior Wi-Fi state needed: turns the AP on and jumps straight to its QR,
+  // skipping the old two-step "open Wi-Fi screen, then turn it on" flow. Only relevant
+  // when the AP isn't already the state you're in — otherwise the Wi-Fi menu (below) is
+  // where you'd want to be to see the code again or turn it off.
+  if (!wifi_setup::apOpen()) {
+    rows.push_back({ListRow("Connect / transfer books"), ACT_WIFI_TRANSFER});
+  }
   rows.push_back({ListRow("Reading stats"), ACT_OPEN_ALL_STATS});
   rows.push_back({ListRow("Games"), ACT_OPEN_GAMES});
   rows.push_back({ListRow("Settings"), ACT_OPEN_SETTINGS});
@@ -413,8 +472,10 @@ std::vector<Row> allStatsRows() {
 
 std::vector<Row> settingsRows() {
   std::vector<Row> rows;
-  String refresh = "Full refresh every: " + String(settings::refreshEveryNPages()) + " pages";
-  if (editingRefresh) refresh = "> " + refresh + " <";
+  String n = String(settings::refreshEveryNPages());
+  if (n.length() < 2) n = " " + n;
+  String refresh = "Full refresh every: " + n + " pages";
+  if (editingRefresh) refresh += " <";
   rows.push_back({ListRow(refresh), ACT_CYCLE_REFRESH});
   String wp = "Wallpaper: ";
   int wpIdx = settings::wallpaperIndex();
@@ -433,15 +494,31 @@ std::vector<Row> settingsRows() {
   return rows;
 }
 
+// The leading row is the current status, and status isn't something you can act on — it's
+// marked unselectable so the cursor opens on the on/off toggle instead of making you
+// scroll past a line that does nothing every single time.
 std::vector<Row> wifiRows() {
   std::vector<Row> rows;
-  if (wifi_setup::isConnected()) {
-    rows.push_back({ListRow("Connected"), ACT_NONE});
-    rows.push_back({ListRow("IP: " + wifi_setup::ipAddress()), ACT_NONE});
-  } else {
-    rows.push_back({ListRow("Not connected"), ACT_NONE});
+  // The AP is the normal book-transfer path now, not a one-time setup fallback — reflected
+  // in "Show QR"/"Turn off" reading like ordinary Wi-Fi controls rather than an escape hatch.
+  if (wifi_setup::apOpen()) {
+    rows.push_back({ListRow(String("Transfer mode: ") + WIFI_AP_NAME, false), ACT_NONE});
+    rows.push_back({ListRow("Show QR code"), ACT_WIFI_SHOW_QR});
+    rows.push_back({ListRow("Turn off"), ACT_WIFI_CLOSE_AP});
+    return rows;
   }
-  rows.push_back({ListRow("Re-enter setup (AP mode)"), ACT_WIFI_PORTAL});
+  if (wifi_setup::isConnected()) {
+    rows.push_back({ListRow("On — " + wifi_setup::ipAddress(), false), ACT_NONE});
+    rows.push_back({ListRow("Show QR code"), ACT_WIFI_SHOW_QR});
+    rows.push_back({ListRow("Turn Wi-Fi off"), ACT_WIFI_OFF});
+  } else if (wifi_setup::radioOn()) {
+    rows.push_back({ListRow("Connecting...", false), ACT_NONE});
+    rows.push_back({ListRow("Turn Wi-Fi off"), ACT_WIFI_OFF});
+  } else {
+    rows.push_back({ListRow("Off (saves battery)", false), ACT_NONE});
+    rows.push_back({ListRow("Turn Wi-Fi on"), ACT_WIFI_ON});
+  }
+  rows.push_back({ListRow("Connect / transfer books"), ACT_WIFI_TRANSFER});
   return rows;
 }
 
@@ -480,6 +557,30 @@ int selectableCount(const std::vector<Row>& rows) {
   return n;
 }
 
+void applyScroll(int delta) {
+  if (delta == 0) return;
+  Screen screen = current();
+  if (screen == Screen::Reading) {
+    int step = delta > 0 ? 1 : -1;
+    int n = delta > 0 ? delta : -delta;
+    bool moved = false;
+    for (int i = 0; i < n; i++) {
+      if (!skipReading(step)) break;
+      moved = true;
+    }
+    if (moved) renderReading();
+  } else if (screen == Screen::GameScreen) {
+    games::scroll(delta);
+    renderCurrent();
+  } else {
+    int count = selectableCount(buildRows());
+    if (count > 0) {
+      focus = std::max(0, std::min(focus + delta, count - 1));
+      renderCurrent();
+    }
+  }
+}
+
 void renderCurrent() {
   if (asleep) return;
   switch (current()) {
@@ -488,6 +589,20 @@ void renderCurrent() {
       return;
     case Screen::GameScreen:
       rend->renderCustom([](Adafruit_GFX& g, U8G2_FOR_ADAFRUIT_GFX& u8f) { games::draw(g, u8f); });
+      return;
+    case Screen::WifiQr:
+      // Reads state at render time rather than at the point the screen was pushed, so
+      // a QR shown right as the AP finished coming up is never stale.
+      if (wifi_setup::apOpen()) {
+        qr_screen::show(*rend, wifi_setup::apQrPayload(), wifi_setup::apCaption());
+      } else if (wifi_setup::isConnected()) {
+        qr_screen::show(*rend, wifi_setup::staQrPayload(), "Scan to open\nthe uploader");
+      } else {
+        // Reachable only if Wi-Fi dropped between pushing this screen and drawing it —
+        // the AP payload is still a valid, working code, just not one anything is
+        // currently advertising; EXIT backs out to the Wi-Fi menu to sort it out.
+        qr_screen::show(*rend, wifi_setup::apQrPayload(), "Wi-Fi is off.\nPress EXIT.");
+      }
       return;
     default: {
       std::vector<Row> rows = buildRows();
@@ -592,9 +707,21 @@ void activateFocused() {
       settings::setWallpaperIndex(next);
       break;
     }
-    case ACT_WIFI_PORTAL:
-      ui::showMessage("Join " + String(WIFI_AP_NAME));
-      wifi_setup::startPortal();
+    case ACT_WIFI_ON:
+      wifi_setup::enable();
+      break;
+    case ACT_WIFI_OFF:
+      wifi_setup::disable();
+      break;
+    case ACT_WIFI_TRANSFER:
+      wifi_setup::startAP();
+      pushScreen(Screen::WifiQr);
+      break;
+    case ACT_WIFI_SHOW_QR:
+      pushScreen(Screen::WifiQr);
+      break;
+    case ACT_WIFI_CLOSE_AP:
+      wifi_setup::stopAP();
       break;
     case ACT_START_GAME:
       games::start((Game)row->param);
@@ -612,15 +739,33 @@ void goToSleep() {
   if (asleep) return;
   asleep = true;
   library::flush();
-  String title = activeBook >= 0 ? bookLabel(library::book(activeBook)) : String("ROTARY READER");
-  rend->renderSleep(title, loadSelectedWallpaper());
+  wifi_setup::disable();
+  String title = "ROTARY READER";
+  String extra;
+  if (activeBook >= 0) {
+    BookMeta& b = library::book(activeBook);
+    title = bookLabel(b);
+    if (b.totalPages) {
+      int pct = (int)((b.absolutePage() * 100L) / b.totalPages);
+      extra = String(pct) + "%";
+    }
+  }
+  rend->renderSleep(title, extra, loadSelectedWallpaper());
   rend->powerDown();
+  // EXIT-hold is still down here; wait for release or light-sleep would wake immediately.
+  input::blockUntilWake();
+  rend->wakeDisplay();
+  asleep = false;
+  lastInputMs = millis();
+  rend->forceFullRefreshNext();
+  renderCurrent();
 }
 
 void wake() {
   if (!asleep) return;
   asleep = false;
-  rend->forceFullRefreshNext();  // clear whatever the sleep screen left behind
+  rend->wakeDisplay();
+  rend->forceFullRefreshNext();
   renderCurrent();
 }
 
@@ -629,15 +774,26 @@ void wake() {
 void ui::begin(Renderer* renderer) {
   rend = renderer;
   scanWallpapers();
-  if (settings::wallpaperIndex() >= (int)wallpaperFiles.size()) settings::setWallpaperIndex(-1);
+  // Empty scan used to force index -1 into NVS, so a later successful scan still showed
+  // "(none)" until the user cycled Settings. If we have files, select the first unless
+  // the saved index already points at one of them.
+  if (!wallpaperFiles.empty()) {
+    int idx = settings::wallpaperIndex();
+    if (idx < 0 || idx >= (int)wallpaperFiles.size()) settings::setWallpaperIndex(0);
+  }
 
-  // Land where the reader left off: the last book with saved progress, else the library.
-  int resume = -1;
-  for (size_t i = 0; i < library::count(); i++) {
-    BookMeta& b = library::book(i);
-    if (b.lastChapterIdx > 0 || b.lastPageIdx > 0) {
-      resume = (int)i;
-      break;
+  // Land where the reader left off. The saved active book is the real answer; the scan
+  // below is only a fallback for state written before it was recorded. It used to be the
+  // *whole* answer, which is why booting with two started books opened whichever one won
+  // the title sort rather than the one actually being read.
+  int resume = library::activeBookIndex();
+  if (resume < 0) {
+    for (size_t i = 0; i < library::count(); i++) {
+      BookMeta& b = library::book(i);
+      if (b.lastChapterIdx > 0 || b.lastPageIdx > 0) {
+        resume = (int)i;
+        break;
+      }
     }
   }
   if (resume < 0 && library::count() > 0) resume = 0;
@@ -666,8 +822,42 @@ void ui::onLibraryChanged() {
   if (!asleep && current() == Screen::Library) renderCurrent();
 }
 
+void ui::onWallpapersChanged() {
+  scanWallpapers();
+  if (!wallpaperFiles.empty()) {
+    int idx = settings::wallpaperIndex();
+    if (idx < 0 || idx >= (int)wallpaperFiles.size()) settings::setWallpaperIndex(0);
+  } else {
+    settings::setWallpaperIndex(-1);
+  }
+  if (!asleep && current() == Screen::Settings) renderCurrent();
+}
+
+void ui::handleScroll(int delta) {
+  if (delta == 0) return;
+  lastInputMs = millis();
+  if (asleep) {
+    wake();
+    return;
+  }
+  if (editingRefresh) {
+    settings::setRefreshEveryNPages(settings::refreshEveryNPages() + delta);
+    renderCurrent();
+    return;
+  }
+  applyScroll(delta);
+}
+
 void ui::handle(InputEvent e) {
   if (e == InputEvent::None) return;
+  if (e == InputEvent::ScrollNext) {
+    handleScroll(1);
+    return;
+  }
+  if (e == InputEvent::ScrollPrev) {
+    handleScroll(-1);
+    return;
+  }
   lastInputMs = millis();
   // A real e-reader doesn't act on the press that woke it, and neither does the simulator.
   if (asleep) {
@@ -702,23 +892,6 @@ void ui::handle(InputEvent e) {
 
   Screen screen = current();
   switch (e) {
-    case InputEvent::ScrollNext:
-    case InputEvent::ScrollPrev: {
-      int delta = (e == InputEvent::ScrollNext) ? 1 : -1;
-      if (screen == Screen::Reading) {
-        delta > 0 ? nextPage() : prevPage();
-      } else if (screen == Screen::GameScreen) {
-        games::scroll(delta);
-        renderCurrent();
-      } else {
-        int count = selectableCount(buildRows());
-        if (count > 0) {
-          focus = std::max(0, std::min(focus + delta, count - 1));
-          renderCurrent();
-        }
-      }
-      break;
-    }
     case InputEvent::MenuShort:
       if (screen == Screen::Reading) {
         browseBook = activeBook;
@@ -744,8 +917,6 @@ void ui::handle(InputEvent e) {
       }
       break;
     case InputEvent::ConfLong:
-      // Only the refresh cadence is scrub-editable; every other row is a name to cycle or
-      // an inert readout, exactly as in the simulator (the Wallpaper row has no `.el`).
       if (screen == Screen::Settings) {
         const std::vector<Row> rows = settingsRows();
         const Row* row = focusedRow(rows);
@@ -753,7 +924,11 @@ void ui::handle(InputEvent e) {
           editingRefresh = true;
           editOriginal = settings::refreshEveryNPages();
           renderCurrent();
+          break;
         }
+      }
+      if (screen != Screen::GameScreen && screen != Screen::Reading) {
+        activateFocused();
       }
       break;
     case InputEvent::MenuLong:
@@ -761,6 +936,16 @@ void ui::handle(InputEvent e) {
       renderCurrent();
       break;
     case InputEvent::ExitShort:
+      // The AP started from the Home/Wi-Fi menu is just another screen on the stack —
+      // EXIT backs out of it normally (WifiQr -> WiFi list -> ... ), same as everywhere
+      // else, and "Turn off" is the deliberate way to actually close it from there. This
+      // universal close is only for the MENU-held-at-boot AP (main.cpp), which bypasses
+      // the screen stack entirely, so there's nothing here for a normal pop to land on.
+      if (wifi_setup::apOpen() && screen != Screen::WifiQr && screen != Screen::WiFi) {
+        wifi_setup::stopAP();
+        renderCurrent();
+        break;
+      }
       if (screen == Screen::Reading) {
         pushScreen(Screen::Home);
       } else {
@@ -769,6 +954,11 @@ void ui::handle(InputEvent e) {
       renderCurrent();
       break;
     case InputEvent::ExitLong:
+      if (wifi_setup::apOpen() && screen != Screen::WifiQr && screen != Screen::WiFi) {
+        wifi_setup::stopAP();
+        renderCurrent();
+        break;
+      }
       goToSleep();
       break;
     default:
@@ -790,16 +980,50 @@ void ui::tick() {
     lastReadingTickMs = now;
   }
 
-  if (!asleep) {
-    unsigned long idleLimit =
-        (current() == Screen::Reading) ? IDLE_SLEEP_READING_MS : IDLE_SLEEP_MENU_MS;
-    if (now - lastInputMs > idleLimit && !input::anyButtonDown()) goToSleep();
+  if (!asleep && current() == Screen::WiFi) {
+    bool conn = wifi_setup::isConnected();
+    bool ap = wifi_setup::apOpen();
+    if (conn != lastWifiConnected || ap != lastApOpen) {
+      lastWifiConnected = conn;
+      lastApOpen = ap;
+      renderCurrent();
+    }
+  } else {
+    lastWifiConnected = wifi_setup::isConnected();
+    lastApOpen = wifi_setup::apOpen();
   }
 
-  // Debounced persistence: page turns mark state dirty, this writes it out at most every
-  // 30s of quiet, so a reading session isn't one flash write per page turn.
-  if (now - lastFlushMs > FLUSH_IDLE_MS) {
+  // Debounced persistence: page turns mark state dirty, this writes it out once the keys
+  // have been quiet for a moment. Runs before the sleep block below so whatever we doze
+  // through is already on flash.
+  if (library::isDirty() && now - lastInputMs > FLUSH_DEBOUNCE_MS &&
+      now - lastFlushMs > FLUSH_DEBOUNCE_MS) {
     lastFlushMs = now;
     library::flush();
   }
+
+  // Never doze or show the sleep screen while the AP is up (a transfer may be in flight)
+  // or a physical key is mid-press.
+  if (asleep || wifi_setup::apOpen() || input::anyButtonDown()) return;
+
+  unsigned long idle = now - lastInputMs;
+
+  // Stage 2 first: long enough with no key at all and the sleep screen goes up.
+  if (idle > IDLE_SLEEP_SCREEN_MS) {
+    goToSleep();
+    return;
+  }
+
+  // Stage 1: doze between keystrokes. Skipped while the radio is up, because light sleep
+  // stalls the web server mid-upload — a device you're uploading to is a device someone is
+  // actively using, so there's nothing to save there anyway.
+  if (wifi_setup::radioOn()) return;
+  unsigned long quiet =
+      (current() == Screen::Reading) ? IDLE_LIGHT_SLEEP_READING_MS : IDLE_LIGHT_SLEEP_MENU_MS;
+  if (idle < quiet) return;
+
+  // Wake no later than the sleep-screen deadline, so it still fires on time from a doze —
+  // this is the "timer that keeps running while asleep" that makes stage 2 reachable
+  // without polling for ten minutes.
+  input::dozeUntilInput(IDLE_SLEEP_SCREEN_MS - idle);
 }

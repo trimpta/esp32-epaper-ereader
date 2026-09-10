@@ -13,10 +13,8 @@
 </head>
 <body>
 <h1>EPUB → .cebk converter</h1>
-<p>Standalone dev/test page — this is <strong>not</strong> the page the device serves (see
-<code>firmware/data/index.html</code> for that; it loads this same conversion logic from an
-external URL instead of shipping it in device flash). Useful for testing the converter and
-inspecting output size without hardware.</p>
+<p>Standalone dev/test page. The device serves the same <code>converter.js</code> from LittleFS
+(<code>firmware/data/</code>). Useful for testing conversion and output size without hardware.</p>
 
 <p><label>EPUB file: <input type="file" id="fileInput" accept=".epub" /></label></p>
 <button id="convertBtn" disabled>Convert</button>

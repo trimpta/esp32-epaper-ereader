@@ -1,29 +1,26 @@
 #include "renderer.h"
 #include "config.h"
-#include "settings.h"
+#include "epd_gfx.h"
 
-#include <GxEPD2_BW.h>
-#include <SPI.h>
 #include <algorithm>
 
-// TODO(verify): GxEPD2_213_BN is GxEPD2's generic 122x250 SSD1680 2.13" panel definition.
-// Confirm this matches the actual JD79661/SSD1680Z panel timing on this board — if GxEPD2
-// doesn't support JD79661 at all, this whole file needs to move to Elecrow's own EPD
-// library instead (see README.md "Status / what needs real-hardware verification").
-static GxEPD2_BW<GxEPD2_213_BN, GxEPD2_213_BN::HEIGHT> display(
-    GxEPD2_213_BN(PIN_EPD_CS, PIN_EPD_DC, PIN_EPD_RST, PIN_EPD_BUSY));
+static EpdGfx display;
 
 static U8G2_FOR_ADAFRUIT_GFX u8f;
 
 // Keep these font choices in sync with tools/dump_font_metrics/dump_font_metrics.ino —
 // the browser converter paginates against widths dumped from these exact fonts.
+// Every face here is one helv step up from where it started (08/10/12 -> 10/12/14): the
+// 08 body text was legible but genuinely small to read for any length of time. The cost is
+// two body lines per page, and that pagination is baked into the .cebk — books converted
+// before this change render at the wrong line count until re-converted.
 static const uint8_t* fontForFlags(uint8_t flags) {
-  if (flags & STYLE_H1) return u8g2_font_helvB12_tf;
-  if (flags & STYLE_H2) return u8g2_font_helvB10_tf;
-  if (flags & STYLE_BOLD) return u8g2_font_helvB08_tf;
+  if (flags & STYLE_H1) return u8g2_font_helvB14_tf;
+  if (flags & STYLE_H2) return u8g2_font_helvB12_tf;
+  if (flags & STYLE_BOLD) return u8g2_font_helvB10_tf;
   // No true italic face available at this size — falls back to regular.
   // See docs/ARCHITECTURE.md "Explicitly out of scope for v1".
-  return u8g2_font_helvR08_tf;
+  return u8g2_font_helvR10_tf;
 }
 
 // Splits [line.offset, line.offset+line.length) into sub-spans by style-run overlap, in
@@ -60,38 +57,25 @@ static void forEachStyledSpan(const Line& line, const std::vector<StyleRun>& run
 }
 
 bool Renderer::begin() {
-  // Panel's 3.3V rail is gated by this pin (schematic: IO7_LCD_3.3_CTL) — nothing on the
-  // SPI lines responds until it's driven high. Give the rail a moment to settle.
-  pinMode(PIN_EPD_POWER_CTL, OUTPUT);
-  digitalWrite(PIN_EPD_POWER_CTL, HIGH);
-  delay(10);
-
-  // MOSI/SCK (IO11/IO12) aren't ESP32-S3's default VSPI pins, so SPI needs explicit begin()
-  // before GxEPD2 touches it. GxEPD2 has no init() overload taking a bare SPIClass& — the
-  // bus is selected separately, via the panel object.
-  SPI.begin(PIN_EPD_SCK, -1 /* MISO unused */, PIN_EPD_MOSI, PIN_EPD_CS);
-  display.epd2.selectSPI(SPI, SPISettings(4000000, MSBFIRST, SPI_MODE0));
-  display.init(115200, true, 20, false);
+  display.begin();
   u8f.begin(display);
-  // Landscape — see config.h PAGE_WIDTH_PX/PAGE_HEIGHT_PX comment for why.
-  display.setRotation(1);
+  u8f.setForegroundColor(INK);
+  u8f.setBackgroundColor(PAPER);
+  // Canvas is already 250x122 landscape (Elecrow horiz-2). Do not setRotation(1) — that
+  // was for GxEPD2's 122x250 native buffer.
 
   display.setFullWindow();
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
   } while (display.nextPage());
   return true;
 }
 
-// Full refresh on the configured cadence (or on demand), partial in between; see
-// docs/ARCHITECTURE.md "Refresh strategy". The counter is shared by every screen, not just
-// book pages, so ghosting accumulated in a menu is cleared on the same schedule.
+// Menus and games stay on lut_DU. Leaving the screen already forces GC (push/pop/reading).
 void Renderer::beginFrame() {
-  bool full = forceFull_ || (pageTurnCounter_ % settings::refreshEveryNPages()) == 0;
-  forceFull_ = false;
-  pageTurnCounter_++;
-  if (full) {
+  if (forceFull_) {
+    forceFull_ = false;
     display.setFullWindow();
   } else {
     display.setPartialWindow(0, 0, PAGE_WIDTH_PX, PAGE_HEIGHT_PX);
@@ -121,10 +105,12 @@ void Renderer::renderPage(BookReader& book, size_t chapterIdx, uint16_t pageIdx,
     }
   }
 
-  beginFrame();
+  display.setFullWindow();
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
+    u8f.setForegroundColor(INK);
+    u8f.setBackgroundColor(PAPER);
     int y = MARGIN_PX + LINE_HEIGHT_PX;  // baseline of first line
     size_t runCursor = 0;
     for (const auto& line : lines) {
@@ -173,23 +159,31 @@ void Renderer::renderList(const std::vector<ListRow>& rows, int focusedSelectabl
   beginFrame();
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
     u8f.setFont(u8g2_font_helvR08_tf);
-    u8f.setForegroundColor(GxEPD_BLACK);
+    u8f.setForegroundColor(INK);
+    // helvR08 is proportional: ">" is wider than a space, so prefixing "> " used to shove
+    // the whole label right and force a full-row DU. Keep labels at a fixed x; only the
+    // caret column toggles when focus moves.
+    const int caretW = (int)u8f.getUTF8Width(">");
+    const int gap = (int)u8f.getUTF8Width(" ");
+    const int labelX = MARGIN_PX + caretW + gap;
     int y = LIST_FIRST_BASELINE_PX;
     int drawn = 0;
     for (size_t i = (size_t)start; i < rows.size() && drawn < maxUnits; i++, drawn++) {
       const ListRow& row = rows[i];
       if (row.separator) {
-        display.drawFastHLine(MARGIN_PX, y - 5, PAGE_WIDTH_PX - 2 * MARGIN_PX, GxEPD_BLACK);
+        display.drawFastHLine(MARGIN_PX, y - 5, PAGE_WIDTH_PX - 2 * MARGIN_PX, INK);
         y += LIST_LINE_HEIGHT_PX / 2;
         continue;
       }
-      // A 1-bit panel has no "dimmed" — the simulator's 60%-alpha meta lines become an
-      // indent here instead, which reads as secondary without needing a gray it can't show.
-      const char* prefix = ((int)i == focusRow) ? "> " : (row.dim ? "   " : "  ");
-      u8f.setCursor(MARGIN_PX, y);
-      u8f.print(prefix);
+      if ((int)i == focusRow) {
+        u8f.setCursor(MARGIN_PX, y);
+        u8f.print(">");
+      }
+      // Dim meta lines (author, hints) get one extra space of indent, constant per row
+      // so it never fights the caret.
+      u8f.setCursor(labelX + (row.dim ? gap : 0), y);
       u8f.print(row.text);
       y += LIST_LINE_HEIGHT_PX;
     }
@@ -199,12 +193,11 @@ void Renderer::renderList(const std::vector<ListRow>& rows, int focusedSelectabl
 void Renderer::renderMessage(const String* lines, size_t lineCount) {
   display.setFullWindow();
   forceFull_ = false;
-  pageTurnCounter_ = 1;  // next frame is a partial; this one already cleared the panel
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
     u8f.setFont(u8g2_font_helvR08_tf);
-    u8f.setForegroundColor(GxEPD_BLACK);
+    u8f.setForegroundColor(INK);
     int y = MARGIN_PX + LINE_HEIGHT_PX;
     for (size_t i = 0; i < lineCount; i++) {
       u8f.setCursor(MARGIN_PX, y);
@@ -218,28 +211,42 @@ void Renderer::renderStatusLine(const String& text) {
   renderMessage(&text, 1);
 }
 
-void Renderer::renderSleep(const String& bottomText, const uint8_t* wallpaperBits) {
+void Renderer::renderSleep(const String& title, const String& extra, const uint8_t* wallpaperBits) {
   display.setFullWindow();
   forceFull_ = false;
-  pageTurnCounter_ = 1;
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
     if (wallpaperBits) {
-      // Panel-native portrait bitmap (122x250, 1bpp). setRotation(1) is still in effect, so
-      // GFX transposes it onto the landscape surface for us.
-      display.drawBitmap(0, 0, wallpaperBits, 122, 250, GxEPD_BLACK);
+      display.copyBuffer(wallpaperBits);
     }
-    if (bottomText.length()) {
-      u8f.setFont(u8g2_font_helvR08_tf);
-      u8f.setForegroundColor(GxEPD_BLACK);
-      u8f.setBackgroundColor(GxEPD_WHITE);
-      // Solid backing plate so a busy wallpaper never runs through the glyphs — same
-      // legibility-over-aesthetics call the simulator's sleep screen makes.
-      int textW = (int)u8f.getUTF8Width(bottomText.c_str());
-      display.fillRect(2, PAGE_HEIGHT_PX - 14, textW + 4, 12, GxEPD_WHITE);
-      u8f.setCursor(4, PAGE_HEIGHT_PX - 5);
-      u8f.print(bottomText);
+    if (!title.length() && !extra.length()) continue;
+    u8f.setFont(u8g2_font_helvR08_tf);
+    u8f.setForegroundColor(INK);
+    u8f.setBackgroundColor(PAPER);
+    const int pad = 4;
+    const int maxW = PAGE_WIDTH_PX - 2 * pad;
+    const char* t = title.c_str();
+    const char* e = extra.c_str();
+    int titleW = title.length() ? (int)u8f.getUTF8Width(t) : 0;
+    int extraW = extra.length() ? (int)u8f.getUTF8Width(e) : 0;
+    int gap = (titleW && extraW) ? (int)u8f.getUTF8Width("  ") : 0;
+    bool twoLines = extraW && titleW && (titleW + gap + extraW > maxW);
+    if (!twoLines) {
+      int w = titleW + gap + extraW;
+      display.fillRect(2, PAGE_HEIGHT_PX - 14, w + 4, 12, PAPER);
+      u8f.setCursor(pad, PAGE_HEIGHT_PX - 5);
+      if (title.length()) u8f.print(t);
+      if (extra.length()) {
+        if (title.length()) u8f.print("  ");
+        u8f.print(e);
+      }
+    } else {
+      display.fillRect(2, PAGE_HEIGHT_PX - 26, PAGE_WIDTH_PX - 4, 24, PAPER);
+      u8f.setCursor(pad, PAGE_HEIGHT_PX - 16);
+      u8f.print(t);
+      u8f.setCursor(pad, PAGE_HEIGHT_PX - 5);
+      u8f.print(e);
     }
   } while (display.nextPage());
 }
@@ -248,13 +255,18 @@ void Renderer::renderCustom(const std::function<void(Adafruit_GFX&, U8G2_FOR_ADA
   beginFrame();
   display.firstPage();
   do {
-    display.fillScreen(GxEPD_WHITE);
+    display.fillScreen(PAPER);
     u8f.setFont(u8g2_font_helvR08_tf);
-    u8f.setForegroundColor(GxEPD_BLACK);
+    u8f.setForegroundColor(INK);
     draw(display, u8f);
   } while (display.nextPage());
 }
 
 void Renderer::powerDown() {
   display.hibernate();
+}
+
+void Renderer::wakeDisplay() {
+  display.wake();
+  forceFull_ = true;
 }

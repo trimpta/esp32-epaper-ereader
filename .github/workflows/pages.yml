@@ -52,10 +52,8 @@ jobs:
           arduino-cli core update-index
           arduino-cli core install esp32:esp32@3.3.10
           arduino-cli lib install \
-            "GxEPD2@1.6.9" \
             "U8g2_for_Adafruit_GFX@1.8.0" \
             "Adafruit GFX Library" \
-            "WiFiManager@2.0.17" \
             "ESP Async WebServer" \
             "Async TCP" \
             "ArduinoJson"

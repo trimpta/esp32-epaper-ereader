@@ -207,9 +207,9 @@ caught the display-init bug and several others; see
 - **Firmware libraries:** [GxEPD2](https://github.com/ZinggJM/GxEPD2),
   [U8g2_for_Adafruit_GFX](https://github.com/olikraus/U8g2_for_Adafruit_GFX),
   [Adafruit GFX Library](https://github.com/adafruit/Adafruit-GFX-Library),
-  [WiFiManager](https://github.com/tzapu/WiFiManager),
   [ESPAsyncWebServer](https://github.com/esphome/ESPAsyncWebServer) /
-  [AsyncTCP](https://github.com/esphome/AsyncTCP) (esphome forks), [ArduinoJson](https://arduinojson.org/).
+  [AsyncTCP](https://github.com/esphome/AsyncTCP) (esphome forks), [ArduinoJson](https://arduinojson.org/),
+  plus DNSServer and the esp_qrcode component, both bundled with the ESP32 Arduino core.
 - **Converter:** [JSZip](https://stuk.github.io/jszip/) for standalone EPUB unzipping outside the simulator.
 - **Fonts:** [Silkscreen](https://fonts.google.com/specimen/Silkscreen), [IBM Plex Mono, and IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) (Google Fonts).
 - **Sample books:** *Alice's Adventures in Wonderland*, *The Strange Case of Dr. Jekyll and Mr.

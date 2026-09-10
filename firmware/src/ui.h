@@ -16,12 +16,18 @@ void begin(Renderer* renderer);
 // Feed every input event here; the UI decides what the current screen does with it.
 void handle(InputEvent e);
 
+// Net thumbwheel steps (can be >1 if several clicks arrived during a refresh). One redraw.
+void handleScroll(int delta);
+
 // Call every loop(): idle-sleep timing, reading-time accounting, debounced state flush.
 void tick();
 
 // A book finished uploading over WiFi — rescan and, if the reader is sitting on an empty
 // library, show it immediately rather than waiting for a reboot.
 void onLibraryChanged();
+
+// A wallpaper finished uploading or was deleted over the web API.
+void onWallpapersChanged();
 
 void showMessage(const String& line);
 }  // namespace ui

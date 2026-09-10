@@ -2,10 +2,10 @@
 #include <LittleFS.h>
 #include <esp_random.h>
 
-#include "battery.h"
 #include "config.h"
 #include "input.h"
 #include "library.h"
+#include "qr_screen.h"
 #include "renderer.h"
 #include "settings.h"
 #include "ui.h"
@@ -36,26 +36,19 @@ void setup() {
   renderer.begin();
   randomSeed(esp_random());  // games otherwise deal the same "random" board every boot
 
-  // Hold MENU while powering on to re-enter WiFi setup.
-  bool forcePortal = (digitalRead(PIN_MENU_BUTTON) == LOW);
+  wifi_setup::begin();  // radio off — reading must not wait on a network
 
-  renderer.renderStatusLine("Connecting to WiFi...");
-  wifi_setup::begin(forcePortal, [](const String& ip) {
-    // Printed directly rather than relying on ereader.local — see wifi_setup.h.
-    String status = "Connect at: " + ip;
-    int pct = battery::readPercent();
-    // -1 until PIN_BATTERY_ADC in config.h is wired up — see battery.h.
-    if (pct >= 0) status += "   Batt: " + String(pct) + "%";
-    renderer.renderStatusLine(status);
-    delay(2000);
-  });
-
-  // library:: and ui:: must be ready before the async server starts: an upload landing
-  // between web_server::begin() and ui::begin() used to call ui::onLibraryChanged() ->
-  // renderCurrent() while the renderer pointer was still null.
   library::begin();
   ui::begin(&renderer);
-  web_server::begin([]() { ui::onLibraryChanged(); });
+  web_server::begin([]() { ui::onLibraryChanged(); }, []() { ui::onWallpapersChanged(); });
+
+  // Hold MENU at power-on as a secondary way into the transfer AP — for a first boot or
+  // a dead battery, before there's any menu to navigate to "Connect / Transfer books".
+  if (digitalRead(PIN_MENU_BUTTON) == LOW) {
+    wifi_setup::startAP();
+    qr_screen::show(renderer, wifi_setup::apQrPayload(), wifi_setup::apCaption());
+    ui::onLibraryChanged();
+  }
 }
 
 void loop() {
@@ -63,14 +56,25 @@ void loop() {
 
   // Drain the input queue rather than handling one event per iteration, so a fast
   // double-press isn't paced by the loop delay below.
-  for (InputEvent e = input::poll(); e != InputEvent::None; e = input::poll()) {
+  InputEvent e = input::poll();
+  while (e != InputEvent::None) {
+    if (e == InputEvent::ScrollNext || e == InputEvent::ScrollPrev) {
+      int scroll = 0;
+      while (e == InputEvent::ScrollNext || e == InputEvent::ScrollPrev) {
+        scroll += (e == InputEvent::ScrollNext) ? 1 : -1;
+        e = input::poll();
+      }
+      ui::handleScroll(scroll);
+      continue;
+    }
     ui::handle(e);
+    e = input::poll();
   }
 
   ui::tick();
 
-  // TODO(verify): once the ext1 wakeup pin set is confirmed on real hardware (input.h),
-  // ui::tick()'s sleep path can hand off to input::enterLightSleepUntilInput() instead of
-  // this poll-and-delay loop, which is what actually saves power between page turns.
+  // ui::tick() light-sleeps on its own once the keys go quiet (config.h, stage 1), so
+  // this delay only paces the short awake window right after a press — the idle case
+  // isn't spinning here.
   delay(20);
 }

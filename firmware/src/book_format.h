@@ -68,6 +68,10 @@ class BookReader {
   // page's text in one seek+read instead of one per styled span.
   size_t readTextInto(uint32_t offset, uint16_t length, uint8_t* out, size_t outCap);
 
+  // One-chapter .cebk from title/author/plain text (word-wrap, no style runs).
+  static bool writePlain(fs::FS& fs, const char* path, const String& title, const String& author,
+                         const String& body);
+
  private:
   File file_;
   String title_;

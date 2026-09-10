@@ -8,7 +8,8 @@ inspection alone, plus a parity pass against what the simulator actually does.
 There's still no physical board. What changed is that the firmware is now **compiled**:
 `arduino-cli` with `esp32:esp32` core 3.3.10, targeting `esp32:esp32:esp32s3`, against the
 same libraries `platformio.ini` pins (GxEPD2, U8g2_for_Adafruit_GFX, Adafruit GFX,
-WiFiManager, an ESPAsyncWebServer/AsyncTCP pair, ArduinoJson).
+an ESPAsyncWebServer/AsyncTCP pair, ArduinoJson) plus DNSServer and esp_qrcode, both
+bundled with the ESP32 core rather than separate dependencies.
 
 That distinction matters: the single most serious bug below is one no amount of careful
 reading had caught, and one that a build catches immediately.

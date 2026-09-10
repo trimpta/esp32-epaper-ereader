@@ -5,6 +5,9 @@
 context.md
 trimpta_drops/
 
+# Converter CLI helper (jsdom) — not needed to build firmware
+tools/node_modules/
+
 # PlatformIO
 firmware/.pio/
 firmware/.vscode/
@@ -12,3 +15,4 @@ firmware/.vscode/
 # OS cruft
 .DS_Store
 Thumbs.db
+.aider*

@@ -1,14 +1,18 @@
 #pragma once
-// Serves firmware/data/index.html (the tiny loader page — see its header comment for
-// why it's tiny) and the book upload/list/delete API.
+// Serves firmware/data/index.html and the book / wallpaper upload APIs.
 
 #include <functional>
 
 namespace web_server {
 
-// onLibraryChanged fires after a book finishes uploading or is deleted over the web API.
-// main.cpp wires it to ui::onLibraryChanged(), which rescans the library and, if the
-// Library screen is on-screen, redraws it.
-void begin(std::function<void()> onLibraryChanged);
+// Stores callbacks and ensures /books and /wallpapers exist. Does **not** start TCP —
+// constructing AsyncWebServer while WiFi is WIFI_OFF crashes (null FreeRTOS queue).
+void begin(std::function<void()> onLibraryChanged, std::function<void()> onWallpapersChanged);
+
+// Bind routes and listen on :80. Call only after STA or the AP is up.
+void start();
+
+// Stop listening. Safe if never started.
+void stop();
 
 }  // namespace web_server

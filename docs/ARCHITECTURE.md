@@ -49,15 +49,59 @@ pagination off-device too (neither precedent does that).
 
 ## Transport
 
-- **Persistent STA WiFi + mDNS-less discovery.** The device joins a saved network (phone hotspot
-  or home WiFi — same code path either way) instead of running its own AP that you'd have to
-  switch to per upload. `.local` mDNS resolution is unreliable from Android browsers even on your
-  own hotspot, so the device prints its assigned IP directly on the e-paper screen after
-  connecting instead of relying on `ereader.local`.
-- First-time (or re-)provisioning uses a captive portal (WiFiManager), entered only when there are
-  no saved credentials or the MENU button is held at boot — not part of the normal flow.
-- Reconnect uses retry-with-backoff rather than re-provisioning, since phone hotspots commonly
-  sleep after inactivity and come back with the same SSID/password.
+Wi-Fi is opt-in. The radio is the expensive thing on this board; a held e-ink page is
+nearly free. Default is `WIFI_OFF`, and nothing brings the radio up on its own — only an
+explicit menu action does.
+
+- Boot goes straight to the library. No associate, no portal, no connecting screen.
+  Hold MENU at power-on as a secondary, menu-free way into the transfer AP (first boot,
+  dead battery).
+- Home → "Connect / transfer books" turns the AP on and jumps straight to its QR in one
+  press — no need to separately open Wi-Fi and turn it on first. Home → Wi-Fi is the
+  fuller screen: STA on (saved credentials)/off, the AP, and "Show QR code" once either
+  is up.
+- **The AP is the normal book-transfer path**, not a one-time setup fallback — reachable
+  from the menu any time, long-lived once started (not tied to any portal UI's lifetime),
+  and password-protected (`WIFI_AP_PASSWORD`, config.h) since the QR is what actually
+  carries that to a phone, not a person typing it. Scanning it with a stock camera joins
+  the network and a captive-portal prompt opens the uploader automatically (DNSServer
+  answers every query with the AP's own IP; known OS probe paths — `/generate_204`,
+  `/hotspot-detect.html`, etc. — get a 302 to `/` instead of the "you have internet" 204).
+  No WiFiManager: it ran its own web server for as long as its portal was open, which
+  can't share port 80 with the uploader — everything (uploader, captive-portal probes,
+  the `/wifi/join` home-network form) is served by the one AsyncWebServer web_server.cpp
+  owns. See wifi_setup.cpp's top comment for the fuller reasoning.
+- Station mode also gets a QR (of `http://<ip>/`) once connected, so the desk workflow
+  skips typing an IP too.
+- The upload page is reachable whenever the shared server is up — AP or STA, same server.
+- Sleep (idle-screen or EXIT hold) turns the radio off, but never fires while the AP is up
+  — a light sleep or the sleep screen mid-upload would stall a transfer (see "Power"
+  above). Wake does not turn the radio back on.
+- Reconnect-with-backoff runs only while Wi-Fi was left on this session, and only in STA
+  mode — the AP doesn't reconnect to anything.
+- No RTC: stats before NTP (typical when offline) stay in the day-0 bucket.
+- No `.local` mDNS; the IP is printed (and QR-coded) on the Wi-Fi screen when connected.
+
+## Power
+
+Idle is two stages, not one, because "the reader stopped touching it" and "the reader put it down"
+are different events on very different timescales.
+
+- **Light sleep**, after ~1.5s of quiet while reading (0.5s in menus). The panel keeps its image,
+  the CPU halts, and any key wakes it — and the key that wakes it is *acted on*, so a page turn
+  still costs exactly one press. This is invisible, which is what lets the gap be so short: the
+  idle case between page turns is not a poll loop, it's a sleeping chip.
+- **Sleep screen**, only after 10 minutes with no key at all. Wallpaper goes up, panel powers
+  down, radio off. A light-sleep timer wakeup carries the deadline across the dozes above, so this
+  fires on schedule without anything staying awake to count.
+
+Light sleep is skipped while the radio is up — it stalls the web server mid-upload, and a device
+you're uploading to isn't idle anyway.
+
+Reading position is written to flash ~1s after the keys go quiet, not on a long timer. Pulling the
+battery is how this device gets switched off, so that window is exactly how much progress an
+unplug can cost. The book you were reading is saved by path alongside the position, so a cold boot
+reopens *that* book rather than guessing from whichever title sorts first.
 
 ## Refresh strategy
 

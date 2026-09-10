@@ -26,11 +26,11 @@ struct FontEntry {
 // TODO(verify): true italic isn't available in u8g2's stock set at this size —
 // "italic" reuses the regular face here. See docs/ARCHITECTURE.md.
 FontEntry FONTS[] = {
-  { "regular",  u8g2_font_helvR08_tf },
-  { "bold",     u8g2_font_helvB08_tf },
-  { "italic",   u8g2_font_helvR08_tf },
-  { "heading1", u8g2_font_helvB12_tf },
-  { "heading2", u8g2_font_helvB10_tf },
+  { "regular",  u8g2_font_helvR10_tf },
+  { "bold",     u8g2_font_helvB10_tf },
+  { "italic",   u8g2_font_helvR10_tf },
+  { "heading1", u8g2_font_helvB14_tf },
+  { "heading2", u8g2_font_helvB12_tf },
 };
 
 void setup() {

@@ -44,12 +44,20 @@ struct BookMeta {
 namespace library {
 void begin();   // scans /books and loads saved state
 void rescan();  // after an upload — keeps state for books that are still present
+bool addPlainNote(const String& title, const String& author, const String& body);
 
 size_t count();
 BookMeta& book(size_t idx);
 bool remove(size_t idx);  // deletes the .cebk from LittleFS and rescans; false if idx is invalid
 
 void setPosition(size_t idx, uint16_t chapterIdx, uint16_t pageIdx);
+
+// Which book the reader was last actually reading. Persisted by path, because "the first
+// book with any progress" (what ui::begin used to guess) is a title-sort artifact, not a
+// memory: two books with saved positions made the boot land in whichever one sorted first.
+void setActiveBook(int idx);   // -1 = none
+int activeBookIndex();         // -1 if nothing was saved, or that book is no longer present
+
 bool toggleBookmark(size_t idx, uint16_t chapterIdx, uint16_t pageIdx);  // true if added
 
 void logPageTurn(size_t idx);                     // forward turns only — see docs/SIMULATOR.md
@@ -82,6 +90,7 @@ struct OverallStats {
 OverallStats overallStats();
 
 void markDirty();
+bool isDirty();     // true when there are unsaved changes — see ui::tick's flush debounce
 void flush();       // writes if dirty
 bool timeIsSynced();
 }  // namespace library

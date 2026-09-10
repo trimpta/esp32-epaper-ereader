@@ -63,7 +63,7 @@ defines the layout explicitly instead:
 | Partition  | Offset    | Size      | Notes |
 |---|---|---|---|
 | (bootloader + partition table) | `0x0000` | 36,864 B (36KB) | Fixed ESP32 region before any partition |
-| `nvs`      | `0x9000`  | 24,576 B (24KB) | WiFi credentials (WiFiManager), Preferences |
+| `nvs`      | `0x9000`  | 24,576 B (24KB) | WiFi credentials (the ESP32 SDK's own WiFi.begin() persistence), Preferences |
 | `phy_init` | `0xF000`  | 4,096 B (4KB)   | RF calibration data |
 | `factory`  | `0x10000` | 2,097,152 B (2.00 MiB) | The firmware binary — see estimate below |
 | `littlefs` | `0x210000`| 6,225,920 B (5.94 MiB) | Books + wallpapers |
@@ -81,8 +81,13 @@ size report:
 
 | Measure | Bytes | Against |
 |---|---|---|
-| Firmware binary | **1,356,955 B** (1.29 MiB) | 65% of the 2 MiB `factory` partition — **~740 KB headroom** |
-| Static RAM (globals) | **60,176 B** (58.8 KiB) | 18% of internal SRAM, leaving 267,504 B for the stack/heap |
+| Firmware binary | **1,180,791 B** (1.13 MiB) | 56% of the 2 MiB `factory` partition — **~880 KB headroom** |
+| Static RAM (globals) | **62,576 B** (61.1 KiB) | 19% of internal SRAM, leaving 265,104 B for the stack/heap |
+
+(Measured after dropping WiFiManager for the QR-code AP/captive-portal transfer flow —
+see "Transport" in docs/ARCHITECTURE.md — which is a net size *decrease* despite adding a
+feature: WiFiManager's own mini web server is gone, and the QR generator and DNS redirect
+it's replaced by are both already part of the ESP32 core rather than added dependencies.)
 
 The earlier estimate below predicted ~1.2–1.5MB. The real number landed inside that range,
 so the 2MB partition stands as-is — no `partitions.csv` change needed.
@@ -93,9 +98,8 @@ so the 2MB partition stands as-is — no `partitions.csv` change needed.
 | Component | Typical contribution |
 |---|---|
 | Base Arduino-ESP32 sketch (no WiFi) | ~250–300KB |
-| + WiFi/LWIP/mbedTLS (needed by WiFiManager, AsyncWebServer) | +~400–550KB |
+| + WiFi/LWIP/mbedTLS (needed by AsyncWebServer, DNSServer) | +~400–550KB |
 | + ESPAsyncWebServer + AsyncTCP | +~50–150KB |
-| + WiFiManager (captive portal, its own mini web server) | +~150–300KB |
 | + GxEPD2 + U8g2_for_Adafruit_GFX (only the ~5 fonts actually referenced get linked, not the whole font library) | +~40–70KB |
 | + ArduinoJson, our own application code | +~30–50KB |
 | **Estimated total** | **~1.2–1.5MB** |

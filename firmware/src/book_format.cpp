@@ -1,4 +1,5 @@
 #include "book_format.h"
+#include "config.h"
 
 #include <algorithm>
 
@@ -202,4 +203,134 @@ String BookReader::readText(uint32_t offset, uint16_t length) {
   size_t got = readTextInto(offset, length, buf.data(), buf.size());
   if (got == 0) return String();
   return String((const char*)buf.data(), got);
+}
+
+namespace {
+
+void wrU8(File& f, uint8_t v) { f.write(&v, 1); }
+
+void wrU16(File& f, uint16_t v) {
+  uint8_t b[2] = {(uint8_t)v, (uint8_t)(v >> 8)};
+  f.write(b, 2);
+}
+
+void wrU32(File& f, uint32_t v) {
+  uint8_t b[4] = {(uint8_t)v, (uint8_t)(v >> 8), (uint8_t)(v >> 16), (uint8_t)(v >> 24)};
+  f.write(b, 4);
+}
+
+void wrPrefixed(File& f, const String& s) {
+  const uint8_t* p = (const uint8_t*)s.c_str();
+  size_t n = s.length();
+  if (n > 255) {
+    n = 255;
+    while (n > 0 && (p[n] & 0xc0) == 0x80) n--;
+  }
+  wrU8(f, (uint8_t)n);
+  if (n) f.write(p, n);
+}
+
+size_t utf8Advance(const uint8_t* s, size_t i, size_t end) {
+  if (i >= end) return 0;
+  uint8_t c = s[i];
+  size_t n = 1;
+  if ((c & 0x80) == 0) n = 1;
+  else if ((c & 0xE0) == 0xC0) n = 2;
+  else if ((c & 0xF0) == 0xE0) n = 3;
+  else if ((c & 0xF8) == 0xF0) n = 4;
+  if (i + n > end) return end - i;
+  return n;
+}
+
+}  // namespace
+
+bool BookReader::writePlain(fs::FS& fs, const char* path, const String& title, const String& author,
+                            const String& body) {
+  String text = body;
+  text.replace("\r\n", "\n");
+  text.replace("\r", "\n");
+  if (text.length() > 24000) text = text.substring(0, 24000);
+
+  const int maxW = PAGE_WIDTH_PX - 2 * MARGIN_PX;
+  const int maxH = PAGE_HEIGHT_PX - 2 * MARGIN_PX;
+  const uint8_t* s = (const uint8_t*)text.c_str();
+  const size_t n = text.length();
+  std::vector<Line> lines;
+  size_t i = 0;
+  while (i <= n) {
+    size_t pStart = i;
+    while (i < n && s[i] != '\n') i++;
+    size_t pEnd = i;
+    if (pEnd == pStart) {
+      lines.push_back({(uint32_t)pStart, 0});
+    } else {
+      size_t lineStart = pStart;
+      int lastBreak = -1;
+      int width = 0;
+      size_t j = pStart;
+      while (j < pEnd) {
+        size_t adv = utf8Advance(s, j, pEnd);
+        int w = (s[j] == ' ') ? 3 : 6;
+        if (s[j] == ' ') lastBreak = (int)j;
+        if (width + w > maxW && j > lineStart) {
+          size_t breakAt = (lastBreak >= (int)lineStart) ? (size_t)lastBreak : j;
+          uint16_t len = (uint16_t)std::min<size_t>(breakAt - lineStart, 65535);
+          lines.push_back({(uint32_t)lineStart, len});
+          lineStart = (s[breakAt] == ' ') ? breakAt + 1 : breakAt;
+          j = lineStart;
+          width = 0;
+          lastBreak = -1;
+          continue;
+        }
+        width += w;
+        j += adv;
+      }
+      if (lineStart < pEnd) {
+        uint16_t len = (uint16_t)std::min<size_t>(pEnd - lineStart, 65535);
+        lines.push_back({(uint32_t)lineStart, len});
+      }
+    }
+    if (i < n && s[i] == '\n') {
+      i++;
+      continue;
+    }
+    break;
+  }
+  if (lines.empty()) lines.push_back({0, 0});
+  if (lines.size() > 65535) return false;
+
+  std::vector<uint16_t> pageStarts;
+  pageStarts.push_back(0);
+  int h = 0;
+  for (size_t idx = 0; idx < lines.size(); idx++) {
+    if (h + LINE_HEIGHT_PX > maxH && idx > pageStarts.back()) {
+      pageStarts.push_back((uint16_t)idx);
+      h = 0;
+    }
+    h += LINE_HEIGHT_PX;
+  }
+  if (pageStarts.size() > 65535) return false;
+
+  File f = fs.open(path, "w");
+  if (!f) return false;
+  f.write((const uint8_t*)"CEBK", 4);
+  wrU8(f, 1);
+  wrPrefixed(f, title.length() ? title : String("Note"));
+  wrPrefixed(f, author);
+  wrU16(f, 1);
+  wrPrefixed(f, title.length() ? title : String("Note"));
+  wrU32(f, 0);
+  wrU32(f, (uint32_t)text.length());
+  wrU16(f, (uint16_t)lines.size());
+  for (const Line& line : lines) {
+    wrU32(f, line.offset);
+    wrU16(f, line.length);
+  }
+  wrU16(f, (uint16_t)pageStarts.size());
+  for (uint16_t p : pageStarts) wrU16(f, p);
+  wrU16(f, 0);
+  wrU32(f, (uint32_t)text.length());
+  if (text.length()) f.write((const uint8_t*)text.c_str(), text.length());
+  f.close();
+  return true;
 }

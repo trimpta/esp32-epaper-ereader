@@ -6,12 +6,16 @@ const STYLE = { BOLD: 1, ITALIC: 2, H1: 4, H2: 8 };
 
 // Landscape (rotated) layout — see firmware/src/config.h for why. The panel is
 // natively 122x250 portrait; the firmware transposes it via setRotation(1).
+// Body text is helvR10 on device (firmware/src/renderer.cpp fontForFlags). These heights
+// are baked into every .cebk at conversion time — they must match firmware/src/config.h's
+// LINE_HEIGHT_PX / HEADING_LINE_HEIGHT_PX, and font-metrics.json must be a dump of those
+// same faces, or pages break in the wrong places on device.
 const LAYOUT = {
   PAGE_WIDTH_PX: 250,
   PAGE_HEIGHT_PX: 122,
   MARGIN_PX: 4,
-  LINE_HEIGHT_PX: 11,
-  HEADING_LINE_HEIGHT_PX: 14,
+  LINE_HEIGHT_PX: 13,
+  HEADING_LINE_HEIGHT_PX: 16,
 };
 
 const BLOCK_TAGS = new Set([

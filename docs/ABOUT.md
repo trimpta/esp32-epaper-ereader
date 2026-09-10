@@ -87,7 +87,8 @@ Two deliberate differences remain, both of them honest ones:
   Python EPUB pre-conversion). This project follows the second pattern, in the browser,
   with pagination also moved off-device.
 - **Firmware libraries.** GxEPD2, U8g2_for_Adafruit_GFX, Adafruit GFX Library,
-  WiFiManager, ESPAsyncWebServer/AsyncTCP, ArduinoJson.
+  ESPAsyncWebServer/AsyncTCP, ArduinoJson, plus the ESP32 core's own bundled
+  DNSServer and esp_qrcode components (no separate Arduino library for either).
 - **Converter.** JSZip, for standalone EPUB unzipping outside this simulator.
 - **Fonts.** Silkscreen, IBM Plex Mono and IBM Plex Sans (Google Fonts).
 - **Sample books.** *Alice's Adventures in Wonderland*, *The Strange Case of Dr. Jekyll and

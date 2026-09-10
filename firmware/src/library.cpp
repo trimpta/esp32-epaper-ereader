@@ -11,6 +11,7 @@
 namespace {
 
 std::vector<BookMeta> books;
+String activePath;   // path of the book that was open for reading; "" = none
 bool dirty = false;
 
 const size_t MAX_DAYS_KEPT = 14;  // bounded so the state file can't grow without limit
@@ -94,6 +95,8 @@ void loadState() {
   f.close();
   if (err) return;  // corrupt state is not worth failing a boot over — start fresh
 
+  activePath = doc["last"] | "";
+
   JsonObject saved = doc["books"].as<JsonObject>();
   if (saved.isNull()) return;
   for (auto& b : books) {
@@ -137,6 +140,33 @@ void library::begin() {
   loadState();
 }
 
+bool library::addPlainNote(const String& title, const String& author, const String& body) {
+  String t = title;
+  t.trim();
+  if (!t.length()) t = "Note";
+  String stem;
+  for (size_t i = 0; i < t.length() && stem.length() < 32; i++) {
+    char c = t[i];
+    if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '-' ||
+        c == '_') {
+      stem += c;
+    } else if (c == ' ') {
+      stem += '_';
+    }
+  }
+  if (!stem.length()) stem = "note";
+  String path = String(BOOKS_DIR) + "/" + stem + ".cebk";
+  int n = 2;
+  while (LittleFS.exists(path)) {
+    path = String(BOOKS_DIR) + "/" + stem + "_" + String(n++) + ".cebk";
+  }
+  if (!BookReader::writePlain(LittleFS, path.c_str(), t, author, body)) {
+    LittleFS.remove(path);
+    return false;
+  }
+  return true;
+}
+
 void library::rescan() {
   std::vector<BookMeta> fresh;
   scanBooks(fresh);
@@ -178,6 +208,21 @@ void library::setPosition(size_t idx, uint16_t chapterIdx, uint16_t pageIdx) {
   books[idx].lastChapterIdx = chapterIdx;
   books[idx].lastPageIdx = pageIdx;
   markDirty();
+}
+
+void library::setActiveBook(int idx) {
+  String path = (idx >= 0 && idx < (int)books.size()) ? books[idx].path : String();
+  if (path == activePath) return;
+  activePath = path;
+  markDirty();
+}
+
+int library::activeBookIndex() {
+  if (!activePath.length()) return -1;
+  for (size_t i = 0; i < books.size(); i++) {
+    if (books[i].path == activePath) return (int)i;
+  }
+  return -1;  // the book was deleted since it was last read
 }
 
 bool library::toggleBookmark(size_t idx, uint16_t chapterIdx, uint16_t pageIdx) {
@@ -295,6 +340,10 @@ void library::markDirty() {
   dirty = true;
 }
 
+bool library::isDirty() {
+  return dirty;
+}
+
 bool library::timeIsSynced() {
   return todayIndex() != 0;
 }
@@ -304,6 +353,7 @@ void library::flush() {
   dirty = false;
 
   JsonDocument doc;
+  if (activePath.length()) doc["last"] = activePath;
   JsonObject saved = doc["books"].to<JsonObject>();
   for (const auto& b : books) {
     JsonObject o = saved[b.path].to<JsonObject>();
