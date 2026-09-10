@@ -105,16 +105,22 @@ reopens *that* book rather than guessing from whichever title sorts first.
 
 ## Refresh strategy
 
-E-ink partial refresh (~300ms) is used for every page turn; ghosting is cleared with a full
-refresh every ~8–10 pages (same cadence convention as most commercial e-readers), tracked with a
-simple counter rather than a timer, so it's tied to actual reading activity.
+Every frame is a full refresh (`renderer.cpp`'s `beginFrame()`) — no partial-refresh cadence.
+There used to be one (an "every N pages" counter, the same convention most commercial e-readers
+use), on the assumption that partial refresh's ghosting cost was worth trading for speed. On real
+hardware that assumption didn't hold: the simulator models a ghosting cost for partial refresh
+that the actual panel doesn't visibly pay, so there was no tradeoff left to make — see
+[GitHub issue #12](https://github.com/trimpta/esp32-epaper-ereader/issues/12).
 
 ## Input
 
 Rotary switch (`ROTARY_UP`/`ROTARY_DOWN`/`ROTARY_CONF`) maps directly to page turn / confirm with
 no menu layer in between — that's the highest-frequency action and the only one worth optimizing
-for zero indirection. MENU/EXIT are reserved for book list, TOC, and settings screens, which can
-afford a slower full-refresh redraw since they're rare.
+for zero indirection. MENU works the same way while reading: a tap turns the page (the same
+zero-indirection reasoning as the wheel — it's the button right next to it), and holding it opens
+the book's own menu (chapters/bookmarks/continue). Elsewhere (library, settings, games, ...) MENU
+still just activates the focused row. EXIT is reserved for the general home menu and backing out
+of screens, which can afford a slower redraw since they're comparatively rare.
 
 ## Explicitly out of scope for v1
 

@@ -38,19 +38,16 @@ static const int PIN_STATUS_LED = 19;
 static const int PAGE_WIDTH_PX = 250;
 static const int PAGE_HEIGHT_PX = 122;
 static const int MARGIN_PX = 4;
-// Body text is helvR10 (see renderer.cpp fontForFlags) — one step up from helvR08, which
-// was legible but cramped on a 122px-tall panel. Both heights are baked into every .cebk
-// at conversion time, so a change here means books converted against the old numbers
+// Body text is helvR08 (see renderer.cpp fontForFlags). Both heights are baked into every
+// .cebk at conversion time, so a change here means books converted against the old numbers
 // paginate wrong: bump converter/converter.js's LAYOUT to match and re-convert.
-static const int LINE_HEIGHT_PX = 13;
-static const int HEADING_LINE_HEIGHT_PX = 16;
+static const int LINE_HEIGHT_PX = 11;
+static const int HEADING_LINE_HEIGHT_PX = 14;
 
-// Full refresh every N partial-refresh page turns, to clear e-ink ghosting.
-// Tied to page turns (a counter), not a timer — see docs/ARCHITECTURE.md.
-// Runtime-adjustable from the on-device Settings screen (unlike the layout constants
-// above, which are baked into every .cebk at conversion time) — this default is just
-// the starting value; settings::refreshEveryNPages() is what the renderer reads.
-static const int FULL_REFRESH_EVERY_N_PAGES = 8;
+// No full-refresh cadence setting here anymore — every frame is a full refresh
+// unconditionally (renderer.cpp's beginFrame(), GitHub issue #12). The periodic-cadence
+// idea only mattered for a partial-refresh ghosting cost the simulator modeled but real
+// hardware doesn't pay, so there was nothing left to tune.
 
 // Menu/list screens. Mirrors simulator/index.html's LIST_TOP_MARGIN / LIST_LINE_H /
 // LIST_FONT_PX so the on-device menus lay out the same way the simulator previews them.

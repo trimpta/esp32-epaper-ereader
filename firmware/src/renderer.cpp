@@ -10,17 +10,13 @@ static U8G2_FOR_ADAFRUIT_GFX u8f;
 
 // Keep these font choices in sync with tools/dump_font_metrics/dump_font_metrics.ino —
 // the browser converter paginates against widths dumped from these exact fonts.
-// Every face here is one helv step up from where it started (08/10/12 -> 10/12/14): the
-// 08 body text was legible but genuinely small to read for any length of time. The cost is
-// two body lines per page, and that pagination is baked into the .cebk — books converted
-// before this change render at the wrong line count until re-converted.
 static const uint8_t* fontForFlags(uint8_t flags) {
-  if (flags & STYLE_H1) return u8g2_font_helvB14_tf;
-  if (flags & STYLE_H2) return u8g2_font_helvB12_tf;
-  if (flags & STYLE_BOLD) return u8g2_font_helvB10_tf;
+  if (flags & STYLE_H1) return u8g2_font_helvB12_tf;
+  if (flags & STYLE_H2) return u8g2_font_helvB10_tf;
+  if (flags & STYLE_BOLD) return u8g2_font_helvB08_tf;
   // No true italic face available at this size — falls back to regular.
   // See docs/ARCHITECTURE.md "Explicitly out of scope for v1".
-  return u8g2_font_helvR10_tf;
+  return u8g2_font_helvR08_tf;
 }
 
 // Splits [line.offset, line.offset+line.length) into sub-spans by style-run overlap, in
@@ -72,14 +68,14 @@ bool Renderer::begin() {
   return true;
 }
 
-// Menus and games stay on lut_DU. Leaving the screen already forces GC (push/pop/reading).
+// Always full refresh — see GitHub issue #12: the ghosting a partial refresh trades speed
+// for is a real cost on this panel, but only in the simulator's model of one; on actual
+// hardware there's no visible benefit to partial refresh worth the tradeoff, so every
+// frame just clears fully. forceFullRefreshNext() is kept as a no-op call site rather than
+// ripped out of every caller — it cost nothing to leave, and reads fine either way now.
 void Renderer::beginFrame() {
-  if (forceFull_) {
-    forceFull_ = false;
-    display.setFullWindow();
-  } else {
-    display.setPartialWindow(0, 0, PAGE_WIDTH_PX, PAGE_HEIGHT_PX);
-  }
+  forceFull_ = false;
+  display.setFullWindow();
 }
 
 void Renderer::renderPage(BookReader& book, size_t chapterIdx, uint16_t pageIdx,

@@ -12,8 +12,8 @@ enum class InputEvent {
   ScrollPrev,   // rotary detent, "up"
   ConfShort,    // rotary push-click
   ConfLong,     // rotary held — enters scrub-edit on a numeric field
-  MenuShort,
-  MenuLong,     // force a full refresh now, bypassing the cadence counter
+  MenuShort,    // while reading: next page (see ui.cpp — GitHub issue #12)
+  MenuLong,     // while reading: open the book's own menu
   ExitShort,
   ExitLong,     // sleep immediately
 };

@@ -48,8 +48,6 @@ size_t currentRunsChapter = (size_t)-1;
 uint16_t chapterIdx = 0, pageIdx = 0;
 
 bool asleep = false;
-bool editingRefresh = false;  // rotary-hold scrub session on the refresh-cadence setting
-int editOriginal = 0;
 bool lastWifiConnected = false;
 bool lastApOpen = false;
 
@@ -62,6 +60,21 @@ const unsigned long READING_TICK_MS = 15000;  // stats granularity; also bounds 
 // old 30s meant the last few pages of a session routinely were. Short enough to survive an
 // unplug, long enough that holding the wheel down is still one write, not one per page.
 const unsigned long FLUSH_DEBOUNCE_MS = 1000;
+
+// Status LED: a short heartbeat blink while awake (100ms on, 1s off — mostly off, so it
+// reads as "alive" rather than a light left on) instead of solid-on the whole time it's
+// plugged in. Asleep turns it off entirely (see goToSleep()) rather than pausing the
+// blink, so "LED off" reliably means "safe to leave alone", not "mid-cycle".
+const unsigned long LED_ON_MS = 100;
+const unsigned long LED_CYCLE_MS = 1100;
+bool ledOn = false;
+
+void updateStatusLed(unsigned long now) {
+  bool shouldBeOn = (now % LED_CYCLE_MS) < LED_ON_MS;
+  if (shouldBeOn == ledOn) return;
+  ledOn = shouldBeOn;
+  digitalWrite(PIN_STATUS_LED, ledOn ? HIGH : LOW);
+}
 
 std::vector<String> wallpaperFiles;
 uint8_t wallpaperBuf[WALLPAPER_BYTES];
@@ -267,7 +280,6 @@ enum {
   ACT_OPEN_HOME,
   ACT_JUMP_CHAPTER,
   ACT_JUMP_BOOKMARK,
-  ACT_CYCLE_REFRESH,
   ACT_CYCLE_WALLPAPER,
   ACT_WIFI_TRANSFER,  // start the AP and jump straight to its QR — the normal transfer path
   ACT_WIFI_CLOSE_AP,
@@ -472,11 +484,6 @@ std::vector<Row> allStatsRows() {
 
 std::vector<Row> settingsRows() {
   std::vector<Row> rows;
-  String n = String(settings::refreshEveryNPages());
-  if (n.length() < 2) n = " " + n;
-  String refresh = "Full refresh every: " + n + " pages";
-  if (editingRefresh) refresh += " <";
-  rows.push_back({ListRow(refresh), ACT_CYCLE_REFRESH});
   String wp = "Wallpaper: ";
   int wpIdx = settings::wallpaperIndex();
   wp += (wpIdx >= 0 && wpIdx < (int)wallpaperFiles.size()) ? wallpaperFiles[wpIdx] : String("(none)");
@@ -693,12 +700,6 @@ void activateFocused() {
       goToReading();
       break;
     }
-    case ACT_CYCLE_REFRESH: {
-      int n = settings::refreshEveryNPages() + 1;
-      if (n > settings::REFRESH_MAX) n = settings::REFRESH_MIN;
-      settings::setRefreshEveryNPages(n);
-      break;
-    }
     case ACT_CYCLE_WALLPAPER: {
       int total = (int)wallpaperFiles.size();
       if (total == 0) break;
@@ -738,6 +739,11 @@ void activateFocused() {
 void goToSleep() {
   if (asleep) return;
   asleep = true;
+  // Heartbeat sleeps with the device (see updateStatusLed()) — also resets ledOn so the
+  // tracked state matches this forced-off pin; otherwise the first post-wake tick() could
+  // think the LED is already on (stale from before sleep) and skip turning it back on.
+  ledOn = false;
+  digitalWrite(PIN_STATUS_LED, LOW);
   library::flush();
   wifi_setup::disable();
   String title = "ROTARY READER";
@@ -840,11 +846,6 @@ void ui::handleScroll(int delta) {
     wake();
     return;
   }
-  if (editingRefresh) {
-    settings::setRefreshEveryNPages(settings::refreshEveryNPages() + delta);
-    renderCurrent();
-    return;
-  }
   applyScroll(delta);
 }
 
@@ -865,38 +866,15 @@ void ui::handle(InputEvent e) {
     return;
   }
 
-  // Scrub-edit session on the refresh-cadence setting: the dial adjusts the value, MENU
-  // commits, EXIT reverts. Same contract as the simulator's tryEnterEditMode().
-  if (editingRefresh) {
-    switch (e) {
-      case InputEvent::ScrollNext:
-        settings::setRefreshEveryNPages(settings::refreshEveryNPages() + 1);
-        break;
-      case InputEvent::ScrollPrev:
-        settings::setRefreshEveryNPages(settings::refreshEveryNPages() - 1);
-        break;
-      case InputEvent::MenuShort:
-      case InputEvent::ConfShort:
-        editingRefresh = false;
-        break;
-      case InputEvent::ExitShort:
-        settings::setRefreshEveryNPages(editOriginal);
-        editingRefresh = false;
-        break;
-      default:
-        break;
-    }
-    renderCurrent();
-    return;
-  }
-
   Screen screen = current();
   switch (e) {
     case InputEvent::MenuShort:
+      // GitHub issue #12: a tap used to open the book menu, which made turning pages
+      // with MENU (the natural single-handed button next to the thumbwheel) impossible.
+      // Holding now opens the book menu instead (below) — freeing the tap for the
+      // highest-frequency action, matching what a detent on the wheel already does.
       if (screen == Screen::Reading) {
-        browseBook = activeBook;
-        pushScreen(Screen::BookMenu);
-        renderCurrent();
+        nextPage();
       } else if (screen == Screen::GameScreen) {
         games::primary();
         renderCurrent();
@@ -917,23 +895,18 @@ void ui::handle(InputEvent e) {
       }
       break;
     case InputEvent::ConfLong:
-      if (screen == Screen::Settings) {
-        const std::vector<Row> rows = settingsRows();
-        const Row* row = focusedRow(rows);
-        if (row && row->action == ACT_CYCLE_REFRESH) {
-          editingRefresh = true;
-          editOriginal = settings::refreshEveryNPages();
-          renderCurrent();
-          break;
-        }
-      }
       if (screen != Screen::GameScreen && screen != Screen::Reading) {
         activateFocused();
       }
       break;
     case InputEvent::MenuLong:
-      rend->forceFullRefreshNext();
-      renderCurrent();
+      // Takes over what a MenuShort tap used to do here (see above) — full refresh is no
+      // longer something to force, since every frame already is one (renderer.cpp).
+      if (screen == Screen::Reading) {
+        browseBook = activeBook;
+        pushScreen(Screen::BookMenu);
+        renderCurrent();
+      }
       break;
     case InputEvent::ExitShort:
       // The AP started from the Home/Wi-Fi menu is just another screen on the stack —
@@ -968,6 +941,8 @@ void ui::handle(InputEvent e) {
 
 void ui::tick() {
   unsigned long now = millis();
+
+  if (!asleep) updateStatusLed(now);
 
   // Reading-time accounting: only counts while a book is actually on screen and awake —
   // not in menus, not in a game, not asleep. Mirrors the simulator's heartbeat.

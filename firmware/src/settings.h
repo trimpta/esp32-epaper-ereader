@@ -12,13 +12,6 @@
 namespace settings {
 void begin();
 
-// Full refresh cadence, in page turns. Safe to change at runtime: it affects only how
-// often ghosting gets cleared, never how text is laid out.
-int refreshEveryNPages();
-void setRefreshEveryNPages(int n);
-static const int REFRESH_MIN = 2;
-static const int REFRESH_MAX = 20;
-
 // Index into whatever wallpaper::count() found in /wallpapers; -1 = none/blank.
 int wallpaperIndex();
 void setWallpaperIndex(int idx);

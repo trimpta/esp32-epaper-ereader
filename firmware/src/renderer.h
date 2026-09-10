@@ -60,13 +60,15 @@ class Renderer {
   // Arbitrary drawing (the games). The callback runs inside the paged-draw loop.
   void renderCustom(const std::function<void(Adafruit_GFX&, U8G2_FOR_ADAFRUIT_GFX&)>& draw);
 
-  // Long-press MENU: full GC now (menus no longer auto-GC every N clicks).
+  // No-op now that beginFrame() always does a full refresh (see renderer.cpp / GitHub
+  // issue #12) — kept so existing call sites (screen transitions, wake) don't need
+  // touching; they still read fine as "make sure this one's a full redraw".
   void forceFullRefreshNext() { forceFull_ = true; }
 
   void powerDown();  // display.hibernate() — call before sleeping
   void wakeDisplay();  // re-init the panel after hibernate so the next frame can draw
 
  private:
-  void beginFrame();  // DU unless forceFullRefreshNext()
+  void beginFrame();  // always full — see forceFullRefreshNext()
   bool forceFull_ = false;
 };

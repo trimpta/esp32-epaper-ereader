@@ -19,10 +19,12 @@ Renderer renderer;
 void setup() {
   Serial.begin(115200);
 
-  // Nothing drives this pin unless firmware does — the board doesn't light it on its
-  // own just from having power. On solid for as long as the device is running.
+  // Nothing drives this pin unless firmware does — the board doesn't light it on its own
+  // just from having power. Starts off; ui::tick() takes over with a heartbeat blink once
+  // the loop is running (see ui.cpp) — solid-on the whole time it's plugged in was both a
+  // needless draw and, per feedback, noticeably warmed the board.
   pinMode(PIN_STATUS_LED, OUTPUT);
-  digitalWrite(PIN_STATUS_LED, HIGH);
+  digitalWrite(PIN_STATUS_LED, LOW);
 
   input::begin();
   // LittleFS::begin()'s partitionLabel defaults to "spiffs" — a holdover from when the
